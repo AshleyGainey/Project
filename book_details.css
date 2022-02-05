@@ -1,0 +1,192 @@
+#MainContent hr {
+    width: 100%;
+    border-top: 5px solid #0034a4;
+    border-radius: 50px;
+    opacity: 0.5;
+    margin-bottom: 20px;
+}
+
+
+.DifferentSection {
+    padding-top: 20px;
+    margin-top: 10px;
+    margin-left: 10px;
+    word-break: break-word;
+
+    /*vertical-align: top;*/
+    /*display: inline-block;*/
+    /*!* To horizontally center images and caption *!*/
+}
+
+
+.DifferentSection h1 {
+    font-style: italic;
+}
+
+#ActionButtons {
+    text-align: center;
+}
+
+
+.containerForActions {
+    margin: 5%;
+    display: inline-block;
+    max-width: 120px;
+
+}
+
+.containerForActions img {
+    vertical-align: middle;
+}
+
+.DifferentSection h5 {
+    display: block;
+    text-align: center;
+    font-size: 0.1em;
+}
+
+
+.DifferentSection img {
+    max-width: 120px;
+
+}
+
+
+
+
+#CitationHolder {
+    /*width:80%;*/
+    display: none;
+    border-radius: 12.5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+padding-left: 2px;
+    padding-right: 2px;
+    z-index:99;
+    background-color: #575757;
+    position: absolute;
+    color: #FFFFFF;
+}
+
+#CopyCitation {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    float:right;
+}
+
+#CopyCitation img {
+    width: 30%;
+    display: inline;
+}
+
+#CopyCitation p {
+    display: inline;
+}
+
+
+
+#Actions a * {
+cursor: pointer;
+}
+
+
+#Notification {
+    background-color: #034e0e;
+    width:50%;
+    position: fixed;
+}
+
+.successful {
+    background-color: #4caf50;
+
+
+    /* Old browsers */
+    background: linear-gradient(to right, #4caf50 50%, #2f702f 50%);
+    background-size: 200% 100%;
+    background-position:right bottom;
+    /*transition:all 2.5s linear;*/
+}
+
+.failure {
+    background-color: #f44336;
+
+    /* Old browsers */
+    background: linear-gradient(to right, #f44336 50%, #9e2525 50%);
+    background-size: 200% 100%;
+    background-position:right bottom;
+    /*transition:all 2.5s linear;*/
+}
+
+#alert {
+    padding: 20px;
+    background-color: #000000;
+    color: white;
+    opacity: 1;
+    transition: opacity 0.6s;
+    position: fixed;
+    bottom:0;
+    width: 50vw;
+    border-radius: 25px;
+    display: none;
+    /*border-radius: 12.5%;*/
+    text-align: center;
+
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+
+
+
+}
+
+
+
+.box:hover {
+    background-position:left bottom;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+th {
+    vertical-align: text-top;
+    float: right;
+}
+
+th {
+    padding-top: 20px;
+    min-width: 30%;
+}
+
+td {
+    padding-top: 20px;
+    min-width: 70%;
+}
+
+#Details {
+    font-size: 15px;
+}
+
+/* @media only screen and (min-width: 600px) {
+    th {
+        float: right;
+        padding-right: 10px;
+        white-space: normal;
+    }
+
+    .DifferentSection {
+        padding: 20px 50px 10px 50px;
+    }
+
+    #Details {
+        font-size: 20px;
+    }
+} */

@@ -1,0 +1,62 @@
+.box-section img {
+    max-width: 100%;
+    border-radius: 10%;
+    text-align: center;
+}
+
+.box-section {
+    border-radius: 10%;
+    /*background-color/: #757575;*/
+    /*color: #FFFFFF;*/
+    cursor: pointer;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+    max-width: 50%;
+    overflow: hidden;
+}
+
+.box-section h2 {
+    text-align: center;
+}
+
+.bottom-right {
+    position: absolute;
+    bottom: 6px;
+    border-radius: 2%;
+    background-color: #003898;
+    min-width: 100%;
+}
+
+.boxed-content {
+    width: 20%;
+}
+
+.boxed-content a {
+    text-decoration: none;
+}
+
+.box-section a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.box-section {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+
+#WelcomeTo img {
+    max-width: 80%;
+    border-radius: 12.5px;
+}
+
+#WelcomeTo {
+    margin-bottom: 10px;
+}
+
+#listOfLibraries p {
+    font-size: 1em;
+}

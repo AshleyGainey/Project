@@ -1,0 +1,211 @@
+/*#PhotoOfLibrary {*/
+/*max-width: 186px;*/
+/*    min-width: 186px;*/
+
+/*    min-height: 200px;*/
+/*    max-height: 200px;*/
+
+/*    float: left;*/
+/*    margin-right: 15px;*/
+
+/*    display: inline-block;*/
+/*}*/
+
+
+/*#PhotoOfLibrary img {*/
+/*    max-width: 100%;*/
+/*    min-width: 100%;*/
+/*    object-fit: cover;*/
+
+/*    border: 3px solid #021a40;*/
+/*}*/
+
+
+#PhotoOfLibrary {
+    /*max-width: 50vw;*/
+    max-height: 20vw;
+
+    min-height: 20vw;
+
+    float: left;
+    /*margin-right: 15px;*/
+    /*margin-bottom: 15px;*/
+
+    display: inline-block;
+
+
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+
+}
+
+
+#PhotoOfLibrary img {
+    border: 3px solid #021a40;
+
+    object-fit: cover;
+    /*width: 50vw;*/
+    height: 20vw;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.topPart {
+    min-height: 20vw;
+    width: 100%;
+    margin: 0 auto;
+}
+
+
+#MainContent hr {
+    width: 100%;
+    border-top: 5px solid #0034a4;
+    border-radius: 50px;
+    opacity: 0.5;
+    margin-bottom: 20px;
+}
+
+
+.DifferentSection {
+    padding-top: 20px;
+    margin-top: 10px;
+    margin-left: 10px;
+    word-break: break-word;
+
+    /*vertical-align: top;*/
+    /*display: inline-block;*/
+    /*!* To horizontally center images and caption *!*/
+}
+
+
+.DifferentSection h1 {
+    font-style: italic;
+}
+
+#ActionButtons {
+    text-align: center;
+}
+
+
+.containerForActions {
+    margin: 5%;
+    display: inline-block;
+    max-width: 120px;
+
+}
+
+.containerForActions img {
+    vertical-align: middle;
+}
+
+.DifferentSection h5 {
+    display: block;
+    text-align: center;
+}
+
+
+.DifferentSection img {
+    max-width: 120px;
+
+}
+
+
+th {
+    vertical-align: text-top;
+    float: right;
+}
+
+th {
+    padding-top: 20px;
+    min-width: 30%;
+}
+
+td {
+    padding-top: 20px;
+    min-width: 70%;
+}
+
+#Details {
+    font-size: 15px;
+}
+
+/* @media only screen and (min-width: 600px) {
+    .DifferentSection {
+        padding: 20px 50px 10px 50px;
+    }
+
+    #Details {
+        font-size: 20px;
+    }
+} */
+
+
+.SingleResult {
+    display: inline;
+    /*padding-left: 2px;*/
+    text-decoration: none;
+    /*float: left;*/
+}
+
+.AllInfo {
+    padding: 10px;
+    text-align: left;
+    min-height: 200px;
+}
+
+
+.AllOtherInfo {
+    vertical-align: center;
+    text-align: center;
+    padding-top: 10px;
+    display: inline-block;
+    width: 100%;
+    word-break: break-word;
+
+}
+
+.AllResults {
+    text-align: center;
+}
+
+
+.AllOtherInfo h3 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+.AllOtherInfo p {
+    color: #000000;
+    margin-left: 10px;
+}
+
+
+.IndividualInfo h2, .BookTitleDiv p {
+    display: inline;
+    width: 100%
+}
+
+.IndividualInfo h4, .IndividualInfo p {
+    display: inline;
+    word-break: break-word;
+}
+
+
+.ResultBox {
+    border-radius: 12.5px;
+    background-color: #FFFFFF;
+    color: #000000;
+    /*margin-top: 10px;*/
+    word-break: break-all;
+    display: inline-block;
+    margin: 5px;
+}
+
+#TelephoneDetails * {
+    display: inline;
+}

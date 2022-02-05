@@ -1,0 +1,127 @@
+form input[type=text], form input[type=password], form input[type=email] {
+    font-size: 30px;
+    min-width: 30%;
+
+    margin: auto;
+    margin-top: 50px;
+
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 3px solid #FFFFFF;
+    color: #000000;
+    display: block;
+}
+
+/*#LoginMode, #RegisterMode {*/
+/*    display: inline;*/
+/*}*/
+
+
+/*form input[type=text], form input[type=password], form input[type=email] {*/
+/*    border: 0;*/
+/*    outline: 0;*/
+/*    background: transparent;*/
+/*    border-bottom: 1px solid #FFFFFF;*/
+/*    color: #FFFFFF;*/
+/*    display: block;*/
+/*}*/
+
+
+form input[type=submit] {
+    border-radius: 12.5px;
+    background-color: #034e0e;
+    color: #FFFFFF;
+    border: 0;
+    font-size: 24px;
+    display: inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    /*margin: 15px;*/
+    margin-top: 50px;
+    /*float: right;*/
+    cursor: pointer;
+    width: 40%;
+}
+
+
+form {
+    display: inline-block;
+    width: 100%;
+
+}
+
+
+#RegisterForm, #LoginForm {
+    top: 50%;
+    right: 0;
+    left: 0;
+}
+
+.Modes {
+    display: inline;
+}
+
+.Modes div {
+    border-radius: 12.5px;
+    background-color: #adadad;
+    color: #FFFFFF;
+    display: inline-block;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.ActiveMode div {
+    background-color: #003898;
+}
+
+/*Need to sort hover on ActiveMode*/
+.Modes div:hover {
+    background-color: #c30003;
+    font-weight: bold;
+    font-style: italic;
+}
+
+html {
+    width: 100%;
+}
+
+#split {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 50px;
+    text-align: left;
+}
+
+#split hr {
+    width: 100%;
+    /*align:center*/
+    margin: 0 auto;
+    opacity: 0.3;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* @media only screen and (min-width: 1024px) {
+
+    .Modes {
+        margin-right: 25px;
+    }
+} */
+/* 
+@media only screen and (max-width: 1023px) {
+    .Modes {
+        margin-bottom: 25px;
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    form input[type=text], form input[type=password], form input[type=email] {
+        font-size: 20px;
+    }
+} */

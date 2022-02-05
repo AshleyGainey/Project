@@ -1,0 +1,491 @@
+/*Start Search Page*/
+
+/*Start of Offline Use*/
+/*TODO: OFFLINE USE ONLY. PLEASE DELETE WHEN GIVING COURSEWORK IN*/
+
+@font-face {
+    font-family: Nunito;
+    src: url('fonts/MasterPage/Nunito.ttf') format("truetype");
+}
+
+/*End of Offline use*/
+
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+#header, footer {
+    background-color: #1a1862;
+}
+
+body {
+    background-color: #bfbfbf;
+}
+
+header {
+    display: inline;
+}
+
+
+#logo {
+    /*height: 130px;*/
+    padding-top: 10px;
+    vertical-align: middle;
+}
+
+@font-face {
+    font-family: HogwartsFont;
+    src: url('fonts/MasterPage/HogwartsFont.ttf') format("truetype");
+}
+
+#header h1 {
+    color: #ffff3f;
+    font-size: 5vw;
+}
+
+.hogwartsFont {
+    font-family: HogwartsFont, sans-serif;
+}
+
+.NunitoFont {
+    font-family: nunito, sans-serif;
+} */
+
+#header h1 {
+    vertical-align: middle;
+}
+
+#header h1, #header img {
+    display: inline;
+}
+
+
+.HeaderRightButton {
+    display: inline;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+    margin: auto;
+    padding-right: 10px;
+    padding-top: 20px;
+    float: right;
+    word-wrap: break-word;
+
+}
+
+.HeaderRightButton img {
+    max-width: 70px;
+    display: block;
+    margin: 0 auto;
+}
+
+.HeaderRightButton h2 {
+    color: #FFFFFF;
+    display: inline;
+    text-align: justify;
+}
+
+#hamburgerMenu {
+    width: 70px;
+    font-size: 20px;
+    display: none;
+}
+
+#hamburgerMenu h2 {
+    font-size: 20px;
+}
+
+#LoginMenuHolder {
+    width: 100px;
+    font-size: 10px;
+    /* display: none; */
+}
+
+#LoginMenuHolder img {
+    padding-bottom: 10px;
+
+}
+
+
+
+#SearchBook img {
+    max-width: 40px;
+    display: block;
+    margin: 0 auto;
+}
+
+#SearchBook {
+    background-color: #034e0e;
+    float: right;
+    padding: 4px;
+}
+
+
+/*Start of Hamburger*/
+/* The Overlay (background) */
+#myNav {
+    /* Height & width depends on how you want to reveal the overlay (see JS below) */
+    height: 100%;
+    width: 0;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    background-color: rgb(95, 0, 0); /* Black fallback color */
+    background-color: rgba(95, 0, 0, 0.9); /* Black w/opacity */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    /*transition: 1s; !* 1 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) *!*/
+}
+
+.centreDiv {
+    text-align: center;
+}
+
+/* Position the content inside the overlay */
+.overlay-content {
+    position: relative;
+    top: 25%; /* 25% from the top */
+    width: 100%; /* 100% width */
+    text-align: center; /* Centered text/links */
+    margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+}
+
+#myNav hr {
+    width: 40%;
+    /*align:center*/
+    margin: 0 auto;
+    opacity: 0.3;
+}
+
+/* The navigation links inside the overlay */
+#myNav a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 60px;
+    color: #ffff3f;
+    display: block; /* Display block instead of inline */
+    transition: 0.3s; /* Transition effects on hover (color) */
+}
+
+/* When you mouse over the navigation links, change their color */
+#myNav a:hover, #myNav a:focus {
+    color: #FFFFFF;
+}
+
+/* Position the close button (top right corner) */
+#myNav .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 60px;
+    cursor: pointer;
+}
+
+
+/*!* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap *!*/
+/* @media screen and (max-height: 800px), screen and (max-width: 400px) {
+    #myNav a {
+        font-size: 20px
+    }
+
+    #myNav .closebtn {
+        font-size: 40px;
+        top: 15px;
+        right: 35px;
+    }
+} */
+
+/*End of Hamburger*/
+
+.category img {
+    max-width: 20px;
+    float: right;
+}
+
+footer h1 {
+    color: #ffff3f;
+}
+
+.SubCategory a {
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 5px;
+    font-size: 20px;
+    display: block;
+}
+
+.SubCategory a:hover {
+    font-weight: bold;
+    font-style: italic;
+}
+
+footer h1, footer img {
+    display: inline;
+    padding: 10px;
+}
+
+footer h4 {
+    color: #bebebe;
+    text-align: center;
+    font-size: 0.7em;
+}
+
+.category, #Copyright {
+    padding: 5px;
+}
+
+
+.SubCategory {
+    display: none;
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+footer a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#MainContent {
+    margin: 0 20px 20px 20px;
+    /*margin-top: 0px;*/
+
+    /*margin-right: 0px;*/
+    /*margin-bottom: 20px;*/
+    /*margin-left: 0px;*/
+}
+
+/*#MainContent {*/
+/*    margin: 0 20px 20px 20px;*/
+/*    margin-top: 0px;*/
+/*    !*margin-right: 20px;*!*/
+/*    margin-bottom: 20px;*/
+/*    !*margin-left: 20px;*!*/
+/*}*/
+
+
+#topArea {
+    min-height: 60px;
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+
+/*For footer staying at bottom*/
+html {
+    height: 100%;
+    position: relative;
+}
+
+body {
+    min-height: 100%;
+    padding: 0;
+    margin: 0;
+    position: relative;
+
+}
+
+body::after {
+    content: '';
+    display: block;
+    height: 191px;
+}
+
+#Mainbody::after {
+    content: '';
+    display: block;
+    height: 191px;
+}
+
+/*#MainContent {*/
+/*    padding-bottom: 191px;*/
+/*}*/
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    clear: both;
+}
+
+/*End of footer*/
+
+.rotateArrow {
+    transform: scaleY(-1);
+}
+
+/*Responsiveness starts*/
+
+
+/* @media only screen and (min-width: 1024px) {
+    #hamburgerMenu {
+        display: none;
+    }
+
+    #NavBar {
+        display: inline-block;
+    }
+
+    #LoginMenuHolder {
+        display: inline-block;
+        float: right;
+    }
+} */
+
+/* 
+@media only screen and (max-width: 1023px) {
+    #hamburgerMenu {
+        display: inline;
+    }
+
+    #NavBar {
+        display: none;
+    }
+
+    #LoginMenuHolder {
+        display: none;
+    }
+} */
+
+/* @media only screen and (max-width: 600px) {
+    #header img {
+        height: 80px;
+    }
+
+
+    #hamburgerMenu {
+        display: inline;
+    }
+
+    #hamburgerMenu img {
+        max-height: 30px;
+    }
+
+    #NavBar {
+        display: none;
+
+    }
+
+    #LoginMenuHolder {
+        display: none;
+    }
+} */
+
+
+/*Code from gadgetgainey.com*/
+#NavBar {
+    background-color: #003898;
+    width: 100%;
+    text-align: center;
+}
+
+.chosenItem {
+    background-color: #1B3C7D;
+}
+
+#NavBar ul li, .subMenu {
+    background-color: #003898;
+    color: white;
+    font-size: 15px;
+    width: 200px;
+}
+
+
+#NavBar ul {
+    list-style-type: none;
+    padding: 10px;
+}
+
+/*Apply inline-block to the all of the nav bar so that they are horizontally align and not a vertically list,
+center the div too and use a pointer cursor when on the section*/
+#NavBar ul li {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
+
+/*Don't display the subMenus at first, absolute positioning allows the element to be placed underneath the navmenuItem
+Margin-Left 3px so the menu doesn't go beyond the max width of the whole body (1024px)
+/*and allow a stack order of 1024 (on top of everything).*/
+.subMenu {
+    display: none;
+    position: absolute;
+    margin-left: -3px;
+    z-index: 1024;
+}
+
+/*On click, show the subMenus as a display of block*/
+.menuItemHover {
+    display: block;
+}
+
+/*Position the products at a 1.5em for the top, and set the left to 99% so it isn't fully on top of the subMenu,
+not 100% so it doesn't go off the screen for the third menu item*/
+.subsubMenu {
+    margin-top: -1.5em;
+    left: 99%;
+}
+
+
+#NavBar ul li a {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+/*End of Nav Bar*/
+
+
+header a {
+    text-decoration: none;
+}
+
+#leftTopArea {
+    word-break: break-all;
+    word-wrap: normal;
+    color: #003898;
+    width: 60vw;
+    margin: 10px;
+}
+
+#rightTopArea {
+    overflow-wrap: break-word;
+    /*max-width: 10%;*/
+    float: right;
+}
+
+
+#leftTopArea, #rightTopArea {
+    display: inline-block;
+}
+
+
+/* Start of customisable Scrollbar*/
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    /*background: #f1f1f1;*/
+    border-radius: 10px;
+
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+
+}
+
+/*End of customisable Scrollbar*/

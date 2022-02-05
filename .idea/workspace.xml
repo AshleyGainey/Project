@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c11cf9ce-6b79-40e8-9487-af456e4f21d3" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="ComposerSettings">
+    <execution>
+      <executable />
+    </execution>
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FileColors">
+    <fileColor scope="Local Unit Tests" color="bbff7e" />
+    <fileColor scope="Android Instrumented Tests" color="bbff7e" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="CSS File" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1YsezIVQYH4OqUPff3iqAnJ21UW" />
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="project.propDebugger" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\Coursework" />
+      <recent name="C:\xampp\htdocs\Coursework\images\Book Details" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\Coursework\images" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="JavaScript Debug.Results.php">
+    <configuration name="Account_new.php" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:8080/Coursework/Account_new.php" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="Library Details.php" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:8080/Coursework/Library Details.php" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="Master.php" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:8080/Coursework/Master.php" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="Results.php" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:8080/Coursework/Results.php" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="index.php" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:8080/Coursework/index.php" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.Results.php" />
+        <item itemvalue="JavaScript Debug.Library Details.php" />
+        <item itemvalue="JavaScript Debug.index.php" />
+        <item itemvalue="JavaScript Debug.Account_new.php" />
+        <item itemvalue="JavaScript Debug.Master.php" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c11cf9ce-6b79-40e8-9487-af456e4f21d3" name="Default Changelist" comment="" />
+      <created>1583735990007</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1583735990007</updated>
+      <workItem from="1583735993379" duration="18462000" />
+      <workItem from="1583763988366" duration="10707000" />
+      <workItem from="1583825576688" duration="36000" />
+      <workItem from="1583827408360" duration="5014000" />
+      <workItem from="1583910824163" duration="12828000" />
+      <workItem from="1583995020201" duration="17266000" />
+      <workItem from="1584079801301" duration="16938000" />
+      <workItem from="1584127272434" duration="1440000" />
+      <workItem from="1584176220134" duration="7628000" />
+      <workItem from="1584187445030" duration="31582000" />
+      <workItem from="1584229506834" duration="610000" />
+      <workItem from="1584267455768" duration="30590000" />
+      <workItem from="1584348155841" duration="12014000" />
+      <workItem from="1584373722526" duration="5262000" />
+      <workItem from="1584379773666" duration="14485000" />
+      <workItem from="1584427798834" duration="18059000" />
+      <workItem from="1584512921809" duration="23230000" />
+      <workItem from="1584690081088" duration="8130000" />
+      <workItem from="1584880429011" duration="657000" />
+      <workItem from="1584960348240" duration="1633000" />
+      <workItem from="1585249327716" duration="43513000" />
+      <workItem from="1585407543419" duration="14863000" />
+      <workItem from="1585473647159" duration="28605000" />
+      <workItem from="1585559714387" duration="2716000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+</project>
