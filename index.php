@@ -23,94 +23,66 @@
     <div>
         <header>
             <div id="header">
-                <a href="index.php" id="LeftSide">
-                    <img id="Gadget Gainey Logo" src="images/Header/Gadget Gainey Logo (Smaller).png" 
-                    alt="Gadget Gainey - Two White G's joining together with the text saying Gadget Gainey"
-                    width="249" height="148"/>
-                </a>
+                <div id="FirstSection">
+                    <a href="index.php" id="LeftSide">
+                        <img id="Gadget Gainey Logo" src="images/Header/Gadget Gainey Logo (Smaller).png" alt="Gadget Gainey - Two White G's joining together with the text saying Gadget Gainey" width="249" height="148" />
+                    </a>
+                </div>
 
-                <div class="searchBarDiv">
-                    <div class="search">
-                        <input type="text" class="searchInput" placeholder="Search our catalogue...">
-                        <button type="submit" class="searchButton">
-                            <i class="fa fa-search"></i>
-                        </button>
+                <div id="SecondSection">
+                    <div class="searchBarDiv">
+                        <div class="search">
+                            <input type="text" class="searchInput" placeholder="Search our catalogue...">
+                            <button type="submit" class="searchButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-    <div id="hamburgerMenu" class="HeaderRightButton" onclick="openNav()">
-        <img alt="Menu icon" src="images/MasterPage/Hamburger Menu.png" />
-        <h2 class="NunitoFont">Menu</h2>
-    </div>
 
-    <!-- The overlay -->
-    <div id="myNav" class="overlay">
+                <div id="ThirdSection">
+                    <a id="Basket" href="Login.php">
+                        <div id="LoginMenuHolder" class="HeaderRightButton">
+                            <i class="fa fa-shopping-basket" aria-hidden="true"></i>
+                            <span class='badge' id='lblCartCount'>1</span>
+                        </div>
+                    </a>
 
-        <!-- Button to close the overlay navigation -->
-        <div><a class="closebtn" onclick="closeNav()">&times;</a></div>
-
-        <!-- Overlay content -->
-        <div class="overlay-content NunitoFont">
-            <a href="#">About Hogwarts University</a>
-            <hr>
-            <a href="#">News</a>
-            <hr>
-            <a href="#">Support</a>
-            <hr>
-            <a id="LoginOrAccount" href="Login.php">Account</a>
+                    <a id="LoginMenu" href="Login.php">
+                        <div id="LoginMenuHolder" class="HeaderRightButton">
+                            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                            <h2 class="NunitoFont">Account</h2>
+                        </div>
+                    </a>
+                </div>
+        </header>
+        <div id="topArea">
+            &nbsp;<a href="search.php">
+                <div id="SearchBook">
+                    <img alt="Search Book - White Magnifying Glass with a white book inside it" src="images/MasterPage/Search.png" />
+                </div>
+            </a>
         </div>
-    </div>
+        <div id="MainContent">
+            <div id="WelcomeTo" class="centreDiv">
+                <img alt="Hogwarts University Logo with the Text of Welcome To Hogwarts University" src="images/Home/Welcome To Hogwarts University.gif">
 
-    <a id="Basket" href="Login.php">
-        <div id="LoginMenuHolder" class="HeaderRightButton">
-        <i class="fa fa-shopping-basket" aria-hidden="true"></i>
-        <span class='badge' id='lblCartCount'>1</span>
-        </div>
-    </a>
-
-    <a id="LoginMenu" href="Login.php">
-        <div id="LoginMenuHolder" class="HeaderRightButton">
-        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-            <h2 class="NunitoFont">Account</h2>
-        </div>
-    </a>
-  
-
-    <div id="NavBar" class="NunitoFont">
-        <ul>
-            <li><a href="Results.php">About Hogwart's University</a></li>
-            <li><a href="#news">News</a></li>
-            <li><a href="#contact">Support</a></li>
-        </ul>
-    </div>
-    </div>
-    </header>
-    <div id="topArea">
-        &nbsp;<a href="search.php">
-            <div id="SearchBook">
-                <img alt="Search Book - White Magnifying Glass with a white book inside it" src="images/MasterPage/Search.png" />
             </div>
-        </a>
-    </div>
-    <div id="MainContent">
-        <div id="WelcomeTo" class="centreDiv">
-            <img alt="Hogwarts University Logo with the Text of Welcome To Hogwarts University" src="images/Home/Welcome To Hogwarts University.gif">
 
-        </div>
-
-        <div class="boxed-content col-12 centreDiv">
-            <div id="visitLibraries" class="box-section NunitoFont centreText col-3">
-                <a href="libraries.php">
-                    <img src="images/Home/Boxed Content/Library.jfif">
-                    <h2 class="bottom-right">Library</h2>
-                </a>
-            </div>
-            <div id="news" class="box-section NunitoFont centreText col-3">
-                <img src="images/Home/Boxed Content/News2.png">
-                <h2 class="bottom-right">News</h2>
+            <div class="boxed-content col-12 centreDiv">
+                <div id="visitLibraries" class="box-section NunitoFont centreText col-3">
+                    <a href="libraries.php">
+                        <img src="images/Home/Boxed Content/Library.jfif">
+                        <h2 class="bottom-right">Library</h2>
+                    </a>
+                </div>
+                <div id="news" class="box-section NunitoFont centreText col-3">
+                    <img src="images/Home/Boxed Content/News2.png">
+                    <h2 class="bottom-right">News</h2>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </body>
 
@@ -169,17 +141,17 @@
         src: url('fonts/CenturyGothic.ttf') format("truetype");
     }
 
- body {
-    font-family: Century-Gothic, sans-serif;
- }
+    body {
+        font-family: Century-Gothic, sans-serif;
+    }
+
     .search {
         width: 100%;
-        position: relative;
-        display: flex;
+        text-align: center;
     }
 
     .searchInput {
-        width: 300px;
+        width: 70%;
         height: 25px;
         font-size: 1em;
         border-radius: 25px;
@@ -190,11 +162,7 @@
         background: none;
         font-family: Century-Gothic, sans-serif;
         color: #FFFFFF;
-
-
-        width: 100%;
         border: 3px solid #FFFFFF;
-        height: 20px;
         outline: none;
     }
 
@@ -238,23 +206,67 @@
 
 
     #lblCartCount {
-    font-size: 2.5em;
-    background: #008528;
-    color: #fff;
-    padding: 0 5px;
-    margin-left: -25px;
-    vertical-align: bottom;
-}
-.badge {
-  padding-left: 9px;
-  padding-right: 9px;
-  -webkit-border-radius: 9px;
-  -moz-border-radius: 9px;
-  border-radius: 25%;
-}
+        font-size: 2.5em;
+        background: #008528;
+        color: #fff;
+        padding: 0 5px;
+        margin-left: -25px;
+        vertical-align: bottom;
+    }
+
+    .badge {
+        padding-left: 9px;
+        padding-right: 9px;
+        -webkit-border-radius: 9px;
+        -moz-border-radius: 9px;
+        border-radius: 25%;
+    }
+
+
+    #searchBarDiv {
+        width: 100%;
+        text-align: center;
+    }
+
+    #header {
+        width: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+
+        border-bottom: 1px solid #d3d3d3;
+        overflow: auto;
+
+
+        margin: 0 10px;
+        display: flex;
+    }
+
+    #firstSection {
+        font-size: 24pt;
+        color: #08a3d9;
+        width: 20%;
+        float: left;
+    }
+
+    #SecondSection {
+        width: 60%;
+        float: left;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
 
 
 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #ThirdSection {
+        float: right;
+        width: 20%;
+        text-align: center;
+    }
 </style>
 
 
