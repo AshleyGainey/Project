@@ -18,64 +18,74 @@
 
 <body>
     <?php include "./header.html" ?>
+    <div id="mainBody">
+        <!-- Old Triangle method -->
+        <!-- <div class="triangle"></div> -->
+        <div class="carousel">
+            <div class="row visible-md visible-lg">
+                <div id="contenedor-slider" class="contenedor-slider">
+                    <div id="slider" class="slider">
 
-    <div class="carousel">
-        <div class="row visible-md visible-lg">
-            <div id="contenedor-slider" class="contenedor-slider">
-                <div id="slider" class="slider">
-                    <a id="slider1" class="slider__section" href=""><img src="Images\Home\Loading.png" class="slider__img">
-                    </a>
-                    <a id="slider2" class="slider__section" href=""><img src="Images\Home\Loading.png" class="slider__img">
-                    </a>
-                    <a id="slider3" class="slider__section" href=""><img src="Images\Home\Loading.png" class="slider__img">
-                    </a>
-                    <a id="slider4" class="slider__section" href=""><img src="Images\Home\Loading.png" class="slider__img">
-                    </a>
-                    <a id="slider5" class="slider__section" href=""><img src="Images\Home\Loading.png" class="slider__img">
-                        </section>
-                        <a id="slider6" class="slider__section"><img src="Images\Home\Loading.png" class="slider__img">
-                            </section>
+                        <a id="slider1" class="slider__section" href="">1<img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                        </a>
+                        <a id="slider2" class="slider__section" href="">2<img src="Images\Home\Welcome To Hogwarts University background 2.png" class="slider__img">
+                            2</a>
+                        <a id="slider3" class="slider__section" href="">3<img src="Images\Home\Right Arrow.svg" class="slider__img">
+                            3 </a>
+                        <a id="slider4" class="slider__section" href="">4<img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                            4 </a>
+                        <a id="slider5" class="slider__section" href="">5<img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                            5 </a>
+                        <a id="slider6" class="slider__section">6<img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                            6 </a>
+                    </div>
+
+                    <div class="sliderArrows">
+                        <a href=" #" id="left">
+                            <img src="images/Home/Right Arrow.svg" alt="Next Slide" />
+                        </a>
+                        <a href="#" id="right">
+                            <img src="images/Home/Right Arrow.svg" alt="Previous Slide" />
+                        </a>
+                    </div>
+
+                    <div class="indicatorDiv">
+                        <div class="sliderIndicators">
+                            <a href=" #" class="button" id="sliderIndicatorsButton1" onclick="myFunction(1)">
+                            </a>
+                            <a href=" #" class="button" id="sliderIndicatorsButton2" onclick="myFunction(2)">
+                            </a>
+                            <a href=" #" class="button" id="sliderIndicatorsButton3" onclick="myFunction(3)">
+                            </a>
+                            <a href=" #" class="button" id="sliderIndicatorsButton4" onclick="myFunction(4)">
+                            </a>
+                            <a href=" #" class="button" id="sliderIndicatorsButton5" onclick="myFunction(5)">
+                            </a>
+                            <a href=" #" class="button" id="sliderIndicatorsButton6" onclick="myFunction(6)">
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div id="btn-prev" class="btn-prev">&#60;</div>
-                <div id="btn-next" class="btn-next">&#62;</div>
-
             </div>
-
         </div>
-
-
     </div>
-
-
     <?php include "./footer.html" ?>
 
     <style>
-       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        .button {
+            background-color: #1a1862;
+            /* Green */
+            border: 5px solid #FFFFFF;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
 
 
 
@@ -84,7 +94,10 @@
             margin: auto;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 0 5px #143576;
+            box-shadow: 0 0 0 5px #FFFFFF;
+            border-radius: 2%;
+            height: 500px;
+            max-width: 1000px;
         }
 
         .slider {
@@ -102,125 +115,317 @@
         .slider__img {
             display: block;
             width: 100%;
-            height: 100%;
         }
 
-        .btn-prev,
-        .btn-next {
-            width: 50px;
-            height: 40px;
-            background: #143576;
-            color: white;
+        .sliderArrows a {
             position: absolute;
             top: 50%;
-            transform: translateY(-50%);
-            font-size: 25px;
-            text-align: center;
-            border-radius: 25%;
-            font-family: Arial Black;
             cursor: pointer;
         }
 
-        .btn-prev:hover,
-        .btn-next:hover {
-            background: white;
-            color: #143576;
+        .sliderArrows a:hover,
+        .sliderArrows a:hover {
+            opacity: 50%;
 
         }
 
-        .btn-prev {
+
+        .indicatorDiv,
+        .black {
+            position: absolute;
+            width: 100%;
+            bottom: 10px;
+        }
+
+        .sliderIndicators {
+            text-align: center;
+        }
+
+        .sliderIndicators a {
+            top: 50%;
+            cursor: pointer;
+        }
+
+        .sliderIndicators a:hover,
+        .sliderIndicators a:hover {
+            opacity: 50%;
+
+        }
+
+        #left {
             left: 5px;
+            transform: rotate(180deg) translateY(50%);
         }
 
-        .btn-next {
+        #right {
             right: 5px;
+            transform: translateY(-50%);
+        }
+
+
+        /* Add a margin to the main_container that is inside the main body, this is because we 
+want something up against the Nav (for instance the breadcrumb/the carousel)*/
+        #mainBody {
+            margin-top: 30px;
+            margin-left: 50px;
+            margin-right: 50px;
+
+            /* Was having an issue if I typed more than expected for the search, then it would destroy the padding 
+	so have added word-wrap, this should apply to the main_container, no matter whether it is a heading 
+	(h1, h2, h3 etc.), paragraph (p) or something other */
+            word-wrap: break-word;
+
+        }
+
+        #sliderIndicators {
+            position: absolute;
+            top: 50%;
+            cursor: pointer;
+
+        }
+
+
+        .button {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+
+        #sliderIndicators .button {
+            position: absolute;
+            top: 50%;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        #sliderIndicators button:hover,
+        #sliderIndicators button:hover {
+            opacity: 50%;
+
+        }
+
+        #first {
+            left: 5px;
+            transform: rotate(180deg) translateY(50%);
+        }
+
+        #right {
+            right: 5px;
+            transform: translateY(-50%);
+        }
+
+        /* Old Traingle method
+
+        .triangle {
+            position: relative;
+            background-color: #1a1862;
+            text-align: left;
+        }
+
+        .triangle:before,
+        .triangle:after {
+            content: '';
+            position: absolute;
+            background-color: inherit;
+        }
+
+        .triangle,
+        .triangle:before,
+        .triangle:after {
+            width: 2em;
+            height: 2em;
+            border-top-right-radius: 50%;
+            border-right: 4px solid white;
+            border-top: 4px solid white;
+
+        }
+
+        .triangle {
+            transform: rotate(-90deg) skewX(-30deg) scale(1, .866);
+        }
+
+        .triangle:before {
+            transform: rotate(-135deg) skewX(-45deg) scale(1.414, .707) translate(0, -50%);
+        }
+
+        .triangle:after {
+            transform: rotate(135deg) skewY(-45deg) scale(.707, 1.414) translate(50%);
+        } */
+
+
+
+
+
+
+
+
+
+
+
+        #first {
+            background-color: #1a1862;
+            border-radius: 50%;
+            width: 500px;
+        }
+
+        .black:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, black 100%);
         }
     </style>
 
 
-    <script>
-        var oldArea;
+    <script type="text/javascript">
+        var timer;
+        var sliderNum;
+        var prevSliderNum
         $(document).ready(function() {
-            // $('#MainContent').css('padding-bottom', $('footer').height() - 50);
+            sliderNum = 1;
+            autoplay();
+            var slider = $('#slider');
+
+            // move the last image to the first place
+            $('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
+            // display the first image with a margin of -100%
+            slider.css('margin-left', '-' + 100 + '%');
+
         });
 
-        /* Open when someone clicks on the span element */
-        function openNav() {
+        function myFunction(slide) {
+            // alert("Hello!" + slide);
+            var currentSlide = sliderNum;
 
-            $('#myNav').animate({
-                width: '100%'
-            }, 600);
-        }
+            var wantToGoTo = slide
+            var slidesToGoNextTo;
 
-
-        /* Close when someone clicks on the "x" symbol inside the overlay */
-        function closeNav() {
-            $("#myNav").animate({
-                width: '0%'
-            }, 600);
-        }
-
-        function expandFooter(Area) {
-
-            if (oldArea == null) {
-                $("#" + Area + "> a > div > img").addClass("rotateArrow");
-            } else {
-                if (oldArea != Area) {
-                    $(".SubCategory").slideUp();
-                    $("#" + oldArea + "> a > div > img").removeClass("rotateArrow");
-                    $("#" + Area + "> a > div > img").addClass("rotateArrow");
-                } else {
-                    oldArea = null;
-                    $("#" + Area + "> a > div > img").removeClass("rotateArrow");
-                }
+            if (wantToGoTo > currentSlide) {
+                slidesToGoNextTo = wantToGoTo - currentSlide;
+                console.log("slidesToGoNextTo" + slidesToGoNextTo);
+                moveNext(slidesToGoNextTo);
+            } else if (currentSlide > wantToGoTo) {
+                slidesToGoNextTo = currentSlide - wantToGoTo;
+                console.log("slidesToGoNextTo" + slidesToGoNextTo);
+                movePrev(slidesToGoNextTo);
             }
-
-            $("#" + Area + " > div").slideToggle();
-
-            //
-            // $("#MainContent").delay(500).animate({
-            //     'padding-bottom': $('footer').height()
-            // }, "slow");
-
-
-            oldArea = Area;
-
-            // if (old!= Area) {
-            //     oldArea = Area;
-            // } else {
-            //
-            // }
-            // $('#MainContent').animate({padding-bottom: $('footer').height()});
-
-
-            // $(+Area + ".SlideDowns").slideToggle();
-            // console.log("Hello, this is coming down here");
         }
 
 
-        $(window).resize(function() {
-            console.log($('footer').height());
+
+
+        function goToSlide(slide) {
+            var currentSlide = sliderNum;
+
+            var wantToGoTo = slide
+            var slidesToGoNextTo;
+
+
+            if (wantToGoTo > current) {
+                slidesToGoNextTo = wantToGoTo - current;
+                console.log("slidesToGoNextTo" + slidesToGoNextTo);
+            } else if (current > wantToGoTo) {
+                slidesToGoNextTo = current - wantToGoTo;
+                console.log("slidesToGoNextTo" + slidesToGoNextTo);
+            }
+        }
+
+
+        $('.sliderArrows #right').on('click', function() {
+            moveNext(1);
+            clearInterval(interval);
+            autoplay();
+            changeIndictors();
+            console.log("sliderNum" + sliderNum);
+        });
+
+        $('#slider').mouseenter(function() {
+            clearInterval(interval);
+        });
+
+        $('#slider').mouseleave(function() {
+            autoplay();
 
         });
 
-        $("#visitLibraries").mouseover(function() {
-            $("#visitLibraries h2").css("background", "#034e0e")
-        });
-        $("#visitLibraries").mouseleave(function() {
-            $("#visitLibraries h2").css("background", "#003898")
-        });
-
-        $("#news").mouseover(function() {
-            $("#news h2").css("background", "#034e0e")
-        });
-        $("#news").mouseleave(function() {
-            $("#news h2").css("background", "#003898")
+        $('.sliderArrows #left').on('click', function() {
+            movePrev();
+            clearInterval(interval);
+            autoplay();
+            changeIndictors();
+            console.log("sliderNum" + sliderNum);
         });
 
+        function changeIndictors() {
+            var even = document.getElementById("sliderIndicatorsButton" + sliderNum);
+            console.log(even);
+            even.style.backgroundColor = "red";
 
-        $(document).ready(function() {
-            $(document).trigger('fontfaceapplied');
-        });
+            var even = document.getElementById("sliderIndicatorsButton" + prevSliderNum);
+            console.log(even);
+            even.style.backgroundColor = "#1a1862";
+        }
+
+
+        // Old Code (TODO Ashley: Remove)
+
+        // var oldArea;
+
+        // /* Open when someone clicks on the span element */
+        // function openNav() {
+
+        //     $('#myNav').animate({
+        //         width: '100%'
+        //     }, 600);
+        // }
+
+
+        // /* Close when someone clicks on the "x" symbol inside the overlay */
+        // function closeNav() {
+        //     $("#myNav").animate({
+        //         width: '0%'
+        //     }, 600);
+        // }
+
+        // function expandFooter(Area) {
+
+        //     if (oldArea == null) {
+        //         $("#" + Area + "> a > div > img").addClass("rotateArrow");
+        //     } else {
+        //         if (oldArea != Area) {
+        //             $(".SubCategory").slideUp();
+        //             $("#" + oldArea + "> a > div > img").removeClass("rotateArrow");
+        //             $("#" + Area + "> a > div > img").addClass("rotateArrow");
+        //         } else {
+        //             oldArea = null;
+        //             $("#" + Area + "> a > div > img").removeClass("rotateArrow");
+        //         }
+        //     }
+
+        //     $("#" + Area + " > div").slideToggle();
+
+        //     //
+        //     // $("#MainContent").delay(500).animate({
+        //     //     'padding-bottom': $('footer').height()
+        //     // }, "slow");
+
+
+        //     oldArea = Area;
+
+        //     // if (old!= Area) {
+        //     //     oldArea = Area;
+        //     // } else {
+        //     //
+        //     // }
+        //     // $('#MainContent').animate({padding-bottom: $('footer').height()});
+
+
+        //     // $(+Area + ".SlideDowns").slideToggle();
+        //     // console.log("Hello, this is coming down here");
+        // }
     </script>
 
 </html>
