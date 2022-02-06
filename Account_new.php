@@ -388,9 +388,6 @@
     }
 
     function ToggleFilter() {
-        // $("#FilterContents").slideToggle();
-        // $("#wholeSearchBar").slideToggle();
-
         if ($("#FilterContents").css('display') == 'none') {
             $(".bodyOfFilter h2").text("Close");
             $(".bodyOfFilter img").addClass("rotateArrow");
