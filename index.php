@@ -11,7 +11,6 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
     <!--    Offline use -->
     <script src="jquery-3.4.1.min.js"></script>
 </head>
@@ -26,18 +25,18 @@
                 <div id="contenedor-slider" class="contenedor-slider">
                     <div id="slider" class="slider">
 
-                        <a id="slider1" class="slider__section" href="">1<img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                        <a id="slider1" class="slider__section" href=""><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
                         </a>
-                        <a id="slider2" class="slider__section" href="">2<img src="Images\Home\Welcome To Hogwarts University background 2.png" class="slider__img">
-                            2</a>
-                        <a id="slider3" class="slider__section" href="">3<img src="Images\Home\Right Arrow.svg" class="slider__img">
-                            3 </a>
-                        <a id="slider4" class="slider__section" href="">4<img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
-                            4 </a>
-                        <a id="slider5" class="slider__section" href="">5<img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
-                            5 </a>
-                        <a id="slider6" class="slider__section">6<img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
-                            6 </a>
+                        <a id="slider2" class="slider__section" href=""><img src="Images\Home\Welcome To Hogwarts University background 2.png" class="slider__img">
+                        </a>
+                        <a id="slider3" class="slider__section" href=""><img src="Images\Home\Right Arrow.svg" class="slider__img">
+                        </a>
+                        <a id="slider4" class="slider__section" href=""><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                        </a>
+                        <a id="slider5" class="slider__section" href=""><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                        </a>
+                        <a id="slider6" class="slider__section"><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                        </a>
                     </div>
 
                     <div class="sliderArrows">
@@ -68,9 +67,32 @@
                 </div>
             </div>
         </div>
-    </div>
-    <?php include "./footer.html" ?>
 
+        <div class="cardArea">
+            <div class="cardContainer leftPart">
+                <div class="card">
+                    <a href="#"><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                    </a>
+                </div>
+                <div class="writingOfCard">
+                    <a href="#">About Us<img src="images/Home/Right Arrow.svg" alt="About Us" /></a>
+                </div>
+            </div>
+
+            <div class="cardContainer rightPart">
+                <div class="card">
+                    <a href="#"><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                    </a>
+                </div>
+                <div class="writingOfCard">
+                    <a href="#">Contact Us<img src="images/Home/Right Arrow.svg" alt="Contact Us" /></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <?php include "./footer.html" ?>
     <style>
         .button {
             background-color: #1a1862;
@@ -88,6 +110,18 @@
         }
 
 
+        .carousel {
+            margin-bottom: 50px;
+
+        }
+
+        .card {
+            box-shadow: 0 0 0 5px #FFFFFF;
+            border-radius: 2%;
+            height: 125px;
+            width: 250px;
+            overflow: hidden;
+        }
 
 
         .contenedor-slider {
@@ -99,6 +133,7 @@
             height: 500px;
             max-width: 1000px;
         }
+
 
         .slider {
             display: flex;
@@ -127,6 +162,43 @@
         .sliderArrows a:hover {
             opacity: 50%;
 
+        }
+
+        .cardArea {
+            display: inline-block;
+            width: 100%;
+        }
+
+        .cardContainer {
+            display: inline-block;
+            width: 250px;
+        }
+
+        .writingOfCard a {
+            font-size: 25px;
+            ;
+            text-decoration: none;
+            color: #000000;
+            position: relative;
+        }
+
+        .writingOfCard img {
+            float: right;
+            width: 20px;
+        }
+
+        .writingOfCard {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+
+        .leftPart {
+            float: left;
+        }
+
+        .rightPart {
+            float: right;
         }
 
 
@@ -284,6 +356,9 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         var oldArea;
         $(document).ready(function() {
             // $('#MainContent').css('padding-bottom', $('footer').height() - 50);
+            prevSliderNum = 1;
+            changeIndictors();
+
         });
 
         /* Open when someone clicks on the span element */
@@ -497,13 +572,15 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         }
 
         function changeIndictors() {
-            var even = document.getElementById("sliderIndicatorsButton" + sliderNum);
-            console.log(even);
-            even.style.backgroundColor = "red";
+
 
             var even = document.getElementById("sliderIndicatorsButton" + prevSliderNum);
             console.log(even);
             even.style.backgroundColor = "#1a1862";
+
+            var even = document.getElementById("sliderIndicatorsButton" + sliderNum);
+            console.log(even);
+            even.style.backgroundColor = "red";
 
         }
     </script>
