@@ -27,7 +27,7 @@
                 <div class="cardContainer leftPart">
                     <div class="card">
                         <div class="writingOfCard">
-                            <a href="#">Change Your Email<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
+                            <a href="Change_Email.php">Change Your Email</a><img src="images/Home/Right Arrow.svg" alt="Order Details" />
                         </div>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                 <div class="cardContainer rightPart">
                     <div class="card">
                         <div class="writingOfCard">
-                            <a href="#">Change Your Password<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
+                            <a href="#">Change Your Password</a><img src="images/Home/Right Arrow.svg" alt="Order Details" />
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
         </div>
 
     </div>
-    <?php include "./footer.html" ?>
+    <?php include "./footer.php" ?>
 </body>
 
 </html>
@@ -94,9 +94,9 @@
         box-shadow: 0 0 0 5px #FFFFFF;
         border-radius: 2%;
         height: 75px;
-        width: 250px;
         overflow: hidden;
         position: relative;
+        padding: 10px;
     }
 
     .firstRow {

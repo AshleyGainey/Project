@@ -24,7 +24,6 @@
             <div class="row visible-md visible-lg">
                 <div id="contenedor-slider" class="contenedor-slider">
                     <div id="slider" class="slider">
-
                         <a id="slider1" class="slider__section" href=""><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
                         </a>
                         <a id="slider2" class="slider__section" href=""><img src="Images\Home\Welcome To Hogwarts University background 2.png" class="slider__img">
@@ -92,7 +91,7 @@
     </div>
 
 
-    <?php include "./footer.html" ?>
+    <?php include "./footer.php" ?>
     <style>
         .button {
             background-color: #1a1862;
@@ -361,102 +360,9 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
 
         });
 
-        /* Open when someone clicks on the span element */
-        function openNav() {
-
-            $('#myNav').animate({
-                width: '100%'
-            }, 600);
-        }
-
-
-        /* Close when someone clicks on the "x" symbol inside the overlay */
-        function closeNav() {
-            $("#myNav").animate({
-                width: '0%'
-            }, 600);
-        }
-
-        function expandFooter(Area) {
-
-            if (oldArea == null) {
-                $("#" + Area + "> a > div > img").addClass("rotateArrow");
-            } else {
-                if (oldArea != Area) {
-                    $(".SubCategory").slideUp();
-                    $("#" + oldArea + "> a > div > img").removeClass("rotateArrow");
-                    $("#" + Area + "> a > div > img").addClass("rotateArrow");
-                } else {
-                    oldArea = null;
-                    $("#" + Area + "> a > div > img").removeClass("rotateArrow");
-                }
-            }
-
-            $("#" + Area + " > div").slideToggle();
-
-            //
-            // $("#MainContent").delay(500).animate({
-            //     'padding-bottom': $('footer').height()
-            // }, "slow");
-
-
-            oldArea = Area;
-
-            // if (old!= Area) {
-            //     oldArea = Area;
-            // } else {
-            //
-            // }
-            // $('#MainContent').animate({padding-bottom: $('footer').height()});
-
-
-            // $(+Area + ".SlideDowns").slideToggle();
-            // console.log("Hello, this is coming down here");
-        }
-
-
-        $(window).resize(function() {
-            console.log($('footer').height());
-
-        });
-
-        $("#visitLibraries").mouseover(function() {
-            $("#visitLibraries h2").css("background", "#034e0e")
-        });
-        $("#visitLibraries").mouseleave(function() {
-            $("#visitLibraries h2").css("background", "#003898")
-        });
-
-        $("#news").mouseover(function() {
-            $("#news h2").css("background", "#034e0e")
-        });
-        $("#news").mouseleave(function() {
-            $("#news h2").css("background", "#003898")
-        });
-
-
-        $(document).ready(function() {
-            $(document).trigger('fontfaceapplied');
-        });
-
-
-
-
-
-
-
         var timer;
         var sliderNum;
         var prevSliderNum
-        // Your global variables should be declared below here -v
-
-
-        // Your global variables should be declared above here -^
-        // Any user defined functions should be declared below here -v
-
-
-        // Any user defined functions should be declared above here -^
-
 
         sliderNum = 1;
         // set a timed function call to wait for product xml to load
@@ -581,7 +487,6 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
             var even = document.getElementById("sliderIndicatorsButton" + sliderNum);
             console.log(even);
             even.style.backgroundColor = "red";
-
         }
     </script>
 

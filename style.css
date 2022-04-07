@@ -12,27 +12,19 @@ body {
     background-color: #bfbfbf;
     font-family: 'Century Gothic', sans-serif;
 }
-
-.NunitoFont {
-    font-family: 'Century Gothic', sans-serif;
-}
-
-.HeaderRightButton {
-    display: inline;
-    vertical-align: middle;
+.navToolButtons {
     text-align: center;
     cursor: pointer;
     margin: auto;
     padding-right: 10px;
     padding-top: 20px;
-    float: right;
-    word-wrap: break-word;
+    width: 100px;
+    display: inline-block;
 }
 
-.HeaderRightButton h2 {
+.navToolButtons h2 {
     color: #FFFFFF;
     display: inline;
-    text-align: justify;
 }
 
 #hamburgerMenu {
@@ -43,12 +35,6 @@ body {
 
 #hamburgerMenu h2 {
     font-size: 20px;
-}
-
-#LoginMenuHolder {
-    width: 100px;
-    font-size: 10px;
-    /* display: none; */
 }
 
 #SearchBook img {
@@ -147,53 +133,9 @@ body {
     cursor: pointer;
 }
 
-
-/*!* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap *!*/
-
-
-/* @media screen and (max-height: 800px), screen and (max-width: 400px) {
-    #myNav a {
-        font-size: 20px
-    }
-
-    #myNav .closebtn {
-        font-size: 40px;
-        top: 15px;
-        right: 35px;
-    }
-} */
-
-
-/*End of Hamburger*/
-
 #MainContent {
     margin: 0 20px 20px 20px;
-    /*margin-top: 0px;*/
-    /*margin-right: 0px;*/
-    /*margin-bottom: 20px;*/
-    /*margin-left: 0px;*/
 }
-
-
-/*#MainContent {*/
-
-
-/*    margin: 0 20px 20px 20px;*/
-
-
-/*    margin-top: 0px;*/
-
-
-/*    !*margin-right: 20px;*!*/
-
-
-/*    margin-bottom: 20px;*/
-
-
-/*    !*margin-left: 20px;*!*/
-
-
-/*}*/
 
 #topArea {
     min-height: 60px;
@@ -228,84 +170,12 @@ body::after {
     height: 191px;
 }
 
-
-/*#MainContent {*/
-
-
-/*    padding-bottom: 191px;*/
-
-
-/*}*/
-
-
 /*End of footer*/
 
 .rotateArrow {
     transform: scaleY(-1);
 }
 
-
-/*Responsiveness starts*/
-
-
-/* @media only screen and (min-width: 1024px) {
-    #hamburgerMenu {
-        display: none;
-    }
-
-    #NavBar {
-        display: inline-block;
-    }
-
-    #LoginMenuHolder {
-        display: inline-block;
-        float: right;
-    }
-} */
-
-
-/* 
-@media only screen and (max-width: 1023px) {
-    #hamburgerMenu {
-        display: inline;
-    }
-
-    #NavBar {
-        display: none;
-    }
-
-    #LoginMenuHolder {
-        display: none;
-    }
-} */
-
-
-/* @media only screen and (max-width: 600px) {
-    #header img {
-        height: 80px;
-    }
-
-
-    #hamburgerMenu {
-        display: inline;
-    }
-
-    #hamburgerMenu img {
-        max-height: 30px;
-    }
-
-    #NavBar {
-        display: none;
-
-    }
-
-    #LoginMenuHolder {
-        display: none;
-    }
-} */
-
-
-/*Code from gadgetgainey.com*/
 
 #NavBar {
     background-color: #003898;
@@ -398,39 +268,3 @@ header a {
 #rightTopArea {
     display: inline-block;
 }
-
-
-/* Start of customisable Scrollbar*/
-
-
-/* width */
-
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-
-/* Track */
-
-::-webkit-scrollbar-track {
-    /*background: #f1f1f1;*/
-    border-radius: 10px;
-}
-
-
-/* Handle */
-
-::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 10px;
-}
-
-
-/* Handle on hover */
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-}
-
-
-/*End of customisable Scrollbar*/

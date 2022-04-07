@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,211 +10,200 @@
     <link rel="stylesheet" type="text/css" href="Results.css">
     <link rel="stylesheet" type="text/css" href="responsiveness.css">
     <link rel="stylesheet" type="text/css" href="book_details.css">
-    <script type="text/javascript"
-            src="https://platform-api.sharethis.com/js/sharethis.js#property=5e80fd5f0a259f00192f1dce&product=inline-share-buttons"
-            async="async"></script>
+    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5e80fd5f0a259f00192f1dce&product=inline-share-buttons" async="async"></script>
     <link href="https://fonts.googleapis.com/css?family=Nunito|Roboto+Condensed" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <!--TODO: Remove when submitting coursework-->
     <!--    Offline use -->
     <script src="jquery-3.4.1.min.js"></script>
 </head>
+
 <body>
-<header>
-    <div id="header">
-        <a href="index.php" id="LeftSide">
-            <img id="logo"
-                 src="images/MasterPage/Hogwarts Logo (No Background) - Small.png"
-                 alt="Hogwarts University Logo - A yellow Crest that has got four animals in it with different colours, red, green, yellow and blue. "/>
-            <h1 class="hogwartsFont">Hogwarts University</h1>
-        </a>
-        <div id="hamburgerMenu" class="HeaderRightButton" onclick="openNav()">
-            <img alt="Menu icon" src="images/MasterPage/Hamburger Menu.png"/>
-            <h2 class="NunitoFont">Menu</h2>
-        </div>
-
-        <!-- The overlay -->
-        <div id="myNav" class="overlay">
-
-            <!-- Button to close the overlay navigation -->
-            <div><a class="closebtn" onclick="closeNav()">&times;</a>
+    <header>
+        <div id="header">
+            <a href="index.php" id="LeftSide">
+                <img id="logo" src="images/MasterPage/Hogwarts Logo (No Background) - Small.png" alt="Hogwarts University Logo - A yellow Crest that has got four animals in it with different colours, red, green, yellow and blue. " />
+                <h1 class="hogwartsFont">Hogwarts University</h1>
+            </a>
+            <div id="hamburgerMenu" class="navToolButtons" onclick="openNav()">
+                <img alt="Menu icon" src="images/MasterPage/Hamburger Menu.png" />
+                <h2 class="">Menu</h2>
             </div>
 
-            <!-- Overlay content -->
-            <div class="overlay-content NunitoFont">
-                <a href="#">About Hogwarts University</a>
-                <hr>
-                <a href="#">News</a>
-                <hr>
-                <a href="#">Support</a>
-                <hr>
-                <a id="LoginOrAccount" href="Login.php">Login/Register</a>
-            </div>
-        </div>
+            <!-- The overlay -->
+            <div id="myNav" class="overlay">
 
-        <a href="Login.php">
-            <div id="LoginMenuHolder" class="HeaderRightButton">
-                <img alt="Login/Register icon" src="images/MasterPage/Account Icon.png"/>
-                <h2 class="NunitoFont">Login/Register</h2>
-            </div>
-        </a>
-
-        <div id="NavBar" class="NunitoFont">
-            <ul>
-                <li><a href="#home">About Hogwart's University</a></li>
-                <li><a href="#news">News</a></li>
-                <li><a href="#contact">Support</a></li>
-            </ul>
-        </div>
-    </div>
-</header>
-<div id="topArea">
-    &nbsp;<a href="search.php">
-        <div id="SearchBook">
-            <img alt="Search Book - White Magnifying Glass with a white book inside it"
-                 src="images/MasterPage/Search.png"/>
-        </div>
-    </a>
-</div>
-<div id="MainContent">
-    <div class="SingleResult col-12">
-        <div class="ResultBox centreDiv NunitoFont col-12">
-            <div class="AllInfo">
-                <div class="ImageHolder">
-                    <img alt="Book Title" class="cover"
-                         src="https://images-na.ssl-images-amazon.com/images/I/91RQbHZZR0L.jpg">
+                <!-- Button to close the overlay navigation -->
+                <div><a class="closebtn" onclick="closeNav()">&times;</a>
                 </div>
-                <div class="AllOtherInfo" id="TopInfo">
-                    <div class="IndividualInfo TitleDiv">
-                        <h2 class="BookTitleLabel">Title:</h2>
-                        <p class="BookTitle">Title</p>
-                    </div>
 
-                    <div class="IndividualInfo AuthorDiv">
-                        <h4 class="Author(s)Label">Authors:</h4>
-                        <p class="Author(s)">Author</p>
-                    </div>
-
-
-                    <div class="IndividualInfo YearDiv">
-                        <h4 class="YearLabel">Year:</h4>
-                        <p class="Year">Year</p>
-                    </div>
-
-                    <div class="IndividualInfo GenreDiv">
-                        <h4 class="Genres">Genres:</h4>
-                        <p class="Genre">Genre</p>
-                    </div>
-                </div>
-                <br>
-                <div id="Actions" class="DifferentSection">
-                    <h1>Actions</h1>
+                <!-- Overlay content -->
+                <div class="overlay-content ">
+                    <a href="#">About Hogwarts University</a>
                     <hr>
-                    <div id="ActionButtons" class="col-12">
-                        <div id="Loan" class="containerForActions col-3" onclick="Loan()">
-                            <img alt="Loan Book - A book with an arrow coming out of the book"
-                                 src="images/Book Details/Loan Book.png">
-                            <h3>Loan</h3>
+                    <a href="#">News</a>
+                    <hr>
+                    <a href="#">Support</a>
+                    <hr>
+                    <a id="LoginOrAccount" href="Login.php">Login/Register</a>
+                </div>
+            </div>
+
+            <a href="Login.php">
+                <div id="LoginMenuHolder" class="navToolButtons">
+                    <img alt="Login/Register icon" src="images/MasterPage/Account Icon.png" />
+                    <h2 class="">Login/Register</h2>
+                </div>
+            </a>
+
+            <div id="NavBar" class="">
+                <ul>
+                    <li><a href="#home">About Hogwart's University</a></li>
+                    <li><a href="#news">News</a></li>
+                    <li><a href="#contact">Support</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div id="topArea">
+        &nbsp;<a href="search.php">
+            <div id="SearchBook">
+                <img alt="Search Book - White Magnifying Glass with a white book inside it" src="images/MasterPage/Search.png" />
+            </div>
+        </a>
+    </div>
+    <div id="MainContent">
+        <div class="SingleResult col-12">
+            <div class="ResultBox centreDiv  col-12">
+                <div class="AllInfo">
+                    <div class="ImageHolder">
+                        <img alt="Book Title" class="cover" src="https://images-na.ssl-images-amazon.com/images/I/91RQbHZZR0L.jpg">
+                    </div>
+                    <div class="AllOtherInfo" id="TopInfo">
+                        <div class="IndividualInfo TitleDiv">
+                            <h2 class="BookTitleLabel">Title:</h2>
+                            <p class="BookTitle">Title</p>
                         </div>
 
-                        <div id="CopyLink" class="containerForActions col-3" onclick="CopyLink()">
-                            <img alt="Loan Book - A book with an arrow coming out of the book"
-                                 src="images/Book Details/Copy Link.png">
-                            <h3>Copy Link</h3>
-                        </div>
-
-                        <div id="Share" class="containerForActions col-3" onclick="Share()">
-                            <img alt="Share Link Book - A book with an arrow coming out of the book"
-                                 src="images/Book Details/Share.png">
-                            <h3>Share</h3>
+                        <div class="IndividualInfo AuthorDiv">
+                            <h4 class="Author(s)Label">Authors:</h4>
+                            <p class="Author(s)">Author</p>
                         </div>
 
 
-                        <div id="Citation" class="containerForActions col-3">
-                            <div onclick="Citation()">
-                                <img alt="Loan Book - A book with an arrow coming out of the book"
-                                     src="images/Book Details/Citation.png">
-                                <h3>Citation</h3>
+                        <div class="IndividualInfo YearDiv">
+                            <h4 class="YearLabel">Year:</h4>
+                            <p class="Year">Year</p>
+                        </div>
+
+                        <div class="IndividualInfo GenreDiv">
+                            <h4 class="Genres">Genres:</h4>
+                            <p class="Genre">Genre</p>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="Actions" class="DifferentSection">
+                        <h1>Actions</h1>
+                        <hr>
+                        <div id="ActionButtons" class="col-12">
+                            <div id="Loan" class="containerForActions col-3" onclick="Loan()">
+                                <img alt="Loan Book - A book with an arrow coming out of the book" src="images/Book Details/Loan Book.png">
+                                <h3>Loan</h3>
+                            </div>
+
+                            <div id="CopyLink" class="containerForActions col-3" onclick="CopyLink()">
+                                <img alt="Loan Book - A book with an arrow coming out of the book" src="images/Book Details/Copy Link.png">
+                                <h3>Copy Link</h3>
+                            </div>
+
+                            <div id="Share" class="containerForActions col-3" onclick="Share()">
+                                <img alt="Share Link Book - A book with an arrow coming out of the book" src="images/Book Details/Share.png">
+                                <h3>Share</h3>
                             </div>
 
 
-                            <div id="CitationHolder">
-                                <p>Text Sample</p>
-                                <div id="CopyCitation" onclick="CopyCitation()">
-                                    <img alt="Copy Citation - A book with an arrow coming out of the book"
-                                         src="images/Book Details/Copy - White.png">
-                                    <p>Copy</p>
+                            <div id="Citation" class="containerForActions col-3">
+                                <div onclick="Citation()">
+                                    <img alt="Loan Book - A book with an arrow coming out of the book" src="images/Book Details/Citation.png">
+                                    <h3>Citation</h3>
+                                </div>
+
+
+                                <div id="CitationHolder">
+                                    <p>Text Sample</p>
+                                    <div id="CopyCitation" onclick="CopyCitation()">
+                                        <img alt="Copy Citation - A book with an arrow coming out of the book" src="images/Book Details/Copy - White.png">
+                                        <p>Copy</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
 
-                        <div id="PrintInfo" class="containerForActions col-3">
-                            <a onclick="Print()">
-                                <img alt="Loan Book - A book with an arrow coming out of the book"
-                                     src="images/Book Details/Print(1).png">
-                                <h3>Print</h3>
-                            </a>
+                            <div id="PrintInfo" class="containerForActions col-3">
+                                <a onclick="Print()">
+                                    <img alt="Loan Book - A book with an arrow coming out of the book" src="images/Book Details/Print(1).png">
+                                    <h3>Print</h3>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div id="Details" class="DifferentSection">
-                    <h1>Details</h1>
-                    <hr>
+                    <div id="Details" class="DifferentSection">
+                        <h1>Details</h1>
+                        <hr>
 
-                    <table>
-                        <tr id="Title">
-                            <th>Title:</th>
-                            <td>Title</td>
-                        </tr>
-                        <tr id="ISBN">
-                            <th>ISBN:</th>
-                            <td>ISBN</td>
-                        </tr>
-                        <tr id="Author">
-                            <th>Author(s):</th>
-                            <td>Author</td>
-                        </tr>
-                        <tr id="Publisher">
-                            <th>Publisher:</th>
-                            <td>Publisher</td>
-                        </tr>
-                        <tr id="Year">
-                            <th>Year:</th>
-                            <td>Year</td>
-                        </tr>
-                        <tr id="Genre">
-                            <th>Genre(s):</th>
-                            <td>Genre</td>
-                        </tr>
+                        <table>
+                            <tr id="Title">
+                                <th>Title:</th>
+                                <td>Title</td>
+                            </tr>
+                            <tr id="ISBN">
+                                <th>ISBN:</th>
+                                <td>ISBN</td>
+                            </tr>
+                            <tr id="Author">
+                                <th>Author(s):</th>
+                                <td>Author</td>
+                            </tr>
+                            <tr id="Publisher">
+                                <th>Publisher:</th>
+                                <td>Publisher</td>
+                            </tr>
+                            <tr id="Year">
+                                <th>Year:</th>
+                                <td>Year</td>
+                            </tr>
+                            <tr id="Genre">
+                                <th>Genre(s):</th>
+                                <td>Genre</td>
+                            </tr>
 
-                        <tr id="LibraryStored">
-                            <th>Library Stored:</th>
-                            <td>Library</td>
-                        </tr>
-                        <tr id="Available">
-                            <th>Available:</th>
-                            <td>No</td>
-                        </tr>
+                            <tr id="LibraryStored">
+                                <th>Library Stored:</th>
+                                <td>Library</td>
+                            </tr>
+                            <tr id="Available">
+                                <th>Available:</th>
+                                <td>No</td>
+                            </tr>
 
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="sharethis-inline-share-buttons"></div>
+
+        <div id="alert" class="">
+            <p></p>
+        </div>
+
+        <div class="box"></div>
     </div>
-
-    <div class="sharethis-inline-share-buttons"></div>
-
-    <div id="alert" class="NunitoFont">
-        <p></p>
-    </div>
-
-    <div class="box"></div>
-</div>
 </body>
 
-<footer class="NunitoFont">
+<footer class="">
     <div id="Study" class="category">
         <a onclick="expandFooter('Study')">
             <div>
@@ -263,7 +253,7 @@
 </footer>
 <script>
     var oldArea;
-    $(document).ready(function () {
+    $(document).ready(function() {
         // $('#MainContent').css('padding-bottom', $('footer').height() - 50);
 
 
@@ -276,22 +266,25 @@
         } else {
             $('#Available').css('color', '#c30003');
 
-        }
-        ;
+        };
 
-        $('#Available').css('color',)
+        $('#Available').css('color', )
     });
 
     /* Open when someone clicks on the span element */
     function openNav() {
 
-        $('#myNav').animate({width: '100%'}, 600);
+        $('#myNav').animate({
+            width: '100%'
+        }, 600);
     }
 
 
     /* Close when someone clicks on the "x" symbol inside the overlay */
     function closeNav() {
-        $("#myNav").animate({width: '0%'}, 600);
+        $("#myNav").animate({
+            width: '0%'
+        }, 600);
     }
 
     function ShowMoreResults() {
@@ -414,7 +407,7 @@
         }
 
         setTimeout(
-            function () {
+            function() {
                 $('#alert').addClass(usingClass);
 
                 $('#alert').text(message);
@@ -424,7 +417,7 @@
             }, 100);
 
         setTimeout(
-            function () {
+            function() {
                 $('#alert').css("transition", "all " + sliderSecs + "ms linear");
 
                 $('#alert').css("background-position", "left bottom");
@@ -432,7 +425,7 @@
 
 
         setTimeout(
-            function () {
+            function() {
                 $('#alert').css("transition", "");
                 $('#alert').slideUp("slow");
             }, totalSecs);
@@ -450,7 +443,7 @@
         AlterTimer(true, message, 5000);
     }
 
-    function fillAlert() {
-    }
+    function fillAlert() {}
 </script>
+
 </html>
