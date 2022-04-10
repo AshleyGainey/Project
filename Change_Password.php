@@ -20,24 +20,24 @@
 
     <div id="mainBody">
         <div>
-            <p>Change Your Email</p>
+            <p>Change Your Password</p>
         </div>
         <div class="cardArea">
             <div class="firstRow">
-                <div class="cardContainer leftPart disabled">
-                    <p>Old Email</p>
-                    <input type="text" class="searchInput" disabled>
+                <div class="cardContainer leftPart">
+                    <p>Old Password</p>
+                    <input type="password" class="searchInput" placeholder="Old Password">
                 </div>
 
                 <div class="cardContainer rightPart">
-                    <p>New Email</p>
-                    <input type="text" class="searchInput" placeholder="New Email">
+                    <p>New Password</p>
+                    <input type="password" class="searchInput" placeholder="New Password">
                 </div>
             </div>
             <div class="secondRow">
                 <div class="cardContainer rightPart">
-                    <p>Your Password</p>
-                    <input type="text" class="searchInput" placeholder="Your Password">
+                    <p>Confirm Password</p>
+                    <input type="password" class="searchInput" placeholder="Confirm Password">
                 </div>
             </div>
             <div class="secondRow">

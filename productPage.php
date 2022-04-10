@@ -12,7 +12,7 @@ if (!$conn) {
 
 $query =
     'SELECT p.productID, p.productTitle, 
-p.productDescription, p.productPrice, pi.productImageFilename, pi.productImageAltText
+p.productDescription, p.productPrice, pi.productImageFilename, pi.productImageAltText, pi.displayOrder
         FROM product 
 AS p RIGHT JOIN product_image pi
  ON pi.productID = p.productID where p.productID = ' . $_GET['productID'];
@@ -43,13 +43,18 @@ foreach ($productInfo as $product) {
 
         $productPrice = $product['productPrice'];
     }
+
     array_push($productImage, $product['productImageFilename']);
     array_push($productAltText, $product['productImageAltText']);
+
+    // array_push($productImage, (object)[
+    //     $product['displayOrder'] => $product['productImageFilename']
+    // ]);
+    // array_push($productAltText, (object)[
+    //     $product['displayOrder'] => $product['productImageAltText']
+    // ]);
     $i++;
 }
-
-
-
 
 //Free  memory and close the connection
 mysqli_free_result($result);
@@ -59,8 +64,6 @@ mysqli_close($conn)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
     <title>
         <?php echo $productTitle; ?> - Gadget Gainey Store </title>
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -87,41 +90,36 @@ mysqli_close($conn)
                                 $productImagePath = "images/products/" . $productID . "/" . $productImage[$i - 1];
 
 
-                                echo "<a id='slider" . $i . "' class='slider__section'><img src='" . $productImagePath . "' class='slider__img'></a>" ?>
+                                echo "<a id='slider" . $i . "' class='slider__section'><img alt='" . $productAltText[$i - 1] . "' src='" . $productImagePath . "' class='slider__img'></a>" ?>
 
                             <?php } ?>
                             </a>
                         </div>
-
-                        <div class="sliderArrows">
-                            <a href=" #" id="left">
-                                <img src="images/Home/Right Arrow.svg" alt="Next Slide" />
+                        <?php
+                        $arrLength = count($productImage);
+                        if ($arrLength > 1) {
+                            echo "<div class='sliderArrows'>
+                            <a id='left'>
+                                <img src='images/Home/Right Arrow.svg' alt='Next Slide' />
                             </a>
-                            <a href="#" id="right">
-                                <img src="images/Home/Right Arrow.svg" alt="Previous Slide" />
+                            <a id='right'>
+                                <img src='images/Home/Right Arrow.svg' alt='Previous Slide' />
                             </a>
-                        </div>
+                        </div>" ?>
+                        <?php } ?>
 
                         <div class="indicatorDiv">
                             <div class="sliderIndicators">
                                 <?php $i = 0;
-                                foreach ($productImage as $product) {
-                                    $i++;
-                                    echo "<a class='button' id='sliderIndicatorsButton" . $i . "' onclick='goToSlide($i)'></a>" ?>
+                                if ($arrLength > 1) {
+                                ?>
 
-                                    <!-- 
-                                <a href=" #" class="button" id="sliderIndicatorsButton1" onclick="goToSlide(1)">
-                                </a>
-                                <a href=" #" class="button" id="sliderIndicatorsButton2" onclick="goToSlide(2)">
-                                </a>
-                                <a href=" #" class="button" id="sliderIndicatorsButton3" onclick="goToSlide(3)">
-                                </a>
-                                <a href=" #" class="button" id="sliderIndicatorsButton4" onclick="goToSlide(4)">
-                                </a>
-                                <a href=" #" class="button" id="sliderIndicatorsButton5" onclick="goToSlide(5)">
-                                </a>
-                                <a href=" #" class="button" id="sliderIndicatorsButton6" onclick="goToSlide(6)"> -->
-                                <?php } ?>
+                                    <?php foreach ($productImage as $product) {
+                                        $i++;
+                                        echo "<a class='button' id='sliderIndicatorsButton" . $i . "' onclick='goToSlide($i)'></a>" ?>
+                                <?php }
+                                } ?>
+
                             </div>
                         </div>
                     </div>
@@ -129,7 +127,7 @@ mysqli_close($conn)
             </div>
 
 
-            <div class="card NunitoFont col-5">
+            <div class="card NunitoFont col-6">
                 <div class="cardInformation">
                     <h1 class="productTitle"> <?php echo $productTitle ?></h1>
                     <h1 class="productPrice">£<?php echo $productPrice ?></h2>
@@ -141,11 +139,12 @@ mysqli_close($conn)
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="descriptionBox">
-        <h3 class="productDescriptionTitle">Description of Product</h3>
-        <?php echo '<pre class="productDescription">' . str_replace('\n', "\n", $productDescriptionCorrect) . '</pre>'; ?>
+
+        <div class="descriptionBox">
+            <h3 class="productDescriptionTitle">Description of Product</h3>
+            <?php echo '<pre class="productDescription">' . str_replace('\n', "\n", $productDescriptionCorrect) . '</pre>'; ?>
+        </div>
     </div>
     <?php include "./footer.php" ?>
 </body>
@@ -323,7 +322,7 @@ mysqli_close($conn)
 
 
     .carousel {
-        margin-bottom: 50px;
+        /* margin-bottom: 50px; */
 
     }
 
@@ -344,8 +343,8 @@ mysqli_close($conn)
         overflow: hidden;
         box-shadow: 0 0 0 5px #FFFFFF;
         border-radius: 2%;
-        height: 500px;
-        max-width: 1000px;
+        max-height: 600px;
+        max-width: 600px;
     }
 
 
@@ -354,14 +353,17 @@ mysqli_close($conn)
     }
 
     .slider__section {
-        /* width: 100%; */
+        width: 100%;
     }
 
 
 
     .slider__img {
         display: block;
-        /* width: 100%; */
+        width: 100%;
+        display: block;
+        width: 100%;
+        height: auto;
     }
 
     .sliderArrows a {
@@ -470,8 +472,8 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
 
 
     .button {
-        margin-left: 10px;
-        margin-right: 10px;
+        /* margin-left: 10px;
+        margin-right: 10px; */
     }
 
 
@@ -539,7 +541,12 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
 
 
 
-
+    .cardInformation .productTitle,
+    .cardInformation .productPrice,
+    .cardInformation .productFreeDelivery {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
 
 
 
@@ -550,6 +557,10 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         background-color: #1a1862;
         border-radius: 50%;
         width: 500px;
+    }
+
+    #mainBody {
+        margin: 50px;
     }
 
     .black:after {
@@ -568,21 +579,28 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
     var timer;
     var sliderNum;
     var prevSliderNum
+    var picturesLength
     $(document).ready(function() {
         // $('#MainContent').css('padding-bottom', $('footer').height() - 50);
         prevSliderNum = 1;
-        var x = "<?php
-                    $arrLength = count($productImage);
+        picturesLength = "<?php echo $arrLength ?>";
+        picturesLength = parseInt(picturesLength);
+
+        if (picturesLength > 1) {
+            changeIndictors()
+        }
 
 
+        let lengthOfSlider = picturesLength * 100;
 
-                    echo "$arrLength" ?>";
-        // document.write(x);
-        x = x * 100;
-        console.log(x);
+        let result = lengthOfSlider + "%";
 
-
-        console.log(document.getElementById("slider").style.width = x);
+        console.log(picturesLength)
+        // Resolves issue with only one image then get rid of the margin left -100 (no image will be shown after, so don't need a margin left)
+        if (picturesLength == 1) {
+            document.getElementById("slider").style.marginLeft = 0;
+        }
+        document.getElementById("slider").style.width = result
         // changeIndictors();
     });
 
@@ -615,8 +633,8 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
             $('#slider .slider__section:first').insertAfter('#slider .slider__section:last');
             slider.css('margin-left', '-' + 100 + '%');
         });
-
-        if (sliderNum === 7) {
+        var helolo = picturesLength + 1;
+        if (sliderNum === helolo) {
             sliderNum = 1;
         }
         console.log(document.getElementById("slider").style.width);
@@ -634,7 +652,7 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         });
 
         if (sliderNum === 0) {
-            sliderNum = 6;
+            sliderNum = picturesLength;
         }
         changeIndictors()
     }
@@ -679,7 +697,6 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
     }
 
     function changeIndictors() {
-
         var even = document.getElementById("sliderIndicatorsButton" + prevSliderNum);
         console.log(even);
         even.style.backgroundColor = "#1a1862";

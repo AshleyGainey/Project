@@ -27,7 +27,7 @@
                 <div class="cardContainer leftPart">
                     <div class="card">
                         <div class="writingOfCard">
-                            <a href="Change_Email.php">Change Your Email</a><img src="images/Home/Right Arrow.svg" alt="Order Details" />
+                            <a href="Change_Email.php">Change Your Email</a><img src="images/Home/Right Arrow.svg" alt="Change Your Email - Right Arrow" />
                         </div>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                 <div class="cardContainer rightPart">
                     <div class="card">
                         <div class="writingOfCard">
-                            <a href="#">Change Your Password</a><img src="images/Home/Right Arrow.svg" alt="Order Details" />
+                            <a href="Change_Password.php">Change Your Password</a><img src="images/Home/Right Arrow.svg" alt="Change Your Password - Right Arrow" />
                         </div>
                     </div>
                 </div>

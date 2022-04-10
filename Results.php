@@ -67,7 +67,7 @@ AS p RIGHT JOIN product_image pi
                     <div id="AllResults">
                         <div class="row">
                             <?php foreach ($products as $product) { ?>
-                                <div class="card NunitoFont col-5">
+                                <div class="card NunitoFont col-2">
                                     <?php echo "<a href='productPage.php?productID=" . $product['productID'] . "'>" ?>
                                     <div class="cardContent">
                                         <div class="ImageHolder ImageMarginAndPadding">
@@ -92,8 +92,11 @@ AS p RIGHT JOIN product_image pi
                                 </div>
                             <?php } ?>
                         </div>
-                    </div>
-                    <?php include "./footer.php" ?>
+                        <div id="showMoreResultsDiv" class="centreDiv">
+                            <button class="centreText ShowMoreResults NunitoFont">Show More Results
+                            </button>
+                        </div>
+                        <?php include "./footer.php" ?>
             </body>
 
             </html>
@@ -201,6 +204,17 @@ AS p RIGHT JOIN product_image pi
                     color: black;
                 }
 
+                .ShowMoreResults {
+                    border-radius: 12.5px;
+                    background-color: #c30003;
+                    color: #FFFFFF;
+                    margin-top: 20px;
+                    margin-bottom: 20px;
+                    display: inline-block;
+                    padding: 15px;
+                    cursor: pointer;
+                }
+
                 /* 
                 .card {
                     box-shadow: 0 0 0 5px #FFFFFF;
@@ -215,3 +229,57 @@ AS p RIGHT JOIN product_image pi
                     text-align: center;
                 }
             </style>
+
+
+            <script>
+                //Used Ajax to load the results count
+                $.ajax({
+                    url: 'load-results.php',
+                    type: 'POST',
+                    data: {
+                        "loadResultFound": true
+                    },
+                    success: function(response) {
+                        if (status == "error") {
+                            var message = "Sorry but there was an error. Please contact the University IT Support for more details: ";
+                            $("#resultsFound").html(message + xhr.status + "" + xhr.statusText)
+                        } else {
+                            $("#resultsFound").text(response);
+                        }
+                    }
+                });
+                //If not invalid then load the results by going to ShowMoreResults() function
+                ShowMoreResults();
+
+                //If not invalid then when you click the Show More Results button, to ShowMoreResults() function to retrieve more results
+                $("#showMoreResultsDiv").click(function() {
+                    ShowMoreResults();
+                });
+
+                function ShowMoreResults() {
+                    //Increase resultCount by 6.
+                    resultCount = resultCount + 6;
+
+                    //Load the results into the div All Results
+                    $("#AllResults").load("load-results.php", {
+                        resultsCount: resultCount
+                    }, function(response, status, xhr) {
+
+                        //If error, show in All Results div
+                        if (status == "error") {
+                            var message = "Sorry but there was an error: ";
+                            $("#AllResults").html(message + xhr.status + "" + xhr.statusText)
+                        }
+                        //If successful, then fade in all of the results (no matter if they are new or not)
+                        // also check if the resultCount is more or equal to the results that are found in the database,
+                        // if there is, there are no more results to load and therefore hide the Show More Results button
+                        if (status === "success") {
+                            if (resultCount >= $("#resultsFound").text()) {
+                                document.getElementById("showMoreResultsDiv").style.display = "none";
+                            } else {
+                                document.getElementById("showMoreResultsDiv").style.display = "block";
+                            }
+                        }
+                    }).hide().fadeIn(1000);
+                }
+            </script>
