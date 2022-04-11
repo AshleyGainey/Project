@@ -21,39 +21,44 @@ $result = mysqli_query($conn, $query);
 
 $productInfo = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-// print_r($productInfo);
+print_r($productInfo);
+
+$invalid = 0;
+if (empty($productInfo)) {
+    $invalid = 1;
+    header('Location: Error404.php');
+} else {
+    $productTitle;
+    $productDescription;
+    $productDescriptionCorrect;
+    $productPrice;
+
+    $productImage = [];
+    $productAltText = [];
 
 
-$productTitle;
-$productDescription;
-$productDescriptionCorrect;
-$productPrice;
+    $i = 0;
+    foreach ($productInfo as $product) {
+        if ($i == 0) {
+            $productID = $product['productID'];
+            $productTitle = $product['productTitle'];
+            $productDescription = $product['productDescription'];
+            $productDescriptionCorrect = str_replace("\\n", "\n", $productDescription);
 
-$productImage = [];
-$productAltText = [];
+            $productPrice = $product['productPrice'];
+        }
 
+        array_push($productImage, $product['productImageFilename']);
+        array_push($productAltText, $product['productImageAltText']);
 
-$i = 0;
-foreach ($productInfo as $product) {
-    if ($i == 0) {
-        $productID = $product['productID'];
-        $productTitle = $product['productTitle'];
-        $productDescription = $product['productDescription'];
-        $productDescriptionCorrect = str_replace("\\n", "\n", $productDescription);
-
-        $productPrice = $product['productPrice'];
+        // array_push($productImage, (object)[
+        //     $product['displayOrder'] => $product['productImageFilename']
+        // ]);
+        // array_push($productAltText, (object)[
+        //     $product['displayOrder'] => $product['productImageAltText']
+        // ]);
+        $i++;
     }
-
-    array_push($productImage, $product['productImageFilename']);
-    array_push($productAltText, $product['productImageAltText']);
-
-    // array_push($productImage, (object)[
-    //     $product['displayOrder'] => $product['productImageFilename']
-    // ]);
-    // array_push($productAltText, (object)[
-    //     $product['displayOrder'] => $product['productImageAltText']
-    // ]);
-    $i++;
 }
 
 //Free  memory and close the connection
@@ -75,7 +80,7 @@ mysqli_close($conn)
 </head>
 
 <body>
-    <?php include "./header.html" ?>
+    <?php include "./header.php" ?>
 
     <div id="mainBody">
         <div class="row">
@@ -133,10 +138,13 @@ mysqli_close($conn)
                     <h1 class="productPrice">£<?php echo $productPrice ?></h2>
                         <h3 class="productFreeDelivery">Free Delivery & Returns</h3>
                 </div>
-                <div id="AddToBasketButton">
-                    <i class="fa fa-shopping-basket"></i>
-                    <p class="textOfButton">Add to Basket</p>
-                </div>
+                <form class="form-item" method="post" action="?action=add&id=<?php echo $row["id"]; ?>">
+                    <div id="AddToBasketButton">
+                        <i class="fa fa-shopping-basket"></i>
+                        <p class="textOfButton">Add to Basket</p>
+                    </div>
+                    <input type="submit" name="add_to_cart" class="btn btn-outline-secondary btn-sm" value="Add to cart">
+                </form>
             </div>
         </div>
 

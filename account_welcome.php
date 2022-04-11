@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <?php include "./header.html" ?>
+    <?php include "./header.php" ?>
 
     <div id="mainBody">
         <div>
@@ -27,7 +27,7 @@
                 <div class="cardContainer leftPart">
                     <div class="card">
                         <div class="writingOfCard">
-                            <a href="#">Account Details<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
+                            <a href="account_details.php">Account Details<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
                         </div>
                     </div>
                 </div>

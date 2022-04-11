@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <?php include "./header.html" ?>
+    <?php include "./header.php" ?>
     <div id="mainBody">
         <!-- Old Triangle method -->
         <!-- <div class="triangle"></div> -->

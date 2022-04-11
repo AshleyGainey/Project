@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <?php include "./header.html" ?>
+    <?php include "./header.php" ?>
 
     <div id="mainBody">
         <div>
@@ -105,11 +105,6 @@
         margin-top: 50px;
     }
 
-    .secondRow .card {
-        background-color: #1a1862;
-        color: #FFFFFF
-    }
-
     .secondRow {
         margin-top: 50px;
         width: 100%;
@@ -120,10 +115,6 @@
         align-items: center;
     }
 
-    .secondRow .card .writingOfCard a {
-        color: #FFFFFF
-    }
-
     .cardContainer {
         display: inline-block;
         width: 250px;
@@ -131,7 +122,6 @@
 
     .writingOfCard a {
         font-size: 25px;
-        ;
         text-decoration: none;
         color: #000000;
         position: relative;

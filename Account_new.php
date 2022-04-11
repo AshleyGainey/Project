@@ -79,9 +79,10 @@
             <div id="WelcomeBack" class="">
                 <p id="ResultsFor">Welcome Back
                     <?php
-                    if (isset($_GET['Name'])) {
-                        echo $_GET['Name'];
+                    if (isset($_SESSION['userFirstName'])) {
+                        echo $_SESSION['userFirstName'] . " " . $_SESSION['userLastName'];
                     } else {
+                        echo "ERROR ASHLEY, FIXXXX";
                     }
                     ?>
                 </p>

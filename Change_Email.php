@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <?php include "./header.html" ?>
+    <?php include "./header.php" ?>
 
     <div id="mainBody">
         <div>
@@ -26,7 +26,9 @@
             <div class="firstRow">
                 <div class="cardContainer leftPart disabled">
                     <p>Old Email</p>
-                    <input type="text" class="searchInput" disabled>
+                    <?php
+                    echo "<input type='text' class='searchInput' disabled>"
+                    ?>
                 </div>
 
                 <div class="cardContainer rightPart">

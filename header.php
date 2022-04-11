@@ -1,3 +1,10 @@
+<?php
+// Start the session
+session_start();
+?>
+<!DOCTYPE html>
+<html>
+
 <head>
     <link rel="stylesheet" type="text/css" href="header.css">
 </head>
@@ -6,9 +13,7 @@
     <div id="header">
         <div id="logoSection">
             <a href="index.php" id="LeftSide">
-                <img id="Gadget Gainey Logo" src="images/Header/Gadget Gainey Logo (Smaller).png"
-                    alt="Gadget Gainey - Two White G's joining together with the text saying Gadget Gainey" width="249"
-                    height="148" />
+                <img id="Gadget Gainey Logo" src="images/Header/Gadget Gainey Logo (Smaller).png" alt="Gadget Gainey - Two White G's joining together with the text saying Gadget Gainey" width="249" height="148" />
             </a>
         </div>
 
@@ -17,9 +22,9 @@
                 <div class="search">
                     <form action="Results.php">
                         <input type="search" class="searchInput" placeholder="Search our catalogue..." autocomplete="off" name="search" value="">
-                    <button type="submit" class="searchButton">
-                        <i class="fa fa-search"></i>
-                    </button>
+                        <button type="submit" class="searchButton">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -38,7 +43,15 @@
             <a id="account" href="Login.php">
                 <div class="navToolButtons">
                     <i class="fa fa-user-circle-o"></i>
-                    <h2>Account</h2>
+                    <h2><?php
+                        if (isset($_SESSION["userFirstName"])) {
+                            echo $_SESSION['userFirstName'];
+                        } else {
+                            echo "Accountss";
+                        }
+                        ?></h2>
+
+
                 </div>
             </a>
         </div>

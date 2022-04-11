@@ -45,7 +45,7 @@ AS p RIGHT JOIN product_image pi
             </head>
 
             <body>
-                <?php include "./header.html" ?>
+                <?php include "./header.php" ?>
 
                 <div id="mainBody">
                     <div id="resultsFor">
