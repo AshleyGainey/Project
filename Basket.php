@@ -1,10 +1,3 @@
-<?php
-
-?>
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,7 +29,7 @@
             if (!isset($_SESSION["basket"])) {
                 $invalidBasket = 1;
                 echo "<h1 id='NoProducts'>No Products In the basket</h1>";
-            } else if (count($_SESSION["basket"]) == 0){
+            } else if (count($_SESSION["basket"]) == 0) {
                 $invalidBasket = 1;
                 echo "<h1 id='NoProducts'>No Products In the basket</h1>";
             } else {
@@ -437,22 +430,41 @@ if ($invalidBasket == 0) {
         var x = document.getElementById("quantity").value;
         // alert(x);
         // debugger;
-        $("#regMessage").load("basket_process.php", {
-            update: id,
-            quantity: x
-        }, function(response, status, xhr) {
-            debugger;
-            document.getElementById("regMessage").style.display = "block";
-            document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
 
-            // if (status == "error") {
-            //     // var message = "An error occured while trying to do this action.";
-            //     document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-            // }
-            if (status == "success") {
-                // window.location.href = "account_welcome.php";
+        $.ajax({
+            url: "basket_process.php", //the page containing php script
+            type: "post", //request type,
+            dataType: 'json',
+            data: {
+                update: id,
+                quantity: x
+            },
+            success: function(result) {
+                debugger;
+                // document.getElementById("regMessage").style.display = "block";
+                // document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+                // console.log(result.abc);
             }
-        })
+        });
+
+
+
+        //     $("#regMessage").load("basket_process.php", {
+        //         update: id,
+        //         quantity: x
+        //     }, function(response, status, xhr) {
+        //         debugger;
+        //         document.getElementById("regMessage").style.display = "block";
+        //         document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+
+        //         // if (status == "error") {
+        //         //     // var message = "An error occured while trying to do this action.";
+        //         //     document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+        //         // }
+        //         if (status == "success") {
+        //             // window.location.href = "account_welcome.php";
+        //         }
+        //     })
     }
 
 

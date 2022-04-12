@@ -47,8 +47,8 @@ if (!isset($_SESSION['userID'])) {
                 </div>
                 <div class="secondRow">
                     <div class="cardContainer rightPart">
-                        <p>Confirm Password</p>
-                        <input type="password" id="confirmPassword" class="searchInput" placeholder="Confirm Password" required>
+                        <p>Confirm New Password</p>
+                        <input type="password" id="confirmPassword" class="searchInput" placeholder="Confirm New Password" required>
                     </div>
                 </div>
 
@@ -59,8 +59,9 @@ if (!isset($_SESSION['userID'])) {
                 </div>
             </div>
         </form>
+        <p id="regMessage"></p>
     </div>
-    
+
     </div>
     <?php include "./footer.php" ?>
 </body>
@@ -154,9 +155,10 @@ if (!isset($_SESSION['userID'])) {
         float: right;
     }
 
+    /* 
     #regMessage {
         display: none;
-    }
+    } */
 
     .disabled input {
         border: 3px solid #000000;
@@ -195,10 +197,12 @@ if (!isset($_SESSION['userID'])) {
 
 <script>
     $("#PasswordForm").submit(function(event) {
+
         event.preventDefault();
         var oldPassword = $("#oldPassword").val();
         var newPassword = $("#newPassword").val();
         var confirmPassword = $("#confirmPassword").val();
+        debugger;
         //Do more validation with Ajax this time
         $("#regMessage").load("change_details.php", {
             oldPassword: oldPassword,

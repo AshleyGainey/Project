@@ -142,8 +142,7 @@ mysqli_close($conn)
                     <!-- <input type="submit" value="Add to cart"> -->
                     <div id="AddtoBasketButtonDiv">
                         <button id="AddToBasketButton" type="submit" class="btn btn-success">
-                            <i class="fa fa-shopping-basket"></i>Add to Basket
-                        </button>
+                            <i class="fa fa-shopping-basket"></i>Add to Basket</button>
                     </div>
                     <p id="regMessage"></p>
                 </form>
@@ -722,23 +721,53 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
 
         var productID = "<?php echo $productID ?>";
         console.log(productID);
-        //Do more validation with Ajax this time
-        $("#regMessage").load("basket_process.php", {
-            product_id: productID,
-            quantity: 1
-        }, function(response, status, xhr) {
-            debugger;
-            document.getElementById("regMessage").style.display = "block";
-            document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
 
-            // if (status == "error") {
-            //     // var message = "An error occured while trying to do this action.";
-            //     document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-            // }
-            if (status == "success") {
-                // window.location.href = "account_welcome.php";
+
+        $.ajax({
+            url: "basket_process.php", //the page containing php script
+            type: "post", //request type,
+            dataType: 'json',
+            data: {
+                product_id: productID,
+                quantity: 1
+            },
+            success: function(result) {
+                debugger;
+                // document.getElementById("regMessage").style.display = "block";
+                // document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+                // console.log(result.abc);
             }
-        })
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // //Do more validation with Ajax this time
+        // $("#regMessage").load("basket_process.php", {
+        //     product_id: productID,
+        //     quantity: 1
+        // }, function(response, status, xhr) {
+        //     debugger;
+        //     document.getElementById("regMessage").style.display = "block";
+        //     document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+
+        //     // if (status == "error") {
+        //     //     // var message = "An error occured while trying to do this action.";
+        //     //     document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+        //     // }
+        //     if (status == "success") {
+        //         // window.location.href = "account_welcome.php";
+        //     }
+        // })
 
 
     });
