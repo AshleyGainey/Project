@@ -138,15 +138,18 @@ mysqli_close($conn)
                     <h1 class="productPrice">£<?php echo $productPrice ?></h2>
                         <h3 class="productFreeDelivery">Free Delivery & Returns</h3>
                 </div>
-                <form class="form-item" method="post" action="?action=add&id=<?php echo $row["id"]; ?>">
-                    <div id="AddToBasketButton">
-                        <i class="fa fa-shopping-basket"></i>
-                        <p class="textOfButton">Add to Basket</p>
+                <form id="addToProductForm" action="/account_welcome.php" method="post">
+                    <!-- <input type="submit" value="Add to cart"> -->
+                    <div id="AddtoBasketButtonDiv">
+                        <button id="AddToBasketButton" type="submit" class="btn btn-success">
+                            <i class="fa fa-shopping-basket"></i>Add to Basket
+                        </button>
                     </div>
-                    <input type="submit" name="add_to_cart" class="btn btn-outline-secondary btn-sm" value="Add to cart">
+                    <p id="regMessage"></p>
                 </form>
             </div>
         </div>
+
 
 
         <div class="descriptionBox">
@@ -244,7 +247,7 @@ mysqli_close($conn)
     #AddToBasketButton {
         background-color: #1a1862;
         padding: 10px;
-        max-width: 200px;
+        width: 200px;
         border: none;
         cursor: pointer;
 
@@ -259,9 +262,15 @@ mysqli_close($conn)
     #AddToBasketButton i {
         font-size: 5em;
         padding-bottom: 10px;
-        color: #FFFFFF
+        color: #FFFFFF;
+        display: block;
     }
 
+    #AddtoBasketButtonDiv {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
     .productTitle {
         margin-left: 20px;
@@ -603,7 +612,7 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
 
         let result = lengthOfSlider + "%";
 
-        console.log(picturesLength)
+        // console.log(picturesLength)
         // Resolves issue with only one image then get rid of the margin left -100 (no image will be shown after, so don't need a margin left)
         if (picturesLength == 1) {
             document.getElementById("slider").style.marginLeft = 0;
@@ -705,4 +714,32 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         console.log(even);
         even.style.backgroundColor = "red";
     }
+
+
+
+    $("#addToProductForm").submit(function(event) {
+        event.preventDefault();
+
+        var productID = "<?php echo $productID ?>";
+        console.log(productID);
+        //Do more validation with Ajax this time
+        $("#regMessage").load("basket_process.php", {
+            product_id: productID,
+            quantity: 1
+        }, function(response, status, xhr) {
+            debugger;
+            document.getElementById("regMessage").style.display = "block";
+            document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+
+            // if (status == "error") {
+            //     // var message = "An error occured while trying to do this action.";
+            //     document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+            // }
+            if (status == "success") {
+                // window.location.href = "account_welcome.php";
+            }
+        })
+
+
+    });
 </script>

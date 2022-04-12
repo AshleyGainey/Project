@@ -1,8 +1,8 @@
 <?php
- if (!isset($_SESSION)) {
+if (!isset($_SESSION)) {
     @ob_start();
     session_start();
-    }
+}
 
 if (!isset($_SESSION['userID'])) {
     header('Location: Login.php');
@@ -32,61 +32,41 @@ if (!isset($_SESSION['userID'])) {
         <div>
             <p>Change Your Password</p>
         </div>
-        <div class="cardArea">
-            <div class="firstRow">
-                <div class="cardContainer leftPart">
-                    <p>Old Password</p>
-                    <input type="password" class="searchInput" placeholder="Old Password">
+        <form id="PasswordForm" action="/account_welcome.php" method="post">
+            <div class="cardArea">
+                <div class="firstRow">
+                    <div class="cardContainer leftPart">
+                        <p>Old Password</p>
+                        <input id="oldPassword" type="password" class="searchInput" placeholder="Old Password">
+                    </div>
+
+                    <div class="cardContainer rightPart">
+                        <p>New Password</p>
+                        <input type="password" id="newPassword" class="searchInput" placeholder="New Password" required>
+                    </div>
+                </div>
+                <div class="secondRow">
+                    <div class="cardContainer rightPart">
+                        <p>Confirm Password</p>
+                        <input type="password" id="confirmPassword" class="searchInput" placeholder="Confirm Password" required>
+                    </div>
                 </div>
 
-                <div class="cardContainer rightPart">
-                    <p>New Password</p>
-                    <input type="password" class="searchInput" placeholder="New Password">
-                </div>
-            </div>
-            <div class="secondRow">
-                <div class="cardContainer rightPart">
-                    <p>Confirm Password</p>
-                    <input type="password" class="searchInput" placeholder="Confirm Password">
-                </div>
-            </div>
-            <div class="secondRow">
-                <div class="cardContainer rightPart">
-                    <div class="card">
-                        <div class="writingOfCard">
-                            <a href="#">Save</a>
-                        </div>
+                <div class="secondRow">
+                    <div class="cardContainer rightPart">
+                        <input type="submit" value="Save">
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-
+    
     </div>
     <?php include "./footer.php" ?>
 </body>
 
 </html>
 <style>
-    #confettiIcon {
-        width: 200px;
-        margin-bottom: 50px;
-        color: #FFFFFF;
-    }
-
-    #orderComplete {
-        text-align: center;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-    }
-
-    #orderComplete h1 {
-        margin-bottom: 10px;
-    }
-
     #mainBody {
         margin-top: 30px;
         margin-left: 50px;
@@ -174,6 +154,10 @@ if (!isset($_SESSION['userID'])) {
         float: right;
     }
 
+    #regMessage {
+        display: none;
+    }
+
     .disabled input {
         border: 3px solid #000000;
         color: #000000;
@@ -196,4 +180,41 @@ if (!isset($_SESSION['userID'])) {
         outline: none;
         width: 100%;
     }
+
+    input[type=submit] {
+        margin-left: 10px;
+        box-shadow: 0 0 0 5px #FFFFFF;
+        border-radius: 2%;
+        height: 75px;
+        width: 250px;
+        overflow: hidden;
+        position: relative;
+        background-color: #1a1862;
+    }
 </style>
+
+<script>
+    $("#PasswordForm").submit(function(event) {
+        event.preventDefault();
+        var oldPassword = $("#oldPassword").val();
+        var newPassword = $("#newPassword").val();
+        var confirmPassword = $("#confirmPassword").val();
+        //Do more validation with Ajax this time
+        $("#regMessage").load("change_details.php", {
+            oldPassword: oldPassword,
+            newPassword: newPassword,
+            confirmPassword: confirmPassword,
+            process: "Password"
+        }, function(response, status, xhr) {
+            debugger;
+            if (status == "error") {
+                document.getElementById("regMessage").style.display = "block";
+                // var message = "An error occured while trying to do this action.";
+                document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+            }
+            if (status == "success") {
+                window.location.href = "account_welcome.php";
+            }
+        })
+    });
+</script>

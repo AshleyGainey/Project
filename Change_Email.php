@@ -69,24 +69,6 @@ if (!isset($_SESSION['userID'])) {
 
 </html>
 <style>
-    #confettiIcon {
-        width: 200px;
-        margin-bottom: 50px;
-        color: #FFFFFF;
-    }
-
-    #orderComplete {
-        text-align: center;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-    }
-
-    #orderComplete h1 {
-        margin-bottom: 10px;
-    }
 
     #mainBody {
         margin-top: 30px;

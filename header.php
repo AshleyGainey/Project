@@ -36,7 +36,14 @@ if (!isset($_SESSION)) {
             <a id="basket" href="Basket.php">
                 <div class="navToolButtons">
                     <i class="fa fa-shopping-basket"></i>
-                    <span id='cartCount'>1</span>
+                    <?php
+                    $quantity;
+                    if (isset($_SESSION['basketQuantity'])) {
+                        $quantity = $_SESSION['basketQuantity'];
+                        //TODO Ashley: How to update this when something has been added.
+                        echo "<span id='cartCount'>" . $quantity . "</span>";
+                    }                    
+                    ?>
                     <h2>Basket</h2>
                 </div>
             </a>

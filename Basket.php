@@ -1,77 +1,6 @@
 <?php
-//Check to see if product has been added to the basket from the Add to Basket button on the product page
-if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['product_id']) &&  is_numeric($_POST['quantity'])) {
-    //Make sure the quantity and product ID are integers and set variables to use later on.
-    $basket_product_ID = (int)$_POST['product_id'];
-    $basket_quantity = (int)$_POST['quantity'];
 
-    //Verify that the product is in the database (users then can't manipulate the system and add products that aren't there) 
-    // and put the result in an array
-    $stmt = $pdo->prepare('Select * from products where id = ?');
-    $stmt->execute([$_POST['product_id']]);
-    $basket_product = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    //If there is a product in the database (the product exists)
-    if ($basket_product && $basket_quantity > 0) {
-        if (isset($_SESSION['basket']) && is_array($_SESSION['basket'])) {
-            //If any product at all is already exists in the basket
-            if (array_key_exists($basket_product_ID, $_SESSION['basket'])) {
-                //Update the quantity of the product since the product is already in the basket.
-                $_SESSION['basket'][$basket_product_ID] += $basket_quantity;
-            } else {
-                //Add the product to the basket, due to it not being in there already
-                $_SESSION['basket'][$basket_product_ID] = $basket_quantity;
-            }
-        } else {
-            //Add the first product to the basket - there were no products in the basket previously 
-            // (add the product ID as the key and the quantity as the value)
-            $_SESSION['basket'] += array($basket_product_ID => $basket_quantity);
-        }
-    }
-}
-
-//Remove from basket by looking at the URL paramater of remove (which is the product id), check to see if it is in the basket and is numerical
-if (isset($_GET['remove']) && is_numeric($_GET['remove']) && isset($_SESSION['basket']) && isset($_SESSION['basket'][$_GET['remove']])) {
-    unset($_SESSION['basket'][$_GET['remove']]);
-}
-
-if (isset($_POST['update']) && isset($_SESSION['basket'])) {
-    foreach ($_POST as $key => $value) {
-        if (strpos($key, 'quantity') !== false && is_numeric($value)) {
-            $id = str_replace('quantity-', '', $k);
-            $basket_product_quantity = (int)$value;
-            if (is_numeric($id) && isset($_SESSION['basket'][$id]) && $basket_product_quantity > 0) {
-                $_SESSION['basket'][$id] = $basket_product_quantity;
-            }
-        }
-    }
-}
-
-
-if (isset($_POST['placeorder']) && isset($_SESSION['basket']) && !empty($_SESSION['basket'])) {
-    header('Location: Change_Email.php');
-}
-
-
-
-$productsInBasket = isset($_SESSION['basket']) ? $_SESSION['basket'] : array();
-$prods = array();
-$subtotal = 0.00;
-
-if ($productsInBasket) {
-    $arraytoQs = implode(',', array_fill(0, count($productsInBasket), '?'));
-    $stmt = $pdo->prepare('SELECT * from products WHERE product_id IN (' . $arraytoQs . ')');
-    $stmt->execute(array_keys($productsInBasket));
-    $productsBackFromDB = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($productsBackFromDB as $indProduct) {
-        $subtotal += (float)$indProduct['price'] * (int)$productsInBasket[$indProduct['id']];
-    }
-}
 ?>
-
-
-
-
 
 
 
@@ -101,71 +30,148 @@ if ($productsInBasket) {
             <h1>Your Basket</h1>
         </div>
         <form action="Basket.php" method="post">
+            <?php
+            $total = 0;
 
-            <div class="individualProduct row">
-                <div class="containerProduct col-2">
-                    <div class="productImage">
-                        <img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
-                    </div>
-                </div>
-                <div class="containerProductDetails col-8">
-                    <div class="productDetails">
-                        <div class="firstRow">
-                            <div class="titleOfProduct">
-                                <h1>Title Of Product</h1>
+            if (!isset($_SESSION["basket"])) {
+                $invalidBasket = 1;
+                echo "<h1 id='NoProducts'>No Products In the basket</h1>";
+            } else if (count($_SESSION["basket"]) == 0){
+                $invalidBasket = 1;
+                echo "<h1 id='NoProducts'>No Products In the basket</h1>";
+            } else {
+                $invalidBasket = 0;
+                foreach ($_SESSION["basket"] as $basketItem => $basketItem_value) {
+                    // echo
+                    // "HRERERERERERERERRERER" . $basketItem;
+                    // echo "xjbfdsgjfdfj" . $basketItem_value;
+
+
+                    include 'DBlogin.php';
+
+                    $conn = new mysqli($host, $user, $pass, $database);
+                    // Check connection
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+
+                    $stmt = $conn->prepare("SELECT p.productTitle, pi.productImageFilename, pi.productImageAltText, p.productPrice, p.productTotalQuantity FROM product p INNER JOIN product_image pi ON p.productID = pi.productID
+where p.productID = ? AND pi.displayOrder = 1");
+                    $stmt->bind_param("i", $basketItem);
+                    $stmt->execute();
+                    $res = $stmt->get_result();
+                    $basket_product = mysqli_fetch_all($res, MYSQLI_ASSOC);
+                    // print_r($basket_product);
+            ?>
+                    <p id="regMessage"></p>
+                    <div class="individualProduct row">
+                        <div class="containerProduct col-2">
+                            <div class="productImage">
+                                <?php
+                                $productImagePath = "images/products/" . $basketItem . "/" . $basket_product[0]["productImageFilename"];
+                                echo "<img src='" . $productImagePath . "' alt='" .
+                                    $basket_product[0]["productImageAltText"]  . "' >" ?>
+                                <!-- <img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img"> -->
                             </div>
-                            <div class="quantityOfProduct">
-                                <label>Quantity:</label>
+                        </div>
+                        <div class="containerProductDetails col-8">
+                            <div class="productDetails">
+                                <div class="firstRow">
+                                    <div class="titleOfProduct">
+                                        <?php
+                                        echo "<h1>" . $basket_product[0]["productTitle"] . "</h1>" ?>
 
-                                <select name="quantity" id="quantity">
+                                        <!-- <h1>Title Of Product</h1> -->
+                                    </div>
+                                    <div class="quantityOfProduct">
+                                        <label>Quantity:</label>
+
+                                        <?php
+                                        echo "<select name='quantity' id='quantity' onchange='changeQuantity(" . $basketItem . ")'>'"
+
+                                        ?>
+
+                                        <?php
+                                        $quantity = $basket_product[0]["productTotalQuantity"];
+                                        $quantitySelected = $basketItem_value;
+
+
+                                        if ($quantity > 10) {
+                                            $quantity = 10;
+                                        }
+                                        for ($i = 1; $i < $quantity + 1; $i++) {
+                                            $selectOption = "<option value='" . $i . "'";
+                                            if ($i == $quantitySelected) {
+                                                $selectOption = $selectOption . " selected";
+                                            }
+                                            $selectOption = $selectOption .
+                                                ">" . $i . "</option>";
+                                            echo $selectOption;
+                                        }
+                                        ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="secondRow">
                                     <?php
-                                    $quantity = 4;
-                                    if ($quantity > 10) {
-                                        $quantity = 10;
-                                    }
-                                    for ($i = 1; $i < $quantity + 1; $i++) {
-                                        echo "<option value='" . $i . "'>" . $i . "</option>";
-                                    }
+                                    echo "<div class='RemoveProduct' onclick='removeProductFromBasket(" . $basketItem . ")'>"
                                     ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="secondRow">
-                            <div class="RemoveProduct">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                <h4>Remove</h4>
-                            </div>
-                            <div class="quantityOfProduct">
-                                <h1>£100.00<h1>
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                    <h4>Remove</h4>
+                                </div>
+                                <div class="quantityOfProduct">
+                                    <?php
+                                    $productPrice = $basket_product[0]["productPrice"];
+                                    if ($quantitySelected > 1) {
+                                        echo "<h3>Price Per Quantity: £" . number_format($productPrice, 2) . "</h3>";
+                                    }
+
+                                    $quantityPrice = $productPrice * $quantitySelected;
+                                    $total += $quantityPrice;
+                                    echo "<h1>£" . number_format($quantityPrice, 2) . "</h1>";
+                                    ?>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="totalContainer">
-                <div class="total">
-                    <h1 class="totalHeader">Total:<h1>
-                            <h1 class="totalAmount">£100.00<h1>
-                </div>
-            </div>
-            <div class="checkoutDiv">
-                <div class="cardContainer rightPart">
-                    <a href="#">
-
-                        <div class="card">
-                            <div class="writingOfCard">
-                                <h1>Checkout</h1>
-                            </div>
-                    </a>
-                </div>
-            </div>
     </div>
+<?php
+                }
+            }
+?>
+<?php
+if ($invalidBasket == 0) {
+?>
+    <div class="totalContainer">
+        <div class="total">
+            <h1 class="totalHeader">Total:<h1>
+                    <?php
+
+                    echo "<h1 class='totalAmount'>£" . number_format($total, 2) . "<h1>";
+                    ?>
+
+        </div>
     </div>
+    <div class="checkoutDiv">
+        <div class="cardContainer rightPart">
+            <a href="#">
 
+                <div class="card">
+                    <div class="writingOfCard">
+                        <h1>Checkout</h1>
+                    </div>
+            </a>
+        </div>
     </div>
+<?php
+}
+?>
+</div>
+</div>
+</div>
 
 
-    <?php include "./footer.php" ?>
+<?php include "./footer.php" ?>
 </body>
 <style>
     #mainBody {
@@ -178,6 +184,13 @@ if ($productsInBasket) {
         font-size: 5em;
         padding-bottom: 10px;
         color: #FFFFFF
+    }
+
+
+    #NoProducts {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .title {
@@ -201,6 +214,9 @@ if ($productsInBasket) {
         display: inline-block;
     }
 
+    .quantityOfProduct h1 {
+        float: right;
+    }
 
     .containerProductDetails {
         width: 75%;
@@ -417,7 +433,48 @@ if ($productsInBasket) {
     }
 </style>
 <script>
+    function changeQuantity(id) {
+        var x = document.getElementById("quantity").value;
+        // alert(x);
+        // debugger;
+        $("#regMessage").load("basket_process.php", {
+            update: id,
+            quantity: x
+        }, function(response, status, xhr) {
+            debugger;
+            document.getElementById("regMessage").style.display = "block";
+            document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
 
+            // if (status == "error") {
+            //     // var message = "An error occured while trying to do this action.";
+            //     document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+            // }
+            if (status == "success") {
+                // window.location.href = "account_welcome.php";
+            }
+        })
+    }
+
+
+    function removeProductFromBasket(id) {
+        alert(id);
+        // debugger;
+        $("#regMessage").load("basket_process.php", {
+            remove: id,
+        }, function(response, status, xhr) {
+            debugger;
+            document.getElementById("regMessage").style.display = "block";
+            document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+
+            // if (status == "error") {
+            //     // var message = "An error occured while trying to do this action.";
+            //     document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+            // }
+            if (status == "success") {
+                // window.location.href = "account_welcome.php";
+            }
+        })
+    }
 </script>
 
 </html>
