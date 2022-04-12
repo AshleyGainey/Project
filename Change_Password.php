@@ -1,3 +1,13 @@
+<?php
+ if (!isset($_SESSION)) {
+    @ob_start();
+    session_start();
+    }
+
+if (!isset($_SESSION['userID'])) {
+    header('Location: Login.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-    <title>Account Details - Gadget Gainey Store</title>
+    <title>Change Your Password - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -127,6 +137,7 @@
 
     .cardContainer {
         display: inline-block;
+        width: 20%;
     }
 
     .writingOfCard a {

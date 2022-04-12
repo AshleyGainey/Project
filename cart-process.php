@@ -1,5 +1,8 @@
-<?php   
-session_start();
+<?php
+// if (!isset($_SESSION)) {
+//     @ob_start();
+//     session_start();
+//     };
 
 if(!empty($_SESSION['shopping_cart'])){  
     $total = 0;  

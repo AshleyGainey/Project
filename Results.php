@@ -20,7 +20,7 @@ AS p RIGHT JOIN product_image pi
             $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
             $rows = mysqli_num_rows($result);
 
-            print_r($products);
+            // print_r($products);
 
             //Free  memory and close the connection
             mysqli_free_result($result);

@@ -1,3 +1,17 @@
+<?php
+// print_r('session here: ' . isset($_SESSION));
+
+if (!isset($_SESSION)) {
+    @ob_start();
+    @session_start();
+}
+
+// print_r('session: ' . $_SESSION['userID']);
+
+if (isset($_SESSION['userID'])) {
+    header('Location: account_welcome.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +20,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-    <title>Account Details - Gadget Gainey Store</title>
+    <title>Login/Register - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -126,7 +140,7 @@
             </div>
         </div>
     </div>
-    <p class="regMessage"></p>
+    <p id="regMessage"></p>
     </div>
     </div>
     </div>
@@ -282,6 +296,7 @@
     .cardContainer {
         margin-top: 20px;
         margin-bottom: 20px;
+        /* width: 20%; */
     }
 
     .invalid,
@@ -328,6 +343,10 @@
         display: inline;
     }
 
+    #regMessage {
+        display: none;
+    }
+
 
     #confirmPasswordValidationMessage {
         margin-bottom: 10px;
@@ -337,23 +356,8 @@
 <script>
     $(document).ready(function() {
         activeModes();
-        isAlreadyLoggedIn();
+        // isAlreadyLoggedIn();
     });
-
-    //If logged in, skip to account if accidentally got to this URL
-    function isAlreadyLoggedIn() {
-        var isAlreadyLoggedIn = <?php
-                                if (isset($_SESSION['userID'])) {
-                                    echo 'true';
-                                } else {
-                                    echo 'false';
-                                }
-                                ?>;
-
-        if (isAlreadyLoggedIn) {
-            window.location.replace("account_welcome.php");
-        }
-    }
 
     var passwordRequirementMet = 0;
 
@@ -522,7 +526,6 @@
 
         //Personal Information values
         var title = $("#regTitle").val();
-        debugger;
         var firstName = $("#regFirstName").val();
         var lastName = $("#regLastName").val();
         var addressLine1 = $("#regAddressLine1").val();
@@ -531,7 +534,7 @@
         var county = $("#regCounty").val();
         var postcode = $("#regPostCode").val();
         //Do more validation with Ajax this time
-        $(".regMessage").load("passwordCheck.php", {
+        $("#regMessage").load("passwordCheck.php", {
             emailAddress: emailAddress,
             password: password,
             title: title,
@@ -547,10 +550,17 @@
             debugger;
             if (status == "error") {
                 var message = "An error occured while registering. Please see below :";
-                $("#AllResults").html(message + xhr.status + "" + xhr.statusText)
+                document.getElementById("regMessage").style.display = "block";
+                $("#regMessage").html(message + xhr.status + "" + xhr.statusText)
+            }
+            if (status == "success") {
+                window.location.href = "account_welcome.php";
             }
         })
     });
+
+
+
 
 
     $("#LoginForm").submit(function(event) {
@@ -558,15 +568,19 @@
         var emailAddress = $("#loginEmail").val();
         var password = $("#loginPassword").val();
         //Do more validation with Ajax this time
-        $(".regMessage").load("passwordCheck.php", {
+        $("#regMessage").load("passwordCheck.php", {
             emailAddress: emailAddress,
             password: password,
             Login: true
         }, function(response, status, xhr) {
             debugger;
             if (status == "error") {
-                var message = "An error occured while registering. Please see below :";
-                $("#AllResults").html(message + xhr.status + "" + xhr.statusText)
+                // var message = "An error occured while trying to do this action.";
+                document.getElementById("regMessage").style.display = "block";
+                document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+            }
+            if (status == "success") {
+                window.location.href = "account_welcome.php";
             }
         })
     });

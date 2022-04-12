@@ -1,3 +1,13 @@
+<?php
+if (!isset($_SESSION)) {
+    @ob_start();
+    session_start();
+}
+
+if (!isset($_SESSION['userID'])) {
+    header('Location: Login.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-    <title>Account Details - Gadget Gainey Store</title>
+    <title>Change Your Email - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -22,38 +32,37 @@
         <div>
             <p>Change Your Email</p>
         </div>
-        <div class="cardArea">
-            <div class="firstRow">
-                <div class="cardContainer leftPart disabled">
-                    <p>Old Email</p>
-                    <?php
-                    echo "<input type='text' class='searchInput' disabled>"
-                    ?>
+        <form id="EmailForm" action="/account_welcome.php" method="post">
+            <div class="cardArea">
+                <div class="firstRow">
+                    <div class="cardContainer leftPart disabled">
+                        <p>Old Email</p>
+                        <?php
+                        echo "<input type='text' id='oldEmail' class='searchInput' disabled value='" . $_SESSION['userEmail'] . "' > ";
+                        ?>
+                    </div>
+
+                    <div class="cardContainer rightPart">
+                        <p>New Email</p>
+                        <input type="text" id="newEmail" class="searchInput" placeholder="New Email" required>
+                    </div>
+                </div>
+                <div class="secondRow">
+                    <div class="cardContainer rightPart">
+                        <p>Your Password</p>
+                        <input type="password" id="password" class="searchInput" placeholder="Your Password" required>
+                    </div>
                 </div>
 
-                <div class="cardContainer rightPart">
-                    <p>New Email</p>
-                    <input type="text" class="searchInput" placeholder="New Email">
-                </div>
-            </div>
-            <div class="secondRow">
-                <div class="cardContainer rightPart">
-                    <p>Your Password</p>
-                    <input type="text" class="searchInput" placeholder="Your Password">
-                </div>
-            </div>
-            <div class="secondRow">
-                <div class="cardContainer rightPart">
-                    <div class="card">
-                        <div class="writingOfCard">
-                            <a href="#">Save</a>
-                        </div>
+                <div class="secondRow">
+                    <div class="cardContainer rightPart">
+                        <input type="submit" value="Save">
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-
+    <p id="regMessage"></p>
     </div>
     <?php include "./footer.php" ?>
 </body>
@@ -129,6 +138,7 @@
 
     .cardContainer {
         display: inline-block;
+        width: 20%;
     }
 
     .writingOfCard a {
@@ -165,6 +175,10 @@
         float: right;
     }
 
+    #regMessage {
+        display: none;
+    }
+
     .disabled input {
         border: 3px solid #000000;
         color: #000000;
@@ -187,4 +201,39 @@
         outline: none;
         width: 100%;
     }
+
+    input[type=submit] {
+        margin-left: 10px;
+        box-shadow: 0 0 0 5px #FFFFFF;
+        border-radius: 2%;
+        height: 75px;
+        width: 250px;
+        overflow: hidden;
+        position: relative;
+        background-color: #1a1862;
+    }
 </style>
+
+<script>
+    $("#EmailForm").submit(function(event) {
+        event.preventDefault();
+        var emailAddress = $("#newEmail").val();
+        var password = $("#password").val();
+        //Do more validation with Ajax this time
+        $("#regMessage").load("change_details.php", {
+            emailAddress: emailAddress,
+            password: password,
+            process: "Email"
+        }, function(response, status, xhr) {
+            debugger;
+            if (status == "error") {
+                document.getElementById("regMessage").style.display = "block";
+                // var message = "An error occured while trying to do this action.";
+                document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+            }
+            if (status == "success") {
+                window.location.href = "account_welcome.php";
+            }
+        })
+    });
+</script>

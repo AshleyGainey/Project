@@ -19,7 +19,7 @@ if (!isset($_SESSION['userID'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-    <title>Account Details - Gadget Gainey Store</title>
+    <title>Order Details - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -33,62 +33,15 @@ if (!isset($_SESSION['userID'])) {
 
     <div id="mainBody">
         <div>
-            <p>Account Details</p>
+            <p>Order Details</p>
         </div>
-        <div class="cardArea">
-            <div class="firstRow">
-                <div class="cardContainer leftPart">
-                    <div class="card">
-                        <div class="writingOfCard">
-                            <a href="Change_Email.php">Change Your Email</a><img src="images/Home/Right Arrow.svg" alt="Change Your Email - Right Arrow" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="cardContainer rightPart">
-                    <div class="card">
-                        <div class="writingOfCard">
-                            <a href="Change_Password.php">Change Your Password</a><img src="images/Home/Right Arrow.svg" alt="Change Your Password - Right Arrow" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="secondRow">
-                <div class="cardContainer rightPart">
-                    <div class="card">
-                        <div class="writingOfCard">
-                            <a href="Change_Address.php">Change Your Address<img src="images/Home/Right Arrow.svg" alt="Change Main Address - Right Arrow" /></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
+
     <?php include "./footer.php" ?>
 </body>
 
 </html>
 <style>
-    #confettiIcon {
-        width: 200px;
-        margin-bottom: 50px;
-        color: #FFFFFF;
-    }
-
-    #orderComplete {
-        text-align: center;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-    }
-
-    #orderComplete h1 {
-        margin-bottom: 10px;
-    }
-
     #mainBody {
         margin-top: 30px;
         margin-left: 50px;

@@ -1,9 +1,10 @@
 <?php
-// Start the session
-session_start();
+if (!isset($_SESSION)) {
+    @ob_start();
+    @session_start();
+}
 ?>
-<!DOCTYPE html>
-<html>
+
 
 <head>
     <link rel="stylesheet" type="text/css" href="header.css">
@@ -40,19 +41,26 @@ session_start();
                 </div>
             </a>
 
-            <a id="account" href="Login.php">
-                <div class="navToolButtons">
-                    <i class="fa fa-user-circle-o"></i>
-                    <h2><?php
-                        if (isset($_SESSION["userFirstName"])) {
-                            echo $_SESSION['userFirstName'];
-                        } else {
-                            echo "Accountss";
-                        }
-                        ?></h2>
+
+            <?php
+            if (isset($_SESSION["userFirstName"])) {
+                echo "<a id='account' href='account_welcome.php'>";
+            } else {
+                echo "<a id='account' href='Login.php'>";
+            }
+            ?>
+            <div class="navToolButtons">
+                <i class="fa fa-user-circle-o"></i>
+                <h2><?php
+                    if (isset($_SESSION["userFirstName"])) {
+                        echo $_SESSION['userFirstName'];
+                    } else {
+                        echo "Account";
+                    }
+                    ?></h2>
 
 
-                </div>
+            </div>
             </a>
         </div>
 </header>

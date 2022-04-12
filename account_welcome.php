@@ -1,3 +1,14 @@
+<?php
+if (!isset($_SESSION)) {
+    @ob_start();
+    session_start();
+}
+// print_r('UserID: ' . $_SESSION['userID']);
+// if (!isset($_SESSION['userID'])) {
+//     header('Location: Login.php#hello');
+// }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +31,19 @@
 
     <div id="mainBody">
         <div>
-            <p>Welcome <span id="firstName">FIRST NAME</span></p>
+            <?php
+            echo "<p>Welcome ";
+            if (isset($_SESSION['register'])) {
+                if ($_SESSION["register"] == false) {
+                    echo "back ";
+                }
+                if (isset($_SESSION['userFirstName'])) {
+                echo $_SESSION["userFirstName"] . "</p>";
+                } else {
+                    echo "</p>";
+                }
+            }
+            ?>
         </div>
         <div class="cardArea">
             <div class="firstRow">
@@ -35,15 +58,15 @@
                 <div class="cardContainer rightPart">
                     <div class="card">
                         <div class="writingOfCard">
-                            <a href="#">Order History<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
+                            <a href="order_details.php">Order History<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="secondRow">
-                <div class="card">
+                <div class="card" id="logOut">
                     <div class="writingOfCard">
-                        <a href="#">Log Out</a>
+                        <a>Log Out</a>
                     </div>
                 </div>
             </div>
@@ -125,6 +148,7 @@
     .cardContainer {
         display: inline-block;
         width: 250px;
+        cursor: pointer;
     }
 
     .writingOfCard a {
@@ -161,3 +185,9 @@
         float: right;
     }
 </style>
+
+<script>
+    document.getElementById("logOut").onclick = function() {
+        document.location = 'logout.php';
+    };
+</script>

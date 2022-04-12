@@ -21,7 +21,7 @@ $result = mysqli_query($conn, $query);
 
 $productInfo = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-print_r($productInfo);
+// print_r($productInfo);
 
 $invalid = 0;
 if (empty($productInfo)) {
@@ -613,15 +613,7 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
     });
 
     sliderNum = 1;
-    // set a timed function call to wait for product xml to load
-    timer = window.setInterval(function() {
 
-        // Check if products have loaded
-    }, 100);
-
-    // Your $(document).ready() event script code goes below here -v
-
-    // Variable for the slider itself
     var slider = $('#slider');
 
 
@@ -641,11 +633,11 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
             $('#slider .slider__section:first').insertAfter('#slider .slider__section:last');
             slider.css('margin-left', '-' + 100 + '%');
         });
-        var helolo = picturesLength + 1;
-        if (sliderNum === helolo) {
+        var picturePath = picturesLength + 1;
+        if (sliderNum === picturePath) {
             sliderNum = 1;
         }
-        console.log(document.getElementById("slider").style.width);
+        // console.log(document.getElementById("slider").style.width);
         changeIndictors()
     }
 

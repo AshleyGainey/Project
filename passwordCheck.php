@@ -1,5 +1,8 @@
 <?php
-session_start();
+if (!isset($_SESSION)) {
+    @ob_start();
+    session_start();
+}
 //If registering
 if (isset($_POST['Register'])) {
     include 'DBlogin.php';
@@ -18,7 +21,11 @@ if (isset($_POST['Register'])) {
     $res = $stmt->get_result();
     if ($res->num_rows > 0) {
         $stmt->close();
-        echo "Is already in DB";
+        // echo "Is already in DB";
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - There is already an account with that email address. Please Log in or Register with a different email address'));
+
         return false;
     }
 
@@ -38,7 +45,7 @@ VALUES (?, ?, ?, ?, ?)");
     $stmt->execute();
     $addressID = mysqli_insert_id($conn);
 
-    print_r($addressID);
+    // print_r($addressID);
     // $res = $stmt->get_result();
 
     // $row = $res->fetch_assoc();
@@ -61,12 +68,24 @@ VALUES (?, ?, ?, ?, ?, ?, ?)");
 
     $stmt2->bind_param("sssssis", $title, $firstName, $lastName, $email, $hash, $addressID, $typeOfUser);
     $stmt2->execute();
+
+    $userID = mysqli_insert_id($conn);
+
+    $_SESSION['userID'] = $userID;
+    $_SESSION['userEmail'] = $email;
+    $_SESSION['userFirstName'] = $firstName;
+    $_SESSION['userLastName'] = $lastName;
+    $_SESSION["register"] = false;
+
 } else if (isset($_POST['Login'])) {
     include 'DBlogin.php';
 
     $conn = mysqli_connect($host, $user, $pass, $database);
 
     if (!$conn) {
+        header('HTTP/1.1 500 Internal Server Error');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Please contact us with this issue.'));
         echo 'Connection error: ' . mysqli_connect_error();
     }
 
@@ -82,7 +101,9 @@ VALUES (?, ?, ?, ?, ?, ?, ?)");
 
 
     if ($rows == 0) {
-        echo "Not in DB";
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Account with that email address does not exist'));
         return false;
     }
 
@@ -90,18 +111,32 @@ VALUES (?, ?, ?, ?, ?, ?, ?)");
     // print_r($user);
     if (password_verify($password, $user[0]['userPassword'])) {
 
+        header('Content-Type: application/json');
+        print json_encode($result);
+
         // header('Location: Error404.php');
         $_SESSION['userID'] = $user[0]["userID"];
         $_SESSION['userEmail'] = $user[0]["userEmail"];
         $_SESSION['userFirstName'] = $user[0]["userFirstName"];
         $_SESSION['userLastName'] = $user[0]["userLastName"];
-        $_SESSION['userID'] = $user[0]["userID"];
-        echo "Password verified +" .  $_SESSION['userFirstName'];
+        $_SESSION["register"] = false;
+        // header('Location: Login.php');
+        exit();
+
+        return true;
+        // echo "Password verified +" .  $_SESSION['userFirstName'];
+        
     } else {
-        echo "Fuck you Syed";
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Password not correct'));
+
+        // echo "Password Incorrect";
+        return false;
     }
 
     //Free  memory and close the connection
     mysqli_free_result($result);
     mysqli_close($conn);
 }
+?>
