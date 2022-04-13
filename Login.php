@@ -87,7 +87,6 @@ if (isset($_SESSION['userID'])) {
                         <p id="minLength" class="invalid">A Minimum of 12 characters</p>
                         <p id="maxLength" class="valid">A Maximum of 128 characters</p>
                     </div>
-                    <div class="block"></div>
                     <div class="cardContainer floatRight">
                         <p>Confirm Password</p>
                         <input id="regConfirmPassword" type="password" class="searchInput" placeholder="Confirm Password" minlength=12 maxlength=128>

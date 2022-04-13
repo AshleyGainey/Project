@@ -57,76 +57,79 @@ where p.productID = ? AND pi.displayOrder = 1");
                     // print_r($basket_product);
             ?>
                     <p id="regMessage"></p>
-                    <div class="individualProduct row">
-                        <div class="containerProduct col-2">
-                            <div class="productImage">
-                                <?php
-                                $productImagePath = "images/products/" . $basketItem . "/" . $basket_product[0]["productImageFilename"];
-                                echo "<img src='" . $productImagePath . "' alt='" .
-                                    $basket_product[0]["productImageAltText"]  . "' >" ?>
-                                <!-- <img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img"> -->
-                            </div>
+                    <?php
+                    echo "<div id='individualProduct" . $basketItem . "' class='individualProduct row'>"
+                    ?>
+
+                    <div class="containerProduct col-2">
+                        <div class="productImage">
+                            <?php
+                            $productImagePath = "images/products/" . $basketItem . "/" . $basket_product[0]["productImageFilename"];
+                            echo "<img src='" . $productImagePath . "' alt='" .
+                                $basket_product[0]["productImageAltText"]  . "' >" ?>
+                            <!-- <img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img"> -->
                         </div>
-                        <div class="containerProductDetails col-8">
-                            <div class="productDetails">
-                                <div class="firstRow">
-                                    <div class="titleOfProduct">
-                                        <?php
-                                        echo "<h1>" . $basket_product[0]["productTitle"] . "</h1>" ?>
-
-                                        <!-- <h1>Title Of Product</h1> -->
-                                    </div>
-                                    <div class="quantityOfProduct">
-                                        <label>Quantity:</label>
-
-                                        <?php
-                                        echo "<select name='quantity' id='quantity' onchange='changeQuantity(" . $basketItem . ")'>'"
-
-                                        ?>
-
-                                        <?php
-                                        $quantity = $basket_product[0]["productTotalQuantity"];
-                                        $quantitySelected = $basketItem_value;
-
-
-                                        if ($quantity > 10) {
-                                            $quantity = 10;
-                                        }
-                                        for ($i = 1; $i < $quantity + 1; $i++) {
-                                            $selectOption = "<option value='" . $i . "'";
-                                            if ($i == $quantitySelected) {
-                                                $selectOption = $selectOption . " selected";
-                                            }
-                                            $selectOption = $selectOption .
-                                                ">" . $i . "</option>";
-                                            echo $selectOption;
-                                        }
-                                        ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="secondRow">
+                    </div>
+                    <div class="containerProductDetails col-8">
+                        <div class="productDetails">
+                            <div class="firstRow">
+                                <div class="titleOfProduct">
                                     <?php
-                                    echo "<div class='RemoveProduct' onclick='removeProductFromBasket(" . $basketItem . ")'>"
-                                    ?>
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                    <h4>Remove</h4>
+                                    echo "<h1>" . $basket_product[0]["productTitle"] . "</h1>" ?>
+
+                                    <!-- <h1>Title Of Product</h1> -->
                                 </div>
                                 <div class="quantityOfProduct">
-                                    <?php
-                                    $productPrice = $basket_product[0]["productPrice"];
-                                    if ($quantitySelected > 1) {
-                                        echo "<h3>Price Per Quantity: £" . number_format($productPrice, 2) . "</h3>";
-                                    }
+                                    <label>Quantity:</label>
 
-                                    $quantityPrice = $productPrice * $quantitySelected;
-                                    $total += $quantityPrice;
-                                    echo "<h1>£" . number_format($quantityPrice, 2) . "</h1>";
+                                    <?php
+                                    echo "<select name='quantity' id='quantity' onchange='changeQuantity(" . $basketItem . ")'>'"
+
                                     ?>
+
+                                    <?php
+                                    $quantity = $basket_product[0]["productTotalQuantity"];
+                                    $quantitySelected = $basketItem_value;
+
+
+                                    if ($quantity > 10) {
+                                        $quantity = 10;
+                                    }
+                                    for ($i = 1; $i < $quantity + 1; $i++) {
+                                        $selectOption = "<option value='" . $i . "'";
+                                        if ($i == $quantitySelected) {
+                                            $selectOption = $selectOption . " selected";
+                                        }
+                                        $selectOption = $selectOption .
+                                            ">" . $i . "</option>";
+                                        echo $selectOption;
+                                    }
+                                    ?>
+                                    </select>
                                 </div>
+                            </div>
+                            <div class="secondRow">
+                                <?php
+                                echo "<div class='RemoveProduct' onclick='removeProductFromBasket(" . $basketItem . ")'>"
+                                ?>
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                                <h4>Remove</h4>
+                            </div>
+                            <div class="quantityOfProduct">
+                                <?php
+                                $productPrice = $basket_product[0]["productPrice"];
+                                if ($quantitySelected > 1) {
+                                    echo "<h3>Price Per Quantity: £" . number_format($productPrice, 2) . "</h3>";
+                                }
+
+                                $quantityPrice = $productPrice * $quantitySelected;
+                                $total += $quantityPrice;
+                                echo "<h1>£" . number_format($quantityPrice, 2) . "</h1>";
+                                ?>
                             </div>
                         </div>
                     </div>
+    </div>
     </div>
 <?php
                 }
@@ -436,8 +439,8 @@ if ($invalidBasket == 0) {
             type: "post", //request type,
             dataType: 'json',
             data: {
-                update: id,
-                quantity: x
+                "update": id,
+                "quantity": x
             },
             success: function(result) {
                 debugger;
@@ -446,46 +449,37 @@ if ($invalidBasket == 0) {
                 // console.log(result.abc);
             }
         });
-
-
-
-        //     $("#regMessage").load("basket_process.php", {
-        //         update: id,
-        //         quantity: x
-        //     }, function(response, status, xhr) {
-        //         debugger;
-        //         document.getElementById("regMessage").style.display = "block";
-        //         document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-
-        //         // if (status == "error") {
-        //         //     // var message = "An error occured while trying to do this action.";
-        //         //     document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-        //         // }
-        //         if (status == "success") {
-        //             // window.location.href = "account_welcome.php";
-        //         }
-        //     })
     }
 
 
     function removeProductFromBasket(id) {
-        alert(id);
-        // debugger;
-        $("#regMessage").load("basket_process.php", {
-            remove: id,
-        }, function(response, status, xhr) {
-            debugger;
-            document.getElementById("regMessage").style.display = "block";
-            document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
 
-            // if (status == "error") {
-            //     // var message = "An error occured while trying to do this action.";
-            //     document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-            // }
-            if (status == "success") {
-                // window.location.href = "account_welcome.php";
+        // debugger;
+
+        $.ajax({
+            url: 'basket_process.php',
+            type: 'POST',
+            data: {
+                "remove": id
+            },
+            success: function(response) {
+                $("#individualProduct" + id).hide().fadeOut(1000);
+                updateTotalPrice();
+                // debugger;
+
+
+                // if (status == "error") {
+                // var message = "Sorry but there was an error. Please contact the University IT Support for more details: ";
+                // } else {
+                //     alert(id);
+                //     $("#resultsFound").text(response);
+                // }
             }
-        })
+        });
+    }
+
+    function updateTotalPrice() {
+        debugger;
     }
 </script>
 

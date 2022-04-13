@@ -94,4 +94,8 @@ if ($_POST['process'] == "Email") {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password not correct'));
     }
+}  else if (
+    $_POST['process'] == "Address"
+) {
+    
 }
