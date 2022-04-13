@@ -1,3 +1,18 @@
+<?php
+// print_r('session here: ' . isset($_SESSION));
+
+if (!isset($_SESSION)) {
+    @ob_start();
+    @session_start();
+}
+
+// print_r('session: ' . $_SESSION['userID']);
+
+if (!isset($_SESSION['basket'])) {
+    header('Location: basket.php');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,155 +34,48 @@
     <?php include "./header.php" ?>
     <div id="mainBody">
         <div class="title">
-            <i class="fa fa-shopping-basket"></i>
-            <h1>Your Basket</h1>
+            <i class="fa fa-shopping-cart"></i>
+            <h1>Confirm your Order</h1>
         </div>
-        <form action="Basket.php" method="post">
+        <form action="placeOrder.php" method="post">
             <?php
-            $_SESSION["total"] = 0;
-
-            if (!isset($_SESSION["basket"])) {
-                $invalidBasket = 1;
-                echo "<h1 id='NoProducts'>No Products In the basket</h1>";
-            } else if (count($_SESSION["basket"]) == 0) {
-                $invalidBasket = 1;
-                echo "<h1 id='NoProducts'>No Products In the basket</h1>";
-            } else {
-                $invalidBasket = 0;
-                foreach ($_SESSION["basket"] as $basketItem => $basketItem_value) {
-                    // echo
-                    // "HRERERERERERERERRERER" . $basketItem;
-                    // echo "xjbfdsgjfdfj" . $basketItem_value;
-
-
-                    include 'DBlogin.php';
-
-                    $conn = new mysqli($host, $user, $pass, $database);
-                    // Check connection
-                    if ($conn->connect_error) {
-                        die("Connection failed: " . $conn->connect_error);
-                    }
-
-                    $stmt = $conn->prepare("SELECT p.productTitle, pi.productImageFilename, pi.productImageAltText, p.productPrice, p.productTotalQuantity FROM product p INNER JOIN product_image pi ON p.productID = pi.productID
-where p.productID = ? AND pi.displayOrder = 1");
-                    $stmt->bind_param("i", $basketItem);
-                    $stmt->execute();
-                    $res = $stmt->get_result();
-                    $basket_product = mysqli_fetch_all($res, MYSQLI_ASSOC);
-                    // print_r($basket_product);
+            // $total = $_POST[];
+            $total = $_SESSION["total"];
+            echo "hello" . $total;
             ?>
-                    <p id="regMessage"></p>
-                    <?php
-                    echo "<div id='individualProduct" . $basketItem . "' class='individualProduct row'>"
-                    ?>
+            <?php
+            if ($invalidBasket == 0) {
+            ?>
+                <div class="totalContainer">
+                    <div class="total">
+                        <h1 class="totalHeader">Total:</h1>
+                        <?php
 
-                    <div class="containerProduct col-2">
-                        <div class="productImage">
-                            <?php
-                            $productImagePath = "images/products/" . $basketItem . "/" . $basket_product[0]["productImageFilename"];
-                            echo "<img src='" . $productImagePath . "' alt='" .
-                                $basket_product[0]["productImageAltText"]  . "' >" ?>
-                            <!-- <img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img"> -->
-                        </div>
+                        echo "<h1 class='totalAmount'>£" . number_format($total, 2) . "<h1>";
+                        ?>
                     </div>
-                    <div class="containerProductDetails col-8">
-                        <div class="productDetails">
-                            <div class="firstRow">
-                                <div class="titleOfProduct">
-                                    <?php
-                                    echo "<h1>" . $basket_product[0]["productTitle"] . "</h1>" ?>
-
-                                    <!-- <h1>Title Of Product</h1> -->
+                </div>
+                <h1 class="">Billing Address:</h1>
+                <div class="checkoutDiv">
+                    <div class="cardContainer rightPart">
+                        <a href="">
+                            <div class="card">
+                                <div class="writingOfCard">
+                                    <h1>Checkout</h1>
                                 </div>
-                                <div class="quantityOfProduct">
-                                    <label>Quantity:</label>
-
-                                    <?php
-                                    echo "<select name='quantity' id='quantity' onchange='changeQuantity(" . $basketItem . ")'>'"
-
-                                    ?>
-
-                                    <?php
-                                    $quantity = $basket_product[0]["productTotalQuantity"];
-                                    $quantitySelected = $basketItem_value;
-
-
-                                    if ($quantity > 10) {
-                                        $quantity = 10;
-                                    }
-                                    for ($i = 1; $i < $quantity + 1; $i++) {
-                                        $selectOption = "<option value='" . $i . "'";
-                                        if ($i == $quantitySelected) {
-                                            $selectOption = $selectOption . " selected";
-                                        }
-                                        $selectOption = $selectOption .
-                                            ">" . $i . "</option>";
-                                        echo $selectOption;
-                                    }
-                                    ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="secondRow">
-                                <?php
-                                echo "<div class='RemoveProduct' onclick='removeProductFromBasket(" . $basketItem . ")'>"
-                                ?>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                <h4>Remove</h4>
-                            </div>
-                            <div class="quantityOfProduct">
-                                <?php
-                                $productPrice = $basket_product[0]["productPrice"];
-                                if ($quantitySelected > 1) {
-                                    echo "<h3>Price Per Quantity: £" . number_format($productPrice, 2) . "</h3>";
-                                }
-
-                                $quantityPrice = $productPrice * $quantitySelected;
-                                $_SESSION["total"] += $quantityPrice;
-                                echo "<h1>£" . number_format($quantityPrice, 2) . "</h1>";
-                                ?>
-                            </div>
-                        </div>
+                        </a>
                     </div>
-    </div>
-    </div>
-<?php
-                }
+                </div>
+            <?php
             }
-?>
-<?php
-if ($invalidBasket == 0) {
-?>
-    <div class="totalContainer">
-        <div class="total">
-            <h1 class="totalHeader">Total:<h1>
-                    <?php
-
-                    echo "<h1 class='totalAmount'>£" . number_format($_SESSION["total"], 2) . "<h1>";
-                    ?>
-
-        </div>
+            ?>
     </div>
-    <div class="checkoutDiv">
-        <div class="cardContainer rightPart">
-            <a href="checkout.php">
-
-                <div class="card">
-                    <div class="writingOfCard">
-                        <h1>Checkout</h1>
-                    </div>
-            </a>
-        </div>
     </div>
-<?php
-}
-?>
-</div>
-</div>
-</div>
+    </div>
+    </div>
 
 
-<?php include "./footer.php" ?>
+    <?php include "./footer.php" ?>
 </body>
 <style>
     #mainBody {
@@ -198,7 +106,15 @@ if ($invalidBasket == 0) {
     .title i {
         display: inline;
         font-size: 3em;
-        color: #FFFFFF
+        color: #FFFFFF;
+        margin-right: 10px;
+    }
+
+    .total {
+        margin-top: 50px;
+        width: 100%;
+        float: left;
+
     }
 
     .title h1 {
@@ -221,8 +137,10 @@ if ($invalidBasket == 0) {
     }
 
     .totalContainer {
-        width: 100%;
+        width: 20%;
         display: inline-block;
+        display: block;
+        margin: 0 auto;
     }
 
     .totalHeader {
