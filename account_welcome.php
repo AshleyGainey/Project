@@ -31,19 +31,7 @@ if (!isset($_SESSION)) {
 
     <div id="mainBody">
         <div>
-            <?php
-            echo "<p>Welcome ";
-            if (isset($_SESSION['register'])) {
-                if ($_SESSION["register"] == false) {
-                    echo "back ";
-                }
-                if (isset($_SESSION['userFirstName'])) {
-                echo $_SESSION["userFirstName"] . "</p>";
-                } else {
-                    echo "</p>";
-                }
-            }
-            ?>
+            <p id="welcome">Welcome!</p>
         </div>
         <div class="cardArea">
             <div class="firstRow">
@@ -64,7 +52,7 @@ if (!isset($_SESSION)) {
                 </div>
             </div>
             <div class="secondRow">
-                <div class="card" id="logOut">
+                <div class="card cardContainer" id="logOut">
                     <div class="writingOfCard">
                         <a>Log Out</a>
                     </div>
@@ -190,4 +178,32 @@ if (!isset($_SESSION)) {
     document.getElementById("logOut").onclick = function() {
         document.location = 'logout.php';
     };
+
+    document.addEventListener("DOMContentLoaded", function() {
+        activeModes();
+    });
+
+    // window.addEventListener("load", function() {
+    //     activeModes();
+    // });
+
+    function activeModes() {
+        debugger;
+        //See if account_welcome.php is set to Register or Login by the account_welcome.php#Register or account_welcome.php#Login and show 'welcome back' or 'welcome' message
+        var url = window.location.href;
+        var afterURL = url.substring(url.indexOf("#") + 1);
+
+        if (afterURL.length != 0) {
+            //Show Register if #Register
+            if (afterURL == "Register") {
+                document.getElementById("welcome").innerHTML = "Welcome" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
+
+            } else {
+                //Show Login if anything other than Register
+                document.getElementById("welcome").innerHTML = "Welcome back" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
+            }
+        } else {
+            document.getElementById("welcome").innerHTML = "Welcome" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
+        }
+    }
 </script>

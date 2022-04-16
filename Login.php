@@ -11,6 +11,12 @@ if (!isset($_SESSION)) {
 if (isset($_SESSION['userID'])) {
     header('Location: account_welcome.php');
 }
+
+if (isset($_SESSION['comeBackToCheckOut'])) {
+    $comeBackToCheckOut = true;
+} else {
+    $comeBackToCheckOut = false;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -71,11 +77,11 @@ if (isset($_SESSION['userID'])) {
                 <h5>Account Details</h5>
                 <form action="/account_welcome.php" id="RegisterForm" method="post">
                     <div class="cardContainer inline">
-                        <p>Email</p>
+                        <p>Email<span class="required">*</span></p>
                         <input id="regEmail" type="text" class="searchInput" placeholder="Email" minlength=4 maxlength=128>
                     </div>
                     <div class="cardContainer inline">
-                        <p>Password</p>
+                        <p>Password<span class="required">*</span></p>
                         <input id="regPassword" type="password" class="searchInput" placeholder="Password" minlength=12 maxlength=128>
                     </div>
                     <div id="passwordValidationMessage">
@@ -88,7 +94,7 @@ if (isset($_SESSION['userID'])) {
                         <p id="maxLength" class="valid">A Maximum of 128 characters</p>
                     </div>
                     <div class="cardContainer floatRight">
-                        <p>Confirm Password</p>
+                        <p>Confirm Password<span class="required">*</span></p>
                         <input id="regConfirmPassword" type="password" class="searchInput" placeholder="Confirm Password" minlength=12 maxlength=128>
                     </div>
                     <div id="confirmPasswordValidationMessage">
@@ -96,7 +102,7 @@ if (isset($_SESSION['userID'])) {
                     </div>
                     <h5>Address Details</h5>
                     <div class="cardContainer">
-                        <p>Title</p>
+                        <p>Title<span class="required">*</span></p>
                         <select id="regTitle" name="title" id="title" required>
                             <option value="Mr">Mr</option>
                             <option value="Mrs">Mrs</option>
@@ -107,15 +113,15 @@ if (isset($_SESSION['userID'])) {
                     </div>
 
                     <div class="cardContainer">
-                        <p>First Name</p>
+                        <p>First Name<span class="required">*</span></p>
                         <input id="regFirstName" type="text" class="searchInput" placeholder="First Name" required pattern="^\D+$" minlength=2 maxlength=255 required>
                     </div>
                     <div class="cardContainer">
-                        <p>Last Name</p>
+                        <p>Last Name<span class="required">*</span></p>
                         <input id="regLastName" type="text" class="searchInput" placeholder="Last Name" required pattern="^\D+$" minlength=2 maxlength=255 required>
                     </div>
                     <div class="cardContainer">
-                        <p>Address Line 1</p>
+                        <p>Address Line 1<span class="required">*</span></p>
                         <input id="regAddressLine1" type="text" class="searchInput" placeholder="Address Line 1" minlength=2 maxlength=255 required>
                     </div>
                     <div class="cardContainer">
@@ -123,15 +129,15 @@ if (isset($_SESSION['userID'])) {
                         <input id="regAddressLine2" type="text" class="searchInput" placeholder="Address Line 2" minlength=2 maxlength=255>
                     </div>
                     <div class="cardContainer">
-                        <p>Town/City</p>
+                        <p>Town/City<span class="required">*</span></p>
                         <input id="regTownCity" type="text" class="searchInput" placeholder="Town/City" minlength=2 maxlength=255 required>
                     </div>
                     <div class="cardContainer">
-                        <p>County</p>
+                        <p>County<span class="required">*</span></p>
                         <input id="regCounty" type="text" class="searchInput" placeholder="County" minlength=2 maxlength=255 required>
                     </div>
                     <div class="cardContainer">
-                        <p>Post Code</p>
+                        <p>Post Code<span class="required">*</span></p>
                         <input id="regPostCode" type="text" class="searchInput" placeholder="Post Code" minlength=5 maxlength=8 required>
                     </div>
                     <input type="submit" value="Register">
@@ -240,6 +246,11 @@ if (isset($_SESSION['userID'])) {
         float: right;
         width: 20px;
         margin-right: 2px;
+    }
+
+    .required {
+        color: red;
+        margin-left: 2px;
     }
 
     .writingOfButton {
@@ -553,7 +564,22 @@ if (isset($_SESSION['userID'])) {
                 $("#regMessage").html(message + xhr.status + "" + xhr.statusText)
             }
             if (status == "success") {
-                window.location.href = "account_welcome.php";
+                var goTocheckout = "<?php
+                                    if (isset($_SESSION['comeBackToCheckOut'])) {
+                                        echo true;
+                                    } else {
+                                        echo false;
+                                    }
+                                    ?>";
+
+                if (goTocheckout) {
+                    <?php
+                    unset($_SESSION['comeBackToCheckOut']);
+                    ?>
+                    window.location.href = "checkout.php";
+                } else {
+                    window.location.href = "account_welcome.php#Register";
+                }
             }
         })
     });
@@ -572,14 +598,27 @@ if (isset($_SESSION['userID'])) {
             password: password,
             Login: true
         }, function(response, status, xhr) {
-            debugger;
             if (status == "error") {
                 // var message = "An error occured while trying to do this action.";
                 document.getElementById("regMessage").style.display = "block";
                 document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
             }
             if (status == "success") {
-                window.location.href = "account_welcome.php";
+                debugger;
+
+
+                var goTocheckout = "<?php echo $comeBackToCheckOut ?>";
+
+
+                if (goTocheckout) {
+                    <?php
+                    unset($_SESSION['comeBackToCheckOut']);
+                    $comeBackToCheckOut = null;
+                    ?>
+                    window.location.href = "checkout.php";
+                } else {
+                    window.location.href = "account_welcome.php#Login";
+                }
             }
         })
     });

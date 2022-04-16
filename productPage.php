@@ -139,7 +139,6 @@ mysqli_close($conn)
                         <h3 class="productFreeDelivery">Free Delivery & Returns</h3>
                 </div>
                 <form id="addToProductForm" action="/account_welcome.php" method="post">
-                    <!-- <input type="submit" value="Add to cart"> -->
                     <div id="AddtoBasketButtonDiv">
                         <button id="AddToBasketButton" type="submit" class="btn btn-success">
                             <i class="fa fa-shopping-basket"></i>Add to Basket</button>

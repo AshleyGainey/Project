@@ -106,13 +106,7 @@ AS p RIGHT JOIN product_image pi
                     height: 48px;
                 }
 
-                .seeMoreDiv {
-                    display: inline-block;
-                }
-
-
-
-                .seeMoreTitle {
+                .SeeMoreDiv {
                     display: inline;
                 }
 
@@ -187,6 +181,10 @@ AS p RIGHT JOIN product_image pi
                     word-break: keep-all;
                 }
 
+                .SeeMoreTitle {
+                    display: inline;
+                    
+                }
 
                 hr {
                     width: 40%;

@@ -1,3 +1,14 @@
+<?php
+// print_r('session here: ' . isset($_SESSION));
+
+if (!isset($_SESSION)) {
+    @ob_start();
+    @session_start();
+}
+
+// print_r('session: ' . $_SESSION['userID']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -115,16 +126,16 @@ where p.productID = ? AND pi.displayOrder = 1");
                                 <i class="fa fa-times" aria-hidden="true"></i>
                                 <h4>Remove</h4>
                             </div>
-                            <div class="quantityOfProduct">
+                            <div class="quantityPriceOfProduct">
                                 <?php
                                 $productPrice = $basket_product[0]["productPrice"];
                                 if ($quantitySelected > 1) {
-                                    echo "<h3>Price Per Quantity: £" . number_format($productPrice, 2) . "</h3>";
+                                    echo "<h3>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPrice, 2) . "</span></h3>";
                                 }
 
                                 $quantityPrice = $productPrice * $quantitySelected;
                                 $_SESSION["total"] += $quantityPrice;
-                                echo "<h1>£" . number_format($quantityPrice, 2) . "</h1>";
+                                echo "<h1 id='totalPriceOfQuantity'>£" . number_format($quantityPrice, 2) . "</h1>";
                                 ?>
                             </div>
                         </div>
@@ -214,6 +225,11 @@ if ($invalidBasket == 0) {
         float: right;
     }
 
+
+    .quantityPriceOfProduct h1 {
+        float: right;
+    }
+
     .containerProductDetails {
         width: 75%;
         display: inline-block;
@@ -282,6 +298,13 @@ if ($invalidBasket == 0) {
     }
 
     .quantityOfProduct {
+        display: inline-block;
+        float: right;
+        /* width: 15%; */
+    }
+
+
+    .quantityPriceOfProduct {
         display: inline-block;
         float: right;
         /* width: 15%; */
@@ -435,9 +458,8 @@ if ($invalidBasket == 0) {
         // debugger;
 
         $.ajax({
-            url: "basket_process.php", //the page containing php script
-            type: "post", //request type,
-            dataType: 'json',
+            url: "basket_process.php",
+            type: "POST",
             data: {
                 "update": id,
                 "quantity": x
@@ -497,6 +519,24 @@ if ($invalidBasket == 0) {
             $invalidBasket = 1;
         } ?>
         // debugger;
+    }
+
+    function updateQuantityPrice() {
+        //TODO: Come back to
+
+
+
+        // <?php
+            // echo $productPrice = $basket_product[0]["productPrice"];
+            // if ($quantitySelected > 1) {
+            //     echo "<h3>Price Per Quantity: £" . number_format($productPrice, 2) . "</h3>";
+            // }
+
+            // $quantityPrice = $productPrice * $quantitySelected;
+            // $_SESSION["total"] += $quantityPrice;
+            // echo "<h1>£" . number_format($quantityPrice, 2) . "</h1>";
+            ?>
+
     }
 </script>
 

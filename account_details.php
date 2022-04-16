@@ -57,7 +57,7 @@ if (!isset($_SESSION['userID'])) {
                 <div class="cardContainer rightPart">
                     <div class="card">
                         <div class="writingOfCard">
-                            <a href="Change_Address.php">Change Your Address<img src="images/Home/Right Arrow.svg" alt="Change Main Address - Right Arrow" /></a>
+                            <a href="Change_Address.php">Change Your Main Address<img src="images/Home/Right Arrow.svg" alt="Change Main Address - Right Arrow" /></a>
                         </div>
                     </div>
                 </div>

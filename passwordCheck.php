@@ -8,7 +8,7 @@ if (isset($_POST['Register'])) {
     include 'DBlogin.php';
     $password = $_POST['password'];
     $hash = password_hash($password, PASSWORD_BCRYPT, array('cost' => 11));
-
+    
     $conn = mysqli_connect($host, $user, $pass, $database);
 
 

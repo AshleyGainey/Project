@@ -9,6 +9,8 @@
         unset($_SESSION['userEmail']);
         unset($_SESSION['userFirstName']);
         unset($_SESSION['userLastName']);
+
+        //TODO: Ashley - Remove once done
         unset($_SESSION['basket']);
         unset($_SESSION['basketQuantity']);
 
