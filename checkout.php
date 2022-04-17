@@ -1177,7 +1177,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
             }
         }
 
-        outputMessage = "Successful so far"
+        // outputMessage = "Successful so far"
         showHideMessage(true, outputMessage);
 
         $.ajax({

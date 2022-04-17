@@ -129,7 +129,7 @@
             overflow: hidden;
             box-shadow: 0 0 0 5px #FFFFFF;
             border-radius: 2%;
-            height: 500px;
+            /* height: 500px; */
             max-width: 1000px;
         }
 
