@@ -1029,8 +1029,8 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
 
 
 
-        var billingAddressStored;
-        billingAddressChecked.value != "BillingADDRESSSTORED" ? billingAddressStored : !billingAddressStored;
+        var billingAddressStored = false;
+        billingAddressStored = (billingAddressChecked.value == "BillingADDRESSSTORED")
 
         var billingFirstName;
         var billingLastName;
@@ -1043,6 +1043,8 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         var billingMethod = 0;
         if (!billingAddressStored) {
             billingMethod = 2;
+            billingFirstName = document.getElementById("billingFirstName").value;
+
             if (!billingFirstName) {
                 outputMessage = "Billing Address: First Name cannot be blank, please fill out that field.";
                 showHideMessage(true, outputMessage);
@@ -1101,6 +1103,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         if (deliveryAddressChecked) {
             if (deliveryAddressChecked.value == "deliveryADDRESSSTORED") {
                 deliveryAddressStored = true;
+                deliveryMethod = 2;
                 // Incorrect values... shouldn't be able to select Main Address for both billing and delivery
             } else if (deliveryAddressChecked.value == "deliveryADDRESSSTORED" &&
                 billingAddressChecked.value == "billingADDRESSSTORED") {
@@ -1126,7 +1129,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                 }
                 // If New Address for delivery
             } else if (deliveryAddressChecked.value == "DeliveryNewAddress") {
-                deliveryMethod = 2;
+                deliveryMethod = 3;
                 deliveryFirstName = document.getElementById("deliveryFirstName").value;
 
                 if (!deliveryFirstName) {
@@ -1182,8 +1185,8 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
             type: "post",
             dataType: 'json',
             data: {
-                "BillingMethod": BillingMethod,
-                "DeliveryMethod": DeliveryMethod,
+                "billingMethod": billingMethod,
+                "deliveryMethod": deliveryMethod,
 
                 // Send in billing details (even if null - won't be checked anyway)
                 "billingFirstName": billingFirstName,
@@ -1205,11 +1208,13 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                 "deliveryPostCode": deliveryPostCode
             },
             success: function(result) {
-                debugger;
-                // document.getElementById("regMessage").style.display = "block";
+                document.getElementById("regMessage").style.display = "block";
                 // document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-                // console.log(result.abc);
-            }
+                console.log(result);
+            },
+            error: function(data) {
+                $("#regMessage").text(data.responseText);
+            },
         });
 
 

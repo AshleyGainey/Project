@@ -29,7 +29,7 @@ if (isset($_POST['Register'])) {
         return false;
     }
 
-    print_r('Still continuing');
+    // print_r('Still continuing');
 
     $stmt = $conn->prepare("INSERT INTO user_address (addressLine1, addressLine2, townCity, county, postcode)
 VALUES (?, ?, ?, ?, ?)");
