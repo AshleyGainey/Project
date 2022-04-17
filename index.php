@@ -24,17 +24,17 @@
             <div class="row visible-md visible-lg">
                 <div id="contenedor-slider" class="contenedor-slider">
                     <div id="slider" class="slider">
-                        <a id="slider1" class="slider__section" href=""><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                        <a id="slider1" class="slider__section" href=""><img src="Images\Home\carouselImages\Product 1.png" class="slider__img">
                         </a>
-                        <a id="slider2" class="slider__section" href=""><img src="Images\Home\Welcome To Hogwarts University background 2.png" class="slider__img">
+                        <a id="slider2" class="slider__section" href=""><img src="Images\Home\carouselImages\Product 5.png" class="slider__img">
                         </a>
-                        <a id="slider3" class="slider__section" href=""><img src="Images\Home\Right Arrow.svg" class="slider__img">
+                        <a id="slider3" class="slider__section" href=""><img src="Images\Home\carouselImages\Product 7.png" class="slider__img">
                         </a>
-                        <a id="slider4" class="slider__section" href=""><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                        <a id="slider4" class="slider__section" href=""><img src="Images\Home\carouselImages\Product 9.png" class="slider__img">
                         </a>
-                        <a id="slider5" class="slider__section" href=""><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                        <a id="slider5" class="slider__section" href=""><img src="Images\Home\carouselImages\Product 11.png" class="slider__img">
                         </a>
-                        <a id="slider6" class="slider__section"><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                        <a id="slider6" class="slider__section"><img src="Images\Home\carouselImages\Product 19.gif" class="slider__img">
                         </a>
                     </div>
 
@@ -70,7 +70,7 @@
         <div class="cardArea">
             <div class="cardContainer leftPart">
                 <div class="card">
-                    <a href="#"><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                    <a href="#"><img src="Images\Home\About Gadget Gainey.png" class="slider__img">
                     </a>
                 </div>
                 <div class="writingOfCard">
@@ -80,7 +80,7 @@
 
             <div class="cardContainer rightPart">
                 <div class="card">
-                    <a href="#"><img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                    <a href="#"><img src="Images\Home\Contact Us (without logo).png" class="slider__img">
                     </a>
                 </div>
                 <div class="writingOfCard">

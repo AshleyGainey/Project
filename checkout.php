@@ -1039,7 +1039,10 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         var billingTownCity;
         var billingCounty;
         var billingPostCode;
+
+        var billingMethod = 0;
         if (!billingAddressStored) {
+            billingMethod = 2;
             if (!billingFirstName) {
                 outputMessage = "Billing Address: First Name cannot be blank, please fill out that field.";
                 showHideMessage(true, outputMessage);
@@ -1077,6 +1080,8 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                 showHideMessage(true, outputMessage);
                 return false;
             }
+        } else {
+            billingMethod = 1;
         }
 
 
@@ -1090,6 +1095,8 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         var deliveryTownCity;
         var deliveryCounty;
         var deliveryPostCode;
+
+        var deliveryMethod = 0;
 
         if (deliveryAddressChecked) {
             if (deliveryAddressChecked.value == "deliveryADDRESSSTORED") {
@@ -1111,12 +1118,15 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                     deliveryTownCity = billingTownCity;
                     deliveryCounty = billingCounty;
                     deliveryPostCode = billingPostCode;
+                    deliveryMethod = 1;
                 } else {
                     //And if the billing address is the main address
                     deliveryAddressStored = true;
+                    deliveryMethod = 2;
                 }
                 // If New Address for delivery
             } else if (deliveryAddressChecked.value == "DeliveryNewAddress") {
+                deliveryMethod = 2;
                 deliveryFirstName = document.getElementById("deliveryFirstName").value;
 
                 if (!deliveryFirstName) {
@@ -1136,7 +1146,6 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                     showHideMessage(true, outputMessage);
                     return false;
                 }
-                debugger;
                 deliveryAddressLine2 = document.getElementById("deliveryAddressLine2").value;
 
                 deliveryTownCity = document.getElementById("deliveryTownCity").value;
@@ -1165,7 +1174,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
             }
         }
 
-        outputMessage = "Successful"
+        outputMessage = "Successful so far"
         showHideMessage(true, outputMessage);
 
         $.ajax({
@@ -1173,8 +1182,8 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
             type: "post",
             dataType: 'json',
             data: {
-                "billingAddressINDB": billingAddressStored,
-                "deliveryAddressINDB": deliveryAddressStored,
+                "BillingMethod": BillingMethod,
+                "DeliveryMethod": DeliveryMethod,
 
                 // Send in billing details (even if null - won't be checked anyway)
                 "billingFirstName": billingFirstName,
