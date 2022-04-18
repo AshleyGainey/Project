@@ -15,7 +15,8 @@ include 'DBlogin.php';
 $conn = mysqli_connect($host, $user, $pass, $database);
 
 
-$stmt = $conn->prepare("select po.orderID, po.totalPrice, po.DateAndTime,
+$stmt = $conn->prepare(
+    "select po.orderID, po.totalPrice, po.DateAndTime,
 
 bua.addressLine1 As billingAddressLine1, bua.addressLine2 As billingAddressLine2, bua.townCity As billingtownCity, bua.county As billingCounty, bua.postCode As billingPostCode,
 dua.addressLine1 As deliveryAddressLine1, dua.addressLine2 As deliveryAddressLine2, dua.townCity As deliverytownCity, dua.county As deliveryCounty, dua.postCode As deliveryPostCode
@@ -32,7 +33,8 @@ ON po.billingAddressID = dua.addressID
 
 
 
-where po.UserID = ?");
+where po.UserID = ? ORDER BY po.DateAndTime DESC;"
+);
 $stmt->bind_param("i", $_SESSION['userID']);
 
 $stmt->execute();
@@ -40,63 +42,6 @@ $stmt->execute();
 $res = $stmt->get_result();
 $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
 // print_r($allOrdersTiedToAccount);
-
-foreach ($allOrdersTiedToAccount as $order) {
-    //Get each order
-    $orderID = $order['orderID'];
-    $totalPrice = $order['totalPrice'];
-    $DateAndTime = $order['DateAndTime'];
-    $billingAddressLine1 = $order['billingAddressLine1'];
-    $billingAddressLine2 = $order['billingAddressLine2'];
-    $billingTownCity = $order['billingtownCity'];
-    $billingCounty = $order['billingCounty'];
-    $billingPostCode = $order['billingPostCode'];
-
-    $deliveryAddressLine1 = $order['deliveryAddressLine1'];
-    $deliveryAddressLine2 = $order['deliveryAddressLine2'];
-    $deliveryTownCity = $order['deliverytownCity'];
-    $deliveryCounty = $order['deliveryCounty'];
-    $deliveryPostCode = $order['deliveryPostCode'];
-
-
-
-    // Get each product from the order
-    $stmt = $conn->prepare("select p.productID, op.productPriceAtTime, op.productQuantity, p.productTitle, pi.productImageFileName, pi.productImageAltText from order_product op
-
-
-INNER JOIN product p ON op.productID = p.productID
-INNER JOIN product_image pi ON p.productID = pi.productID
-
-
-
- where pi.displayOrder = 1 and op.orderID = ?");
-    $stmt->bind_param("i", $orderID);
-    $stmt->execute();
-
-    $res = $stmt->get_result();
-    $individualProduct = mysqli_fetch_all($res, MYSQLI_ASSOC);
-
-    print_r($individualProduct);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ?>
 
 
@@ -121,89 +66,169 @@ INNER JOIN product_image pi ON p.productID = pi.productID
     <?php include "./header.php" ?>
 
     <div id="mainBody">
-        <p>Order Details</p>
-        <div class="eachOrder">
-            <div class="eachOrderOuter">
-                <div class="dateOfOrderDiv">
-                    <h2>Order Placed: 18/04/2022 11:23</h1>
+        <div class="title">
+            <i class="fa fa-file-text"></i>
+            <h1>Order History</h1>
+        </div>
+        <?php
+        foreach ($allOrdersTiedToAccount as $order) {
+            //Get each order
+            $orderID = $order['orderID'];
+            $totalPrice = $order['totalPrice'];
+            $DateAndTime = $order['DateAndTime'];
+            $billingAddressLine1 = $order['billingAddressLine1'];
+            $billingAddressLine2 = $order['billingAddressLine2'];
+            $billingTownCity = $order['billingtownCity'];
+            $billingCounty = $order['billingCounty'];
+            $billingPostCode = $order['billingPostCode'];
+
+            $deliveryAddressLine1 = $order['deliveryAddressLine1'];
+            $deliveryAddressLine2 = $order['deliveryAddressLine2'];
+            $deliveryTownCity = $order['deliverytownCity'];
+            $deliveryCounty = $order['deliveryCounty'];
+            $deliveryPostCode = $order['deliveryPostCode'];
+
+            $date = date_create($DateAndTime);
+            // echo "Date and Time:" . $DateAndTime;
+
+            echo "<div class='eachOrder'>
+            <div class='eachOrderOuter'>
+                <div class='dateOfOrderDiv'>
+                    <h2>Order Placed: " .
+                date_format($date, "l dS F Y") . " at " . date_format($date, "H:i") .
+                "</h1>
                 </div>
-                <div class="eachOrderInner">
-                    <div class="rowOne">
-                        <div class="leftPart">
-                            <h2>Order Number: 000</h1>
-                            <!-- echo sprintf('%05d', $orderID); -->
+                <div class='eachOrderInner'>
+                    <div class='rowOne'>
+                        <div class='leftPart'>
+                            <h2>Order Number: " . sprintf('%05d', $orderID) .
+                "</h1>
                         </div>
-                        <div class="rightPart">
-                            <h2>Total Price: £00.00</h1>
+                        <div class='rightPart'>
+                            <h2>Total Price: £" . $totalPrice .
+                "</h1>
                         </div>
                     </div>
-                    <div class="rowTwo">
-                        <div class="eachProduct">
-                            <div class="productImage">
-                                <img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img">
+                    <div class='rowTwo'>
+                    ";
+
+
+            // Get each product from the order
+            $stmt = $conn->prepare("select p.productID, op.productPriceAtTime, op.productQuantity, p.productTitle, pi.productImageFileName, pi.productImageAltText from order_product op
+
+
+INNER JOIN product p ON op.productID = p.productID
+INNER JOIN product_image pi ON p.productID = pi.productID
+
+
+
+ where pi.displayOrder = 1 and op.orderID = ?");
+            $stmt->bind_param("i", $orderID);
+            $stmt->execute();
+
+            $res = $stmt->get_result();
+            $productsPurchased = mysqli_fetch_all(
+                $res,
+                MYSQLI_ASSOC
+            );
+
+            foreach ($productsPurchased as $individualProduct) {
+                $productID = $individualProduct['productID'];
+                $productPriceAtTime = $individualProduct['productPriceAtTime'];
+                $productQuantity = $individualProduct['productQuantity'];
+                $productTitle = $individualProduct['productTitle'];
+                $productImageFileName = $individualProduct['productImageFileName'];
+                $productImageAltText = $individualProduct['productImageAltText'];
+
+
+
+                echo  "<div class='eachProduct'>
+                            <div class='productImage'>";
+                $productSCR = 'Images/products/' . $productID . '/' . $productImageFileName;
+
+
+                echo   "<img src='" . $productSCR . "' alt='" . $productImageAltText . "' class='slider__img'>
                             </div>
-                            <div class="containerProductDetails col-8">
-                                <div class="productDetails">
-                                    <div class="firstRow">
-                                        <div class="titleOfProduct">
-                                            <h3>Title Of Product</h3>
+                            <div class='containerProductDetails col-8'>
+                                <div class='productDetails'>
+                                    <div class='firstRow'>
+                                        <div class='titleOfProduct'>
+                                            <h3>" . $productTitle . "</h3>
                                         </div>
-                                        <div class="quantityOfProduct">
-                                            <h3>Quantity:</h3>
+                                        <div class='quantityOfProduct'>
+                                            <h3>Quantity: " . $productQuantity . "</h3>
                                         </div>
                                     </div>
-                                    <div class="secondRow">
-                                        <div class="priceOfProduct">
-                                            <h3>£100.00</h3>
-                                        </div>
+                                    <div class='secondRow'>
+                                        <div class='priceOfProduct'>";
+
+                $productPrice = $productPriceAtTime;
+                if ($productQuantity > 1) {
+                    echo "<h5>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPriceAtTime, 2) . "</span></h3>";
+                }
+
+                $quantityPrice = $productPrice * $productQuantity;
+                $_SESSION["total"] += $quantityPrice;
+                echo "<h3 class='totalPriceOfQuantity'>£" . number_format($quantityPrice, 2) . "</h1>";
+
+                echo "</div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>";
+            }
+            echo  "<div class='BillingDeliveryAddressButton' onclick='hideShowBillingDeliveryAddress(" . $orderID . ")'>
+                        <h2 class='left'>Billing & Delivery Address</h2>
+                        <img class='right' src='images/Down Arrow - Big.png' alt='Billing and Delivery Address - Right Arrow' />
                     </div>
-                    <div class="BillingDeliveryAddressButton" onclick="hideShowBillingDeliveryAddress()">
-                        <h2 class="left">Billing & Delivery Address</h2>
-                        <img class="right" src="images/Down Arrow - Big.png" alt="Billing and Delivery Address - Right Arrow" />
-                    </div>
-                    <div id="billingDeliveryAddressContainer">
-                        <div class="billingAddress">
+                    <div class='billingDeliveryAddressOuterContainer'> 
+                    <div id='billingDeliveryAddressInnerContainer" . $orderID .
+                "' style='display:none;'>
+                        <div class='billingAddress'>
                             <h2>Billing Address</h2>
-                            <div class="nameBilling">
-                                <h3 class="titleBilling">Mr</h3>
-                                <h3 class="FirstNameBilling">Ashley</h3>
-                                <h3 class="FirstNameBilling">Gainey</h3>
+                            <div class='nameBilling'>
+                                <h3 class='titleBilling'>Mr</h3>
+                                <h3 class='FirstNameBilling'>Ashley</h3>
+                                <h3 class='FirstNameBilling'>Gainey</h3>
                             </div>
-                            <h3 class="addressLine1Billing">Address Line 1</h3>
-                            <h3 class="addressLine2Billing">Address Line 2</h3>
-                            <h3 class="townCityBilling">Town/City</h3>
-                            <h3 class="countyBilling">County</h3>
-                            <h3 class="postCodeBilling">Postcode</h3>
+                            <h3 class='addressLine1Billing'>" . $billingAddressLine1 . "</h3>";
+            if (!empty($billingAddressLine2)) {
+                echo "<h3 class='addressLine2Billing'>" . $billingAddressLine2 . "</h3>";
+            }
+            echo "<h3 class='townCityBilling'>" . $billingTownCity . "</h3>
+                            <h3 class='countyBilling'>" . $billingCounty . "</h3>
+                            <h3 class='postCodeBilling'>" . $billingPostCode .
+                "</h3>
                         </div>
-                        <div class="deliveryAddress">
+                        <div class='deliveryAddress'>
                             <h2>Delivery Address</h2>
-                            <div class="nameBilling">
-                                <h3 class="titleBilling">Mr</h3>
-                                <h3 class="FirstNameBilling">Ashley</h3>
-                                <h3 class="FirstNameBilling">Gainey</h3>
+                            <div class='nameBilling'>
+                                <h3 class='titleBilling'>Mr</h3>
+                                <h3 class='FirstNameBilling'>Ashley</h3>
+                                <h3 class='FirstNameBilling'>Gainey</h3>
                             </div>
-                            <h3 class="addressLine1Billing">Address Line 1</h3>
-                            <h3 class="addressLine2Billing">Address Line 2</h3>
-                            <h3 class="townCityBilling">Town/City</h3>
-                            <h3 class="countyBilling">County</h3>
-                            <h3 class="postCodeBilling">Postcode</h3>
-
+                            <h3 class='addressLine1Billing'>" . $deliveryAddressLine1 . "</h3>";
+            if (!empty($deliveryAddressLine2)) {
+                echo "<h3 class='addressLine2Billing'>" . $deliveryAddressLine2 . "</h3>";
+            }
+            echo "<h3 class='townCityBilling'>" . $deliveryTownCity . "</h3>
+                            <h3 class='countyBilling'>" . $deliveryCounty . "</h3>
+                            <h3 class='postCodeBilling'>" . $deliveryPostCode . "</h3>
                         </div>
                     </div>
                 </div>
-
             </div>
+            </div>
+        </div> 
+        </div>";
+        }
+        ?>
 
-        </div>
     </div>
     </div>
     </div>
 
-    <?php include "./footer.php" ?>
+    <?php include "./footer.php " ?>
 </body>
 
 </html>
@@ -212,12 +237,23 @@ INNER JOIN product_image pi ON p.productID = pi.productID
         margin-top: 30px;
         margin-left: 50px;
         margin-right: 50px;
+    }
 
-        /* Was having an issue if I typed more than expected for the search, then it would destroy the padding 
-	so have added word-wrap, this should apply to the main_container, no matter whether it is a heading 
-	(h1, h2, h3 etc.), paragraph (p) or something other */
-        word-wrap: break-word;
 
+    .title {
+        display: inline-block;
+        color: white;
+        margin: 50px;
+    }
+
+    .title i {
+        display: inline;
+        font-size: 3em;
+        color: #FFFFFF
+    }
+
+    .title h1 {
+        display: inline;
     }
 
     /* .eachOrder {
@@ -252,13 +288,18 @@ INNER JOIN product_image pi ON p.productID = pi.productID
         margin-right: 10px;
     }
 
-    #billingDeliveryAddressContainer {
+    .billingDeliveryAddressOuterContainer {
         /* display: flex; */
         width: 100%;
         /* display: flex; */
         justify-content: center;
         align-items: center;
-        display: none;
+        text-align: center;
+        /* display: none; */
+    }
+
+    .eachOrder {
+        margin-bottom: 50px;
     }
 
     .eachOrderInner {
@@ -295,17 +336,15 @@ INNER JOIN product_image pi ON p.productID = pi.productID
         word-break: keep-all;
     }
 
-    #billingDeliveryAddressContainer {
-        display: none;
-    }
-
     .leftPart,
     .rightPart {
         display: inline-block;
     }
 
     .dateOfOrderDiv {
-        text-align: center;
+        /* text-align: center; */
+
+        margin-left: 50px;
     }
 
     .writingOfCard a {
@@ -351,6 +390,7 @@ INNER JOIN product_image pi ON p.productID = pi.productID
     .eachProduct {
         margin: 10px;
         height: 200px;
+        padding-bottom: 20px;
     }
 
     /* 
@@ -394,16 +434,17 @@ INNER JOIN product_image pi ON p.productID = pi.productID
         width: 100%
     }
 
+    /* 
     .leftPart {
         float: left;
-    }
+    } */
 
     .rightPart {
         float: right;
     }
 
     .rowOne {
-        height: 100px;
+        /* height: 100px; */
     }
 
 
@@ -450,7 +491,7 @@ INNER JOIN product_image pi ON p.productID = pi.productID
     } */
 
     .productImage {
-        box-shadow: 0 0 0 5px #000000;
+        box-shadow: 0 0 0 5px #FFFFFF;
         border-radius: 2%;
         height: 200px;
         width: 20%;
@@ -523,17 +564,23 @@ INNER JOIN product_image pi ON p.productID = pi.productID
         padding-top: 2%;
         width: 97%; */
     }
+
+    .totalPriceOfQuantity {
+        float: right;
+    }
 </style>
 
 <script>
-    function hideShowBillingDeliveryAddress() {
+    function hideShowBillingDeliveryAddress(orderID) {
         // debugger;
-        if (document.getElementById('billingDeliveryAddressContainer').style.display === 'none' || document.getElementById('billingDeliveryAddressContainer').style.display === '') {
-            console.log("Not visible");
-            fade(document.getElementById("billingDeliveryAddressContainer"), true)
+        var section = document.getElementById('billingDeliveryAddressInnerContainer' + orderID)
+        if (section.style.display === 'none' ||
+            section.style.display === '') {
+            // console.log("Not visible");
+            fade(section, true)
         } else {
-            console.log("visible");
-            fade(document.getElementById("billingDeliveryAddressContainer"), false)
+            // console.log("visible");
+            fade(section, false)
         }
     }
 

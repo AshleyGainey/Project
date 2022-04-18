@@ -333,7 +333,8 @@ foreach ($_SESSION['basket'] as $productID => $productQuantity) {
 $totalOfOrder = 0.00;
 // echo count($orderProduct_ProductPrice);
 for ($x = 0; $x < count($orderProduct_ProductPrice); $x++) {
-    $totalOfOrder = $totalOfOrder + $orderProduct_ProductPrice[$x];
+    $quantityPrice = $orderProduct_ProductQuantity[$x] * $orderProduct_ProductPrice[$x];
+    $totalOfOrder = $totalOfOrder + $quantityPrice;
 }
 
 // echo "totalllllllll: £" . $totalOfOrder;
