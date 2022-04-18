@@ -1,3 +1,23 @@
+<?php
+// print_r('session here: ' . isset($_SESSION));
+
+if (!isset($_SESSION)) {
+    @ob_start();
+    @session_start();
+}
+
+// print_r('session: ' . $_SESSION['userID']);
+
+if (!isset($_SESSION['orderID'])) {
+    header('Location: checkout.php');
+}
+$orderID = $_SESSION['orderID'];
+
+unset($_SESSION['basket']);
+unset($_SESSION['basketQuantity']);
+unset($_SESSION['orderID']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,13 +42,17 @@
         <div id="orderComplete">
             <img src="Images\OrderComplete\confetti-svgrepo-com.svg" id="confettiIcon">
             <h1> Your Order is Complete!</h1>
-            <h2> Order Number: <span id="orderNumber">000</span></h2>
+            <h2> Order Number: <span id="orderNumber">
+                    <?php
+                    echo sprintf('%05d', $orderID);
+                    ?>
+                </span></h2>
 
             <div class="cardArea">
                 <div class="cardContainer leftPart">
                     <div class="card">
                         <div class="writingOfCard">
-                            <a href="#">Order Details<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
+                            <a href="order_details.php">Order Details<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
                         </div>
                     </div>
 

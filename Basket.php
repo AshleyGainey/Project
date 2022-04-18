@@ -486,7 +486,7 @@ if ($invalidBasket == 0) {
             },
             success: function(response) {
                 removeFadeOut(document.getElementById('individualProduct' + id), 500);
-                updateTotalPrice();
+                // updateTotalPrice();
                 // debugger;
 
 

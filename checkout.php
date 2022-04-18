@@ -27,7 +27,7 @@ $conn = mysqli_connect($host, $user, $pass, $database);
 
 
 $stmt = $conn->prepare("select u.userID, u.userTitle, u.userFirstName, u.userLastName, ua.addressID, ua.addressLine1, ua.addressLine2, ua.townCity, ua.county, ua.postcode from user u INNER JOIN user_address ua ON u.mainAddressID = ua.addressID where u.userID  = ?");
-$stmt->bind_param("s", $_SESSION['userID']);
+$stmt->bind_param("i", $_SESSION['userID']);
 
 $stmt->execute();
 
@@ -1210,7 +1210,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
             success: function(result) {
                 document.getElementById("regMessage").style.display = "block";
                 // document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-                console.log(result);
+                window.location.href = "order_complete.php";
             },
             error: function(data) {
                 $("#regMessage").text(data.responseText);

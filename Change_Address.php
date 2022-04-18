@@ -65,7 +65,7 @@ $userPostCode = $mainaddressDB[0]['postcode'];
             <div class="allElements">
                 <form action="/account_welcome.php" id="MainAddressForm" method="post">
                     <div class="cardContainer">
-                        <p>Title</p>
+                        <p>Title<span class="required">*</span></p>
                         <select id="regTitle" name="title" id="title" required>
                             <option value="Mr">Mr</option>
                             <option value="Mrs">Mrs</option>
@@ -76,20 +76,20 @@ $userPostCode = $mainaddressDB[0]['postcode'];
                     </div>
 
                     <div class="cardContainer">
-                        <p>First Name</p>
+                        <p>First Name<span class="required">*</span></p>
                         <?php
                         echo "<input id='regFirstName' type='text' class='searchInput' value='" . $userFirstName . "' placeholder='First Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
 
                         ?>
                     </div>
                     <div class="cardContainer ">
-                        <p>Last Name</p>
+                        <p>Last Name<span class="required">*</span></p>
                         <?php
                         echo "<input id='regLastName' type='text' class='searchInput' value='" . $userLastName . "' placeholder='Last Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
                         ?>
                     </div>
                     <div class="cardContainer">
-                        <p>Address Line 1</p>
+                        <p>Address Line 1<span class="required">*</span></p>
                         <?php
                         echo "<input id='regAddressLine1' type='text' class='searchInput' value='" . $userAddressLine1 . "'  placeholder='Address Line 1' minlength=2 maxlength=255 required>";
                         ?>
@@ -101,19 +101,19 @@ $userPostCode = $mainaddressDB[0]['postcode'];
                         ?>
                     </div>
                     <div class="cardContainer">
-                        <p>Town/City</p>
+                        <p>Town/City<span class="required">*</span></p>
                         <?php
                         echo "<input id='regTownCity' type='text' class='searchInput' value='" . $userTownCity . "' placeholder='Town/City' minlength=2 maxlength=255 required>";
                         ?>
                     </div>
                     <div class="cardContainer">
-                        <p>County</p>
+                        <p>County<span class="required">*</span></p>
                         <?php
                         echo "<input id='regCounty' type='text' class='searchInput' value='" . $userCounty . "' placeholder='County' minlength=2 maxlength=255 required>"
                         ?>
                     </div>
                     <div class="cardContainer">
-                        <p>Post Code</p>
+                        <p>Post Code<span class="required">*</span></p>
                         <?php
                         echo  "<input id='regPostCode' type='text' class='searchInput' value='" . $userPostCode . "' placeholder='Post Code' minlength=5 maxlength=8 required>"
                         ?>
@@ -147,7 +147,10 @@ $userPostCode = $mainaddressDB[0]['postcode'];
         margin: 50px;
     }
 
-    .doAction {
+    .required {
+        color: red;
+    }
+     .doAction {
         margin-left: 20px;
     }
 
@@ -193,7 +196,8 @@ $userPostCode = $mainaddressDB[0]['postcode'];
 
     input[type="text"] {
         padding: 9%;
-    } 
+    }
+
     .buttons {
         margin-top: 50px;
         width: 100%;

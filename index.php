@@ -175,7 +175,6 @@
 
         .writingOfCard a {
             font-size: 25px;
-            ;
             text-decoration: none;
             color: #000000;
             position: relative;

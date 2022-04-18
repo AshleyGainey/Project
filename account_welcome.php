@@ -188,7 +188,6 @@ if (!isset($_SESSION)) {
     // });
 
     function activeModes() {
-        debugger;
         //See if account_welcome.php is set to Register or Login by the account_welcome.php#Register or account_welcome.php#Login and show 'welcome back' or 'welcome' message
         var url = window.location.href;
         var afterURL = url.substring(url.indexOf("#") + 1);
