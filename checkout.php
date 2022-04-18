@@ -20,13 +20,12 @@ if (!isset($_SESSION['userID'])) {
 
 // Query for getting the address
 
-// select u.userID, ua.addressID, ua.addressLine1, ua.addressLine2, ua.townCity, ua.county, ua.postcode from user u INNER JOIN user_address ua ON u.mainAddressID = ua.addressID where u.userID  = 13;
 include 'DBlogin.php';
 
 $conn = mysqli_connect($host, $user, $pass, $database);
 
 
-$stmt = $conn->prepare("select u.userID, u.userTitle, u.userFirstName, u.userLastName, ua.addressID, ua.addressLine1, ua.addressLine2, ua.townCity, ua.county, ua.postcode from user u INNER JOIN user_address ua ON u.mainAddressID = ua.addressID where u.userID  = ?");
+$stmt = $conn->prepare("select ua.title, ua.firstName, ua.lastName, ua.addressID, ua.addressLine1, ua.addressLine2, ua.townCity, ua.county, ua.postcode from user u INNER JOIN address ua ON u.mainAddressID = ua.addressID where u.userID  = ?");
 $stmt->bind_param("i", $_SESSION['userID']);
 
 $stmt->execute();
@@ -34,9 +33,9 @@ $stmt->execute();
 $res = $stmt->get_result();
 $mainaddressDB = mysqli_fetch_all($res, MYSQLI_ASSOC);
 // print_r($mainaddressDB);
-$mainAddressUserTitle = $mainaddressDB[0]['userTitle'];
-$mainAddressUserFirstName = $mainaddressDB[0]['userFirstName'];
-$mainAddressUserLastName = $mainaddressDB[0]['userLastName'];
+$mainAddressUserTitle = $mainaddressDB[0]['title'];
+$mainAddressUserFirstName = $mainaddressDB[0]['firstName'];
+$mainAddressUserLastName = $mainaddressDB[0]['lastName'];
 $mainAddressUserAddressID = $mainaddressDB[0]['addressID'];
 
 $mainAddressUserAddressLine1 = $mainaddressDB[0]['addressLine1'];
@@ -128,6 +127,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                                     <p>Title<span class="required">*</span></p>
                                     <select id="billingTitle" name="title" id="title">
                                         <option value="Mr">Mr</option>
+                                        <option value="Master">Master</option>
                                         <option value="Mrs">Mrs</option>
                                         <option value="Miss">Miss</option>
                                         <option value="Ms">Ms</option>
@@ -203,6 +203,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                                     <p>Title<span class="required">*</span></p>
                                     <select id="deliveryTitle" name="title" id="title">
                                         <option value="Mr">Mr</option>
+                                        <option value="Master">Master</option>
                                         <option value="Mrs">Mrs</option>
                                         <option value="Miss">Miss</option>
                                         <option value="Ms">Ms</option>
@@ -1032,6 +1033,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         var billingAddressStored = false;
         billingAddressStored = (billingAddressChecked.value == "BillingADDRESSSTORED")
 
+        var billingTitle;
         var billingFirstName;
         var billingLastName;
         var billingAddressLine1;
@@ -1043,6 +1045,17 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         var billingMethod = 0;
         if (!billingAddressStored) {
             billingMethod = 2;
+
+            billingTitle = document.getElementById("billingTitle").value;
+
+            if (billingTitle != "Master" && billingTitle != "Mr" &&
+                billingTitle != "Mrs" && billingTitle != "Ms" && billingTitle != "Miss" &&
+                billingTitle != "Dr") {
+                outputMessage = "Billing Address: Not a value Name Title. Please fill the section in correctly";
+                showHideMessage(true, outputMessage);
+                return false;
+            }
+
             billingFirstName = document.getElementById("billingFirstName").value;
 
             if (!billingFirstName) {
@@ -1090,6 +1103,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
 
         var deliveryAddressStored;
 
+        var deliveryTitle;
         var deliveryFirstName;
         var deliveryLastName;
         var deliveryAddressLine1;
@@ -1114,6 +1128,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
             } else if (deliveryAddressChecked.value == "UseSameAsBillingAddress") {
                 //If the billing address is a new address (not main address)
                 if (!billingAddressStored) {
+                    deliveryTitle = billingTitle;
                     deliveryFirstName = billingFirstName;
                     deliveryLastName = billingLastName;
                     deliveryAddressLine1 = billingAddressLine1;
@@ -1130,8 +1145,17 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                 // If New Address for delivery
             } else if (deliveryAddressChecked.value == "DeliveryNewAddress") {
                 deliveryMethod = 3;
-                deliveryFirstName = document.getElementById("deliveryFirstName").value;
 
+                deliveryTitle = document.getElementById("deliveryTitle").value;
+                if (deliveryTitle != "Master" && deliveryTitle != "Mr" &&
+                    deliveryTitle != "Mrs" && deliveryTitle != "Ms" && deliveryTitle != "Miss" &&
+                    deliveryTitle != "Dr") {
+                    outputMessage = "Delivery Address: Not a value Name Title. Please fill the section in correctly";
+                    showHideMessage(true, outputMessage);
+                    return false;
+                }
+
+                deliveryFirstName = document.getElementById("deliveryFirstName").value;
                 if (!deliveryFirstName) {
                     outputMessage = "Delivery Address: First Name cannot be blank, please fill out that field.";
                     showHideMessage(true, outputMessage);
@@ -1189,6 +1213,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                 "deliveryMethod": deliveryMethod,
 
                 // Send in billing details (even if null - won't be checked anyway)
+                "billingTitle": billingTitle,
                 "billingFirstName": billingFirstName,
                 "billingLastName": billingLastName,
                 "billingAddressLine1": billingAddressLine1,
@@ -1199,6 +1224,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
 
 
                 // Send in delivery details (even if null - won't be checked anyway)
+                "deliveryTitle": deliveryTitle,
                 "deliveryFirstName": deliveryFirstName,
                 "deliveryLastName": deliveryLastName,
                 "deliveryAddressLine1": deliveryAddressLine1,

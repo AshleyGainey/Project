@@ -105,6 +105,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                         <p>Title<span class="required">*</span></p>
                         <select id="regTitle" name="title" id="title" required>
                             <option value="Mr">Mr</option>
+                            <option value="Master">Master</option>
                             <option value="Mrs">Mrs</option>
                             <option value="Miss">Miss</option>
                             <option value="Ms">Ms</option>

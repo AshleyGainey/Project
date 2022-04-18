@@ -10,13 +10,12 @@ if (!isset($_SESSION['userID'])) {
 
 // Query for getting the address
 
-// select u.userID, ua.addressID, ua.addressLine1, ua.addressLine2, ua.townCity, ua.county, ua.postcode from user u INNER JOIN user_address ua ON u.mainAddressID = ua.addressID where u.userID  = 13;
 include 'DBlogin.php';
 
 $conn = mysqli_connect($host, $user, $pass, $database);
 
 
-$stmt = $conn->prepare("select u.userID, u.userTitle, u.userFirstName, u.userLastName, ua.addressID, ua.addressLine1, ua.addressLine2, ua.townCity, ua.county, ua.postcode from user u INNER JOIN user_address ua ON u.mainAddressID = ua.addressID where u.userID  = ?");
+$stmt = $conn->prepare("select ua.title, ua.firstName, ua.lastName, ua.addressID, ua.addressLine1, ua.addressLine2, ua.townCity, ua.county, ua.postcode from user u INNER JOIN address ua ON u.mainAddressID = ua.addressID where u.userID  = ?");
 $userID =    $_SESSION['userID'];
 $stmt->bind_param("s", $userID);
 
@@ -26,9 +25,9 @@ $res = $stmt->get_result();
 $mainaddressDB = mysqli_fetch_all($res, MYSQLI_ASSOC);
 print_r($mainaddressDB);
 
-$userTitle = $mainaddressDB[0]['userTitle'];
-$userFirstName = $mainaddressDB[0]['userFirstName'];
-$userLastName = $mainaddressDB[0]['userLastName'];
+$userTitle = $mainaddressDB[0]['title'];
+$userFirstName = $mainaddressDB[0]['firstName'];
+$userLastName = $mainaddressDB[0]['lastName'];
 $userAddressID = $mainaddressDB[0]['addressID'];
 
 $userAddressLine1 = $mainaddressDB[0]['addressLine1'];
@@ -68,6 +67,7 @@ $userPostCode = $mainaddressDB[0]['postcode'];
                         <p>Title<span class="required">*</span></p>
                         <select id="regTitle" name="title" id="title" required>
                             <option value="Mr">Mr</option>
+                            <option value="Master">Master</option>
                             <option value="Mrs">Mrs</option>
                             <option value="Miss">Miss</option>
                             <option value="Ms">Ms</option>
@@ -150,7 +150,8 @@ $userPostCode = $mainaddressDB[0]['postcode'];
     .required {
         color: red;
     }
-     .doAction {
+
+    .doAction {
         margin-left: 20px;
     }
 

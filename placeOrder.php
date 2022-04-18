@@ -78,9 +78,12 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
 
             $conn = mysqli_connect($host, $user, $pass, $database);
 
-            $sql = "select addressID from user_address where addressLine1 = ? AND addressLine2 = ? AND townCity = ? AND county = ? AND postcode = ?";
+            $sql = "select addressID from address where title = ? AND firstName = ? AND lastName = ? AND addressLine1 = ? AND addressLine2 = ? AND townCity = ? AND county = ? AND postcode = ?";
 
 
+            $billingTitle = $_POST['billingTitle'];
+            $billingFirstName = $_POST['billingFirstName'];
+            $billingLastName = $_POST['billingLastName'];
             $billingAddressLine1 = $_POST['billingAddressLine1'];
             $billingAddressLine2 = $_POST['billingAddressLine2'];
             $billingTownCity = $_POST['billingTownCity'];
@@ -98,7 +101,7 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
             
             // echo $sql;
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $billingAddressLine1, $billingAddressLine2, $billingTownCity, $billingCounty, $billingPostCode);
+            $stmt->bind_param("ssssssss", $billingTitle, $billingFirstName, $billingLastName, $billingAddressLine1, $billingAddressLine2, $billingTownCity, $billingCounty, $billingPostCode);
 
             if (!$stmt->execute()) {
                 header('HTTP/1.1 500 Internal Server Error');
@@ -113,22 +116,25 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
             if (mysqli_num_rows($res) > 0) {
                 //In DB, set billingAddressID to the DB version
                 global $billingAddressID;
-                $billingAddressID = $mainaddressDB[0]['mainAddressID'];
+                $billingAddressID = $mainaddressDB[0]['addressID'];
             } else {
                 //If not already in DB, then send it to the DB.
 
 
                 //TODO Ashley; Come back to.... NO FIRST AND LAST NAME FOR ADDDRESS.
-                $stmt = $conn->prepare("INSERT INTO user_address (addressLine1, addressLine2, townCity, county, postcode)
-VALUES (?, ?, ?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO address (title, firstName, lastName, addressLine1, addressLine2, townCity, county, postcode)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
+                $title = $_POST['billingTitle'];
+                $firstName = $_POST['billingFirstName'];
+                $lastName = $_POST['billingLastName'];
                 $addressLine1 = $_POST['billingAddressLine1'];
                 $addressLine2 = $_POST['billingAddressLine2'];
                 $townCity =    $_POST['billingTownCity'];
                 $county =    $_POST['billingCounty'];
                 $postcode =    $_POST['billingPostCode'];
 
-                $stmt->bind_param("sssss", $addressLine1, $addressLine2, $townCity, $county, $postcode);
+                $stmt->bind_param("ssssssss", $title, $firstName, $lastName, $addressLine1, $addressLine2, $townCity, $county, $postcode);
 
                 if (!$stmt->execute()) {
                     header('HTTP/1.1 500 Internal Server Error');
@@ -188,9 +194,11 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
 
             $conn = mysqli_connect($host, $user, $pass, $database);
 
-            $sql = "select addressID from user_address where addressLine1 = ? AND addressLine2 = ? AND townCity = ? AND county = ? AND postcode = ?";
+            $sql = "select addressID from address where title = ? AND firstName = ? AND lastName = ? AND addressLine1 = ? AND addressLine2 = ? AND townCity = ? AND county = ? AND postcode = ?";
 
-
+            $deliveryTitle = $_POST['deliveryTitle'];
+            $deliveryFirstName = $_POST['deliveryFirstName'];
+            $deliveryLastName = $_POST['deliveryLastName'];
             $deliveryAddressLine1 = $_POST['deliveryAddressLine1'];
             $deliveryAddressLine2 = $_POST['deliveryAddressLine2'];
             $deliveryTownCity = $_POST['deliveryTownCity'];
@@ -206,7 +214,7 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
 
             // echo $sql;
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $deliveryAddressLine1, $deliveryAddressLine2, $deliveryTownCity, $deliveryCounty, $deliveryPostCode);
+            $stmt->bind_param("ssssssss", $deliveryTitle, $deliveryFirstName, $deliveryLastName, $deliveryAddressLine1, $deliveryAddressLine2, $deliveryTownCity, $deliveryCounty, $deliveryPostCode);
 
             if (!$stmt->execute()) {
                 header('HTTP/1.1 500 Internal Server Error');
@@ -221,22 +229,33 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
             if (mysqli_num_rows($res) > 0) {
                 //In DB, set deliveryAddressID to the DB version
                 global $deliveryAddressID;
-                $deliveryAddressID = $addressFound[0]['mainAddressID'];
+                $deliveryAddressID = $addressFound[0]['addressID'];
             } else {
                 //If not already in DB, then send it to the DB.
 
 
                 //TODO Ashley; Come back to.... NO FIRST AND LAST NAME FOR ADDDRESS.
-                $stmt = $conn->prepare("INSERT INTO user_address (addressLine1, addressLine2, townCity, county, postcode)
-VALUES (?, ?, ?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO address (title, firstName, lastName, addressLine1, addressLine2, townCity, county, postcode)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
+                $title = $_POST['deliveryTitle'];
+                $firstName = $_POST['deliveryFirstName'];
+                $lastName = $_POST['deliveryLastName'];
                 $addressLine1 = $_POST['deliveryAddressLine1'];
                 $addressLine2 = $_POST['deliveryAddressLine2'];
                 $townCity =    $_POST['deliveryTownCity'];
                 $county =    $_POST['deliveryCounty'];
                 $postcode =    $_POST['deliveryPostCode'];
 
-                $stmt->bind_param("sssss", $addressLine1, $addressLine2, $townCity, $county, $postcode);
+                $stmt->bind_param("ssssssss", $title,
+                    $firstName,
+                    $lastName,
+                    $addressLine1,
+                    $addressLine2,
+                    $townCity,
+                    $county,
+                    $postcode
+                );
 
                 if (!$stmt->execute()) {
                     header('HTTP/1.1 500 Internal Server Error');

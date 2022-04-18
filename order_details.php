@@ -18,18 +18,18 @@ $conn = mysqli_connect($host, $user, $pass, $database);
 $stmt = $conn->prepare(
     "select po.orderID, po.totalPrice, po.DateAndTime,
 
-bua.addressLine1 As billingAddressLine1, bua.addressLine2 As billingAddressLine2, bua.townCity As billingtownCity, bua.county As billingCounty, bua.postCode As billingPostCode,
-dua.addressLine1 As deliveryAddressLine1, dua.addressLine2 As deliveryAddressLine2, dua.townCity As deliverytownCity, dua.county As deliveryCounty, dua.postCode As deliveryPostCode
+bua.title As billingTitle, bua.firstName As billingFirstName, bua.lastName As billingLastName, bua.addressLine1 As billingAddressLine1, bua.addressLine2 As billingAddressLine2, bua.townCity As billingtownCity, bua.county As billingCounty, bua.postCode As billingPostCode,
+dua.title As deliveryTitle, dua.firstName As deliveryFirstName, dua.lastName As deliveryLastName, dua.addressLine1 As deliveryAddressLine1, dua.addressLine2 As deliveryAddressLine2, dua.townCity As deliverytownCity, dua.county As deliveryCounty, dua.postCode As deliveryPostCode
 
 
 FROM purchase_order po
 
-INNER JOIN user_address AS bua
+INNER JOIN address AS bua
 ON po.billingAddressID = bua.addressID
 
 
-INNER JOIN user_address AS dua
-ON po.billingAddressID = dua.addressID
+INNER JOIN address AS dua
+ON po.deliveryAddressID = dua.addressID
 
 
 
@@ -71,50 +71,63 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
             <h1>Order History</h1>
         </div>
         <?php
-        foreach ($allOrdersTiedToAccount as $order) {
-            //Get each order
-            $orderID = $order['orderID'];
-            $totalPrice = $order['totalPrice'];
-            $DateAndTime = $order['DateAndTime'];
-            $billingAddressLine1 = $order['billingAddressLine1'];
-            $billingAddressLine2 = $order['billingAddressLine2'];
-            $billingTownCity = $order['billingtownCity'];
-            $billingCounty = $order['billingCounty'];
-            $billingPostCode = $order['billingPostCode'];
+        if (empty($allOrdersTiedToAccount)) {
+            echo "<div class='NoOrders'>
+            <h1>No Order have been placed with this account</h1>
+            </div>";
+        } else {
 
-            $deliveryAddressLine1 = $order['deliveryAddressLine1'];
-            $deliveryAddressLine2 = $order['deliveryAddressLine2'];
-            $deliveryTownCity = $order['deliverytownCity'];
-            $deliveryCounty = $order['deliveryCounty'];
-            $deliveryPostCode = $order['deliveryPostCode'];
+            foreach ($allOrdersTiedToAccount as $order) {
+                //Get each order
+                $orderID = $order['orderID'];
+                $totalPrice = $order['totalPrice'];
+                $DateAndTime = $order['DateAndTime'];
+                
+                $billingTitle = $order['billingTitle'];
+                $billingFirstName = $order['billingFirstName'];
+                $billingLastName = $order['billingLastName'];
+                $billingAddressLine1 = $order['billingAddressLine1'];
+                $billingAddressLine2 = $order['billingAddressLine2'];
+                $billingTownCity = $order['billingtownCity'];
+                $billingCounty = $order['billingCounty'];
+                $billingPostCode = $order['billingPostCode'];
 
-            $date = date_create($DateAndTime);
-            // echo "Date and Time:" . $DateAndTime;
+                $deliveryTitle = $order['deliveryTitle'];
+                $deliveryFirstName = $order['deliveryFirstName'];
+                $deliveryLastName = $order['deliveryLastName'];
+                $deliveryAddressLine1 = $order['deliveryAddressLine1'];
+                $deliveryAddressLine2 = $order['deliveryAddressLine2'];
+                $deliveryTownCity = $order['deliverytownCity'];
+                $deliveryCounty = $order['deliveryCounty'];
+                $deliveryPostCode = $order['deliveryPostCode'];
 
-            echo "<div class='eachOrder'>
+                $date = date_create($DateAndTime);
+                // echo "Date and Time:" . $DateAndTime;
+
+                echo "<div class='eachOrder'>
             <div class='eachOrderOuter'>
                 <div class='dateOfOrderDiv'>
                     <h2>Order Placed: " .
-                date_format($date, "l dS F Y") . " at " . date_format($date, "H:i") .
-                "</h1>
+                    date_format($date, "l dS F Y") . " at " . date_format($date, "H:i") .
+                    "</h1>
                 </div>
                 <div class='eachOrderInner'>
                     <div class='rowOne'>
                         <div class='leftPart'>
                             <h2>Order Number: " . sprintf('%05d', $orderID) .
-                "</h1>
+                    "</h1>
                         </div>
                         <div class='rightPart'>
                             <h2>Total Price: £" . $totalPrice .
-                "</h1>
+                    "</h1>
                         </div>
                     </div>
                     <div class='rowTwo'>
                     ";
 
 
-            // Get each product from the order
-            $stmt = $conn->prepare("select p.productID, op.productPriceAtTime, op.productQuantity, p.productTitle, pi.productImageFileName, pi.productImageAltText from order_product op
+                // Get each product from the order
+                $stmt = $conn->prepare("select p.productID, op.productPriceAtTime, op.productQuantity, p.productTitle, pi.productImageFileName, pi.productImageAltText from order_product op
 
 
 INNER JOIN product p ON op.productID = p.productID
@@ -123,31 +136,32 @@ INNER JOIN product_image pi ON p.productID = pi.productID
 
 
  where pi.displayOrder = 1 and op.orderID = ?");
-            $stmt->bind_param("i", $orderID);
-            $stmt->execute();
+                $stmt->bind_param("i", $orderID);
+                $stmt->execute();
 
-            $res = $stmt->get_result();
-            $productsPurchased = mysqli_fetch_all(
-                $res,
-                MYSQLI_ASSOC
-            );
+                $res = $stmt->get_result();
+                $productsPurchased = mysqli_fetch_all(
+                    $res,
+                    MYSQLI_ASSOC
+                );
 
-            foreach ($productsPurchased as $individualProduct) {
-                $productID = $individualProduct['productID'];
-                $productPriceAtTime = $individualProduct['productPriceAtTime'];
-                $productQuantity = $individualProduct['productQuantity'];
-                $productTitle = $individualProduct['productTitle'];
-                $productImageFileName = $individualProduct['productImageFileName'];
-                $productImageAltText = $individualProduct['productImageAltText'];
+                foreach ($productsPurchased as $individualProduct) {
+                    $productID = $individualProduct['productID'];
+                    $productPriceAtTime = $individualProduct['productPriceAtTime'];
+                    $productQuantity = $individualProduct['productQuantity'];
+                    $productTitle = $individualProduct['productTitle'];
+                    $productImageFileName = $individualProduct['productImageFileName'];
+                    $productImageAltText = $individualProduct['productImageAltText'];
 
 
 
-                echo  "<div class='eachProduct'>
+                    echo  "<div class='eachProduct'>
+                    <a href='productPage.php?productID=" . $productID . "'.>
                             <div class='productImage'>";
-                $productSCR = 'Images/products/' . $productID . '/' . $productImageFileName;
+                    $productSCR = 'Images/products/' . $productID . '/' . $productImageFileName;
 
 
-                echo   "<img src='" . $productSCR . "' alt='" . $productImageAltText . "' class='slider__img'>
+                    echo   "<img src='" . $productSCR . "' alt='" . $productImageAltText . "' class='slider__img'>
                             </div>
                             <div class='containerProductDetails col-8'>
                                 <div class='productDetails'>
@@ -162,56 +176,57 @@ INNER JOIN product_image pi ON p.productID = pi.productID
                                     <div class='secondRow'>
                                         <div class='priceOfProduct'>";
 
-                $productPrice = $productPriceAtTime;
-                if ($productQuantity > 1) {
-                    echo "<h5>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPriceAtTime, 2) . "</span></h3>";
-                }
+                    $productPrice = $productPriceAtTime;
+                    if ($productQuantity > 1) {
+                        echo "<h5>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPriceAtTime, 2) . "</span></h3>";
+                    }
 
-                $quantityPrice = $productPrice * $productQuantity;
-                $_SESSION["total"] += $quantityPrice;
-                echo "<h3 class='totalPriceOfQuantity'>£" . number_format($quantityPrice, 2) . "</h1>";
+                    $quantityPrice = $productPrice * $productQuantity;
+                    $_SESSION["total"] += $quantityPrice;
+                    echo "<h3 class='totalPriceOfQuantity'>£" . number_format($quantityPrice, 2) . "</h1>";
 
-                echo "</div>
+                    echo "</div>
                                     </div>
                                 </div>
                             </div>
-                        </div>";
-            }
-            echo  "<div class='BillingDeliveryAddressButton' onclick='hideShowBillingDeliveryAddress(" . $orderID . ")'>
+                        </div>
+                        </a>";
+                }
+                echo  "<div class='BillingDeliveryAddressButton' onclick='hideShowBillingDeliveryAddress(" . $orderID . ")'>
                         <h2 class='left'>Billing & Delivery Address</h2>
                         <img class='right' src='images/Down Arrow - Big.png' alt='Billing and Delivery Address - Right Arrow' />
                     </div>
                     <div class='billingDeliveryAddressOuterContainer'> 
                     <div id='billingDeliveryAddressInnerContainer" . $orderID .
-                "' style='display:none;'>
+                    "' style='display:none;'>
                         <div class='billingAddress'>
                             <h2>Billing Address</h2>
                             <div class='nameBilling'>
-                                <h3 class='titleBilling'>Mr</h3>
-                                <h3 class='FirstNameBilling'>Ashley</h3>
-                                <h3 class='FirstNameBilling'>Gainey</h3>
+                                <h3 class='titleBilling'>." . $billingTitle . "</h3>
+                                <h3 class='FirstNameBilling'>" . $billingFirstName . "</h3>
+                                <h3 class='FirstNameBilling'>" . $billingLastName . "</h3>
                             </div>
                             <h3 class='addressLine1Billing'>" . $billingAddressLine1 . "</h3>";
-            if (!empty($billingAddressLine2)) {
-                echo "<h3 class='addressLine2Billing'>" . $billingAddressLine2 . "</h3>";
-            }
-            echo "<h3 class='townCityBilling'>" . $billingTownCity . "</h3>
+                if (!empty($billingAddressLine2)) {
+                    echo "<h3 class='addressLine2Billing'>" . $billingAddressLine2 . "</h3>";
+                }
+                echo "<h3 class='townCityBilling'>" . $billingTownCity . "</h3>
                             <h3 class='countyBilling'>" . $billingCounty . "</h3>
                             <h3 class='postCodeBilling'>" . $billingPostCode .
-                "</h3>
+                    "</h3>
                         </div>
                         <div class='deliveryAddress'>
                             <h2>Delivery Address</h2>
                             <div class='nameBilling'>
-                                <h3 class='titleBilling'>Mr</h3>
-                                <h3 class='FirstNameBilling'>Ashley</h3>
-                                <h3 class='FirstNameBilling'>Gainey</h3>
+                                 <h3 class='titleBilling'>." . $deliveryTitle . "</h3>
+                                <h3 class='FirstNameBilling'>" . $deliveryFirstName . "</h3>
+                                <h3 class='FirstNameBilling'>" . $deliveryLastName . "</h3>
                             </div>
                             <h3 class='addressLine1Billing'>" . $deliveryAddressLine1 . "</h3>";
-            if (!empty($deliveryAddressLine2)) {
-                echo "<h3 class='addressLine2Billing'>" . $deliveryAddressLine2 . "</h3>";
-            }
-            echo "<h3 class='townCityBilling'>" . $deliveryTownCity . "</h3>
+                if (!empty($deliveryAddressLine2)) {
+                    echo "<h3 class='addressLine2Billing'>" . $deliveryAddressLine2 . "</h3>";
+                }
+                echo "<h3 class='townCityBilling'>" . $deliveryTownCity . "</h3>
                             <h3 class='countyBilling'>" . $deliveryCounty . "</h3>
                             <h3 class='postCodeBilling'>" . $deliveryPostCode . "</h3>
                         </div>
@@ -221,6 +236,7 @@ INNER JOIN product_image pi ON p.productID = pi.productID
             </div>
         </div> 
         </div>";
+            }
         }
         ?>
 
@@ -254,6 +270,10 @@ INNER JOIN product_image pi ON p.productID = pi.productID
 
     .title h1 {
         display: inline;
+    }
+
+    .NoOrders {
+        text-align: center;
     }
 
     /* .eachOrder {
@@ -300,6 +320,10 @@ INNER JOIN product_image pi ON p.productID = pi.productID
 
     .eachOrder {
         margin-bottom: 50px;
+    }
+
+    .eachProduct a {
+        color: black;
     }
 
     .eachOrderInner {

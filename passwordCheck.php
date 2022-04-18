@@ -31,16 +31,18 @@ if (isset($_POST['Register'])) {
 
     // print_r('Still continuing');
 
-    $stmt = $conn->prepare("INSERT INTO user_address (addressLine1, addressLine2, townCity, county, postcode)
-VALUES (?, ?, ?, ?, ?)");
-
+    $stmt = $conn->prepare("INSERT INTO address (title, firstName, lastName, addressLine1, addressLine2, townCity, county, postcode)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $title = $_POST['title'];
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
     $addressLine1 = $_POST['addressLine1'];
     $addressLine2 = $_POST['addressLine2'];
     $townCity =    $_POST['townCity'];
     $county =    $_POST['county'];
     $postcode =    $_POST['postcode'];
 
-    $stmt->bind_param("sssss", $addressLine1, $addressLine2, $townCity, $county, $postcode);
+    $stmt->bind_param("ssssssss", $title, $firstName, $lastName, $addressLine1, $addressLine2, $townCity, $county, $postcode);
 
     $stmt->execute();
     $addressID = mysqli_insert_id($conn);
@@ -58,15 +60,12 @@ VALUES (?, ?, ?, ?, ?)");
 
 
 
-    $stmt2 = $conn->prepare("INSERT INTO user (userTitle, userFirstName, userLastName, userEmail, userPassword, mainAddressID, typeOfUser)
-VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt2 = $conn->prepare("INSERT INTO user (userEmail, userPassword, mainAddressID, typeOfUser)
+VALUES (?, ?, ?, ?)");
 
-    $title = $_POST['title'];
-    $firstName = $_POST['firstName'];
-    $lastName =    $_POST['lastName'];
     $typeOfUser =    "Customer";
 
-    $stmt2->bind_param("sssssis", $title, $firstName, $lastName, $email, $hash, $addressID, $typeOfUser);
+    $stmt2->bind_param("ssis", $email, $hash, $addressID, $typeOfUser);
     $stmt2->execute();
 
     $userID = mysqli_insert_id($conn);
@@ -75,7 +74,6 @@ VALUES (?, ?, ?, ?, ?, ?, ?)");
     $_SESSION['userEmail'] = $email;
     $_SESSION['userFirstName'] = $firstName;
     $_SESSION['userLastName'] = $lastName;
-    $_SESSION["register"] = false;
 
 } else if (isset($_POST['Login'])) {
     include 'DBlogin.php';
@@ -92,7 +90,8 @@ VALUES (?, ?, ?, ?, ?, ?, ?)");
     $email =    $_POST['emailAddress'];
     $password = $_POST['password'];
 
-    $query = 'SELECT userID, userEmail, userFirstName, userLastName, userPassword From user where userEmail = "' . $email . '" LIMIT 1';
+    $query = 'SELECT u.userID, u.userEmail, u.userPassword, a.firstName, a.lastName From user u INNER JOIN address a ON u.mainAddressID = a.addressID where userEmail = "' . $email . '" LIMIT 1';
+
 
     $result = mysqli_query($conn, $query);
 
@@ -117,9 +116,8 @@ VALUES (?, ?, ?, ?, ?, ?, ?)");
         // header('Location: Error404.php');
         $_SESSION['userID'] = $user[0]["userID"];
         $_SESSION['userEmail'] = $user[0]["userEmail"];
-        $_SESSION['userFirstName'] = $user[0]["userFirstName"];
-        $_SESSION['userLastName'] = $user[0]["userLastName"];
-        $_SESSION["register"] = false;
+        $_SESSION['userFirstName'] = $user[0]["firstName"];
+        $_SESSION['userLastName'] = $user[0]["lastName"];
         // header('Location: Login.php');
         exit();
 
