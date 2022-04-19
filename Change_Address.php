@@ -62,60 +62,92 @@ $userPostCode = $mainaddressDB[0]['postcode'];
         </div>
         <div class="allElementss" id="AddressChange">
             <div class="allElements">
-                <form action="/account_welcome.php" id="MainAddressForm" method="post">
+                <form action="account_welcome.php" id="MainAddressForm" method="post" onsubmit="changeAddress()">
                     <div class="cardContainer">
                         <p>Title<span class="required">*</span></p>
-                        <select id="regTitle" name="title" id="title" required>
-                            <option value="Mr">Mr</option>
-                            <option value="Master">Master</option>
-                            <option value="Mrs">Mrs</option>
-                            <option value="Miss">Miss</option>
-                            <option value="Ms">Ms</option>
-                            <option value="Dr">Dr</option>
+                        <select id="title" name="title" id="title" required>
+                            <?php
+                            if ($userTitle == "Mr") {
+                                echo "<option value='Mr'selected>Mr</option>";
+                            } else {
+                                echo "<option value='Mr'>Mr</option>";
+                            }
+
+                            if ($userTitle == "Mr") {
+                                echo "<option value='Master' selected>Master</option>";
+                            } else {
+                                echo "<option value='Master'>Master</option>";
+                            }
+
+                            if ($userTitle == "Mrs") {
+                                echo "<option value='Mrs' selected>Mrs</option>";
+                            } else {
+                                echo "<option value='Mrs'>Mrs</option>";
+                            }
+
+                            if ($userTitle == "Miss") {
+                                echo "<option value='Miss' selected>Miss</option>";
+                            } else {
+                                echo "<option value='Miss'>Miss</option>";
+                            }
+
+                            if ($userTitle == "Ms") {
+                                echo "<option value='Ms' selected>Ms</option>";
+                            } else {
+                                echo "<option value='Ms'>Ms</option>";
+                            }
+                            if ($userTitle == "Dr") {
+                                echo "<option value='Dr' selected>Dr</option>";
+                            } else {
+                                echo "<option value='Dr'>Dr</option>";
+                            }
+                            ?>
+
+
                         </select>
                     </div>
 
                     <div class="cardContainer">
                         <p>First Name<span class="required">*</span></p>
                         <?php
-                        echo "<input id='regFirstName' type='text' class='searchInput' value='" . $userFirstName . "' placeholder='First Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
+                        echo "<input id='firstName' type='text' class='searchInput' value='" . $userFirstName . "' placeholder='First Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
 
                         ?>
                     </div>
                     <div class="cardContainer ">
                         <p>Last Name<span class="required">*</span></p>
                         <?php
-                        echo "<input id='regLastName' type='text' class='searchInput' value='" . $userLastName . "' placeholder='Last Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
+                        echo "<input id='lastName' type='text' class='searchInput' value='" . $userLastName . "' placeholder='Last Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
                         ?>
                     </div>
                     <div class="cardContainer">
                         <p>Address Line 1<span class="required">*</span></p>
                         <?php
-                        echo "<input id='regAddressLine1' type='text' class='searchInput' value='" . $userAddressLine1 . "'  placeholder='Address Line 1' minlength=2 maxlength=255 required>";
+                        echo "<input id='addressLine1' type='text' class='searchInput' value='" . $userAddressLine1 . "'  placeholder='Address Line 1' minlength=2 maxlength=255 required>";
                         ?>
                     </div>
                     <div class="cardContainer">
                         <p>Address Line 2</p>
                         <?php
-                        echo "<input id='regAddressLine2' type='text' class='searchInput' value='" . $userAddressLine2 . "' placeholder='Address Line 2' minlength=2 maxlength=255>";
+                        echo "<input id='addressLine2' type='text' class='searchInput' value='" . $userAddressLine2 . "' placeholder='Address Line 2' minlength=2 maxlength=255>";
                         ?>
                     </div>
                     <div class="cardContainer">
                         <p>Town/City<span class="required">*</span></p>
                         <?php
-                        echo "<input id='regTownCity' type='text' class='searchInput' value='" . $userTownCity . "' placeholder='Town/City' minlength=2 maxlength=255 required>";
+                        echo "<input id='townCity' type='text' class='searchInput' value='" . $userTownCity . "' placeholder='Town/City' minlength=2 maxlength=255 required>";
                         ?>
                     </div>
                     <div class="cardContainer">
                         <p>County<span class="required">*</span></p>
                         <?php
-                        echo "<input id='regCounty' type='text' class='searchInput' value='" . $userCounty . "' placeholder='County' minlength=2 maxlength=255 required>"
+                        echo "<input id='county' type='text' class='searchInput' value='" . $userCounty . "' placeholder='County' minlength=2 maxlength=255 required>"
                         ?>
                     </div>
                     <div class="cardContainer">
                         <p>Post Code<span class="required">*</span></p>
                         <?php
-                        echo  "<input id='regPostCode' type='text' class='searchInput' value='" . $userPostCode . "' placeholder='Post Code' minlength=5 maxlength=8 required>"
+                        echo  "<input id='postCode' type='text' class='searchInput' value='" . $userPostCode . "' placeholder='Post Code' minlength=5 maxlength=8 required>"
                         ?>
                     </div>
                     <input type="submit" value="Save">
@@ -343,44 +375,79 @@ $userPostCode = $mainaddressDB[0]['postcode'];
 </style>
 
 <script>
-    // $("#RegisterForm").submit(function(event) {
+    function changeAddress() {
+        event.preventDefault();
 
-    //     event.preventDefault();
-    //     var emailAddress = $("#regEmail").val();
-    //     var password = $("#regPassword").val();
+        title = document.getElementById("title").value;
+        if (title != "Master" && title != "Mr" &&
+            title != "Mrs" && title != "Ms" && title != "Miss" &&
+            title != "Dr") {
+            outputMessage = "Delivery Address: Not a value Name Title. Please fill the section in correctly";
+            showHideMessage(true, outputMessage);
+            return false;
+        }
 
-    //     //Personal Information values
-    //     var title = $("#regTitle").val();
-    //     var firstName = $("#regFirstName").val();
-    //     var lastName = $("#regLastName").val();
-    //     var addressLine1 = $("#regAddressLine1").val();
-    //     var addressLine2 = $("#regAddressLine2").val();
-    //     var townCity = $("#regTownCity").val();
-    //     var county = $("#regCounty").val();
-    //     var postcode = $("#regPostCode").val();
-    //     //Do more validation with Ajax this time
-    //     $("#regMessage").load("passwordCheck.php", {
-    //         emailAddress: emailAddress,
-    //         password: password,
-    //         title: title,
-    //         firstName: firstName,
-    //         lastName: lastName,
-    //         addressLine1: addressLine1,
-    //         addressLine2: addressLine2,
-    //         townCity: townCity,
-    //         county: county,
-    //         postcode: postcode,
-    //         Register: true
-    //     }, function(response, status, xhr) {
-    //         debugger;
-    //         if (status == "error") {
-    //             var message = "An error occured while registering. Please see below :";
-    //             document.getElementById("regMessage").style.display = "block";
-    //             $("#regMessage").html(message + xhr.status + "" + xhr.statusText)
-    //         }
-    //         if (status == "success") {
-    //             window.location.href = "account_welcome.php";
-    //         }
-    //     })
-    // });
+        firstName = document.getElementById("firstName").value;
+        if (!firstName) {
+            outputMessage = "Delivery Address: First Name cannot be blank, please fill out that field.";
+            showHideMessage(true, outputMessage);
+            return false;
+        }
+        lastName = document.getElementById("lastName").value;
+        if (!lastName) {
+            outputMessage = "Delivery Address: Last Name cannot be blank, please fill out that field.";
+            showHideMessage(true, outputMessage);
+            return false;
+        }
+        addressLine1 = document.getElementById("addressLine1").value;
+        if (!addressLine1) {
+            outputMessage = "Delivery Address: Address Line 1 cannot be blank, please fill out that field.";
+            showHideMessage(true, outputMessage);
+            return false;
+        }
+        addressLine2 = document.getElementById("addressLine2").value;
+
+        townCity = document.getElementById("townCity").value;
+        if (!townCity) {
+            outputMessage = "Delivery Address: Town/City cannot be blank, please fill out that field.";
+            showHideMessage(true, outputMessage);
+            return false;
+        }
+        county = document.getElementById("county").value;
+        if (!county) {
+            outputMessage = "Delivery Address: County cannot be blank, please fill out that field.";
+            showHideMessage(true, outputMessage);
+            return false;
+        }
+        postCode = document.getElementById("postCode").value;
+        if (!postCode) {
+            outputMessage = "Delivery Address: Post Code cannot be blank, please fill out that field.";
+            showHideMessage(true, outputMessage);
+            return false;
+        }
+        $.ajax({
+            url: "change_details.php",
+            type: "POST",
+            data: {
+                "title": title,
+                "firstName": firstName,
+                "lastName": lastName,
+                "addressLine1": addressLine1,
+                "addressLine2": addressLine2,
+                "townCity": townCity,
+                "county": county,
+                "postcode": postCode,
+                "process": "Address"
+            },
+            success: function(result) {
+                window.location.href = "account_welcome.php";
+                // document.getElementById("regMessage").style.display = "block";
+                // document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+                // console.log(result.abc);
+            },
+            error: function(data) {
+                $("#regMessage").text(data.responseText);
+            }
+        });
+    }
 </script>

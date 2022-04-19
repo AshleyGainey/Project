@@ -117,7 +117,6 @@ VALUES (?, ?, ?, ?)");
         $_SESSION['userID'] = $user[0]["userID"];
         $_SESSION['userEmail'] = $user[0]["userEmail"];
         $_SESSION['userFirstName'] = $user[0]["firstName"];
-        $_SESSION['userLastName'] = $user[0]["lastName"];
         // header('Location: Login.php');
         exit();
 
