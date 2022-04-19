@@ -1,3 +1,103 @@
+<?php
+
+if (!isset($_SESSION)) {
+    @ob_start();
+    @session_start();
+}
+
+include 'DBlogin.php';
+
+$conn = mysqli_connect($host, $user, $pass, $database);
+
+$sql = "SELECT COUNT(ProductID) AS NumberOfProducts FROM Product";
+
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+
+$res = $stmt->get_result();
+$mainaddressDB = mysqli_fetch_all($res, MYSQLI_ASSOC);
+
+$numOfProductsInDB =  $mainaddressDB[0]['NumberOfProducts'];
+
+//From other project
+$productIDCarousel = [];
+for ($x = 0; $x < 6; $x = $x + 1) {
+    // Generate product id
+    $productID = rand(1, $numOfProductsInDB);
+
+    if ($x > 0) {
+        $foundInproductIDCarousel = 0;
+
+        // Check it has not already been chosen
+        while ($foundInproductIDCarousel == 0) {
+            for ($v = 0; $v < $x; $v++) {
+                if ($productIDCarousel[$v] == $productID) {
+                    $foundInproductIDCarousel = 1;
+                }
+            }
+
+            if ($foundInproductIDCarousel == 1) {
+                $productID = rand(1, $numOfProductsInDB);
+                $foundInproductIDCarousel = 0;
+            } else {
+                $foundInproductIDCarousel = 1;
+            }
+        }
+    }
+
+    // Debug line
+    // error_log($val, 4);
+
+    $productIDCarousel[$x] = $productID;
+
+    // if ($productID < 10) {
+    //     echo "0", $vaproductIDl;
+    // } else {
+    //     echo $productID;
+    // }
+
+    // echo "</prodID>";
+}
+
+// echo print_r($productIDCarousel);
+
+
+$picturesURLCarousel = array();
+$picturesAltCarousel = array();
+$sql = "select productCarouselImageFileName, productCarouselImageAltText from product where productID = ?";
+
+for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carouselProduct++) {
+
+
+    $productID = $productIDCarousel[$carouselProduct];
+
+    echo $productID;
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $productID);
+
+    if ($stmt->execute()) {
+        $res = $stmt->get_result();
+        $productDetails = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        // print_r($productDetails);
+
+        $productFileName = $productDetails[0]['productCarouselImageFileName'];
+        $productAlt = $productDetails[0]['productCarouselImageAltText'];
+        $productAlt = str_replace("'", '"', $productAlt);
+
+        array_push($picturesURLCarousel, $productFileName);
+        array_push($picturesAltCarousel, $productAlt);
+
+        // select productCarouselImageFileName, productCarouselImageAltText from product where productID = ?
+    }
+}
+print_r($picturesURLCarousel);
+print_r($picturesAltCarousel);
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,18 +124,14 @@
             <div class="row visible-md visible-lg">
                 <div id="contenedor-slider" class="contenedor-slider">
                     <div id="slider" class="slider">
-                        <a id="slider1" class="slider__section" href=""><img src="Images\Home\carouselImages\Product 1.png" class="slider__img">
-                        </a>
-                        <a id="slider2" class="slider__section" href=""><img src="Images\Home\carouselImages\Product 5.png" class="slider__img">
-                        </a>
-                        <a id="slider3" class="slider__section" href=""><img src="Images\Home\carouselImages\Product 7.png" class="slider__img">
-                        </a>
-                        <a id="slider4" class="slider__section" href=""><img src="Images\Home\carouselImages\Product 9.png" class="slider__img">
-                        </a>
-                        <a id="slider5" class="slider__section" href=""><img src="Images\Home\carouselImages\Product 11.png" class="slider__img">
-                        </a>
-                        <a id="slider6" class="slider__section"><img src="Images\Home\carouselImages\Product 19.gif" class="slider__img">
-                        </a>
+                        <?php
+                        for ($slider = 0; $slider < count($picturesURLCarousel); $slider++) {
+                            $productID = $productIDCarousel[$slider];
+
+                            echo "<a id='slider" . ($slider + 1) . "' class='slider__section' href='productPage.php?productID=" . $productID . "'><img src='Images/Home/carouselImages/newMethod/" . $picturesURLCarousel[$slider] . "' alt='" . $picturesAltCarousel[$slider] . "' class='slider__img '>
+                        </a>";
+                        }
+                        ?>
                     </div>
 
                     <div class="sliderArrows">
