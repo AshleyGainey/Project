@@ -18,11 +18,7 @@ if (!isset($_SESSION['userID'])) {
 
     <title>Change Your Email - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!--    Offline use -->
-    <script src="jquery-3.4.1.min.js"></script>
 </head>
 
 <body>
@@ -32,7 +28,7 @@ if (!isset($_SESSION['userID'])) {
         <div>
             <p>Change Your Email</p>
         </div>
-        <form id="EmailForm" action="/account_welcome.php" method="post">
+        <form id="EmailForm" action="/account_welcome.php" method="post" onsubmit="ChangeEmail()">
             <div class="cardArea">
                 <div class="firstRow">
                     <div class="cardContainer leftPart disabled">
@@ -69,7 +65,6 @@ if (!isset($_SESSION['userID'])) {
 
 </html>
 <style>
-
     #mainBody {
         margin-top: 30px;
         margin-left: 50px;
@@ -81,8 +76,6 @@ if (!isset($_SESSION['userID'])) {
         word-wrap: break-word;
 
     }
-
-
 
     .card {
         box-shadow: 0 0 0 5px #FFFFFF;
@@ -158,6 +151,8 @@ if (!isset($_SESSION['userID'])) {
     }
 
     #regMessage {
+        margin-top: 25px;
+        text-align: center;
         display: none;
     }
 
@@ -189,7 +184,7 @@ if (!isset($_SESSION['userID'])) {
         box-shadow: 0 0 0 5px #FFFFFF;
         border-radius: 2%;
         height: 75px;
-        width: 250px;
+        /* width: 250px; */
         overflow: hidden;
         position: relative;
         background-color: #1a1862;
@@ -197,25 +192,33 @@ if (!isset($_SESSION['userID'])) {
 </style>
 
 <script>
-    $("#EmailForm").submit(function(event) {
+    function ChangeEmail() {
         event.preventDefault();
-        var emailAddress = $("#newEmail").val();
-        var password = $("#password").val();
-        //Do more validation with Ajax this time
-        $("#regMessage").load("change_details.php", {
-            emailAddress: emailAddress,
-            password: password,
-            process: "Email"
-        }, function(response, status, xhr) {
-            debugger;
-            if (status == "error") {
+
+        var emailAddress = document.getElementById("newEmail").value;
+        var password = document.getElementById("password").value;
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', "change_details.php", true)
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("emailAddress=" + emailAddress +
+            "&password=" + password +
+            "&process=" + "Email"
+        );
+
+
+        // Create an event to receive the return.
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                window.location.href = "account_welcome.php";
+            } else if (xhr.readyState == 4 && (xhr.status == 400 || xhr.status == 500)) {
                 document.getElementById("regMessage").style.display = "block";
                 // var message = "An error occured while trying to do this action.";
                 document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+                console.log(xhr.responseText);
             }
-            if (status == "success") {
-                window.location.href = "account_welcome.php";
-            }
-        })
-    });
+        }
+
+    }
 </script>

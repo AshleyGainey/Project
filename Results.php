@@ -7,13 +7,49 @@
                 echo 'Connection error: ' . mysqli_connect_error();
             }
 
+
             $query =
                 'SELECT p.productID, p.productTitle, 
 p.productDescription, p.productPrice, pi.productImageFilename, pi.productImageAltText
         FROM product 
 AS p RIGHT JOIN product_image pi
- ON pi.productID = p.productID WHERE  pi.displayOrder = 1 AND p.productTitle LIKE "%'
-                . $_GET['search'] . '%"';
+ ON pi.productID = p.productID WHERE pi.displayOrder = 1';
+
+            $query = $query . " AND (p.productTitle LIKE '%";
+            // $query = $_GET['search'];
+            $search_exploded = explode(" ", $_GET['search']);
+
+
+            for ($i = 0; $i < sizeof($search_exploded); $i++) {
+                $query = $query . $search_exploded[$i] . "%'";
+
+                if ($i !== sizeof($search_exploded) - 1) {
+                    $query = $query . " AND p.productTitle LIKE '%";
+                } else {
+                    $query = $query . ")";
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             $result = mysqli_query($conn, $query);
 
@@ -37,11 +73,7 @@ AS p RIGHT JOIN product_image pi
 
                 <title>Results for <?php echo $_GET['search']; ?> - Gadget Gainey Store</title>
                 <link rel="stylesheet" type="text/css" href="style.css">
-                <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-                <!--    Offline use -->
-                <script src="jquery-3.4.1.min.js"></script>
             </head>
 
             <body>
@@ -92,10 +124,10 @@ AS p RIGHT JOIN product_image pi
                                 </div>
                             <?php } ?>
                         </div>
-                        <div id="showMoreResultsDiv" class="centreDiv">
+                        <!-- <div id="showMoreResultsDiv" class="centreDiv">
                             <button class="centreText ShowMoreResults NunitoFont">Show More Results
                             </button>
-                        </div>
+                        </div> -->
                         <?php include "./footer.php" ?>
             </body>
 
@@ -183,7 +215,7 @@ AS p RIGHT JOIN product_image pi
 
                 .SeeMoreTitle {
                     display: inline;
-                    
+
                 }
 
                 hr {
@@ -227,57 +259,3 @@ AS p RIGHT JOIN product_image pi
                     text-align: center;
                 }
             </style>
-
-
-            <script>
-                //Used Ajax to load the results count
-                $.ajax({
-                    url: 'load-results.php',
-                    type: 'POST',
-                    data: {
-                        "loadResultFound": true
-                    },
-                    success: function(response) {
-                        if (status == "error") {
-                            var message = "Sorry but there was an error. Please contact the University IT Support for more details: ";
-                            $("#resultsFound").html(message + xhr.status + "" + xhr.statusText)
-                        } else {
-                            $("#resultsFound").text(response);
-                        }
-                    }
-                });
-                //If not invalid then load the results by going to ShowMoreResults() function
-                ShowMoreResults();
-
-                //If not invalid then when you click the Show More Results button, to ShowMoreResults() function to retrieve more results
-                $("#showMoreResultsDiv").click(function() {
-                    ShowMoreResults();
-                });
-
-                function ShowMoreResults() {
-                    //Increase resultCount by 6.
-                    resultCount = resultCount + 6;
-
-                    //Load the results into the div All Results
-                    $("#AllResults").load("load-results.php", {
-                        resultsCount: resultCount
-                    }, function(response, status, xhr) {
-
-                        //If error, show in All Results div
-                        if (status == "error") {
-                            var message = "Sorry but there was an error: ";
-                            $("#AllResults").html(message + xhr.status + "" + xhr.statusText)
-                        }
-                        //If successful, then fade in all of the results (no matter if they are new or not)
-                        // also check if the resultCount is more or equal to the results that are found in the database,
-                        // if there is, there are no more results to load and therefore hide the Show More Results button
-                        if (status === "success") {
-                            if (resultCount >= $("#resultsFound").text()) {
-                                document.getElementById("showMoreResultsDiv").style.display = "none";
-                            } else {
-                                document.getElementById("showMoreResultsDiv").style.display = "block";
-                            }
-                        }
-                    }).hide().fadeIn(1000);
-                }
-            </script>

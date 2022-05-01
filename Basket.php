@@ -7,6 +7,11 @@ if (!isset($_SESSION)) {
 }
 
 // print_r('session: ' . $_SESSION['userID']);
+
+$picturesURLCarousel = array();
+$productPriceArray = array();
+$totalPriceOfEachProduct = array();
+// $productQuantityArray = array();
 ?>
 
 <!DOCTYPE html>
@@ -19,11 +24,7 @@ if (!isset($_SESSION)) {
 
     <title>Your Basket - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!--    Offline use -->
-    <script src="jquery-3.4.1.min.js"></script>
 </head>
 
 <body>
@@ -33,7 +34,7 @@ if (!isset($_SESSION)) {
             <i class="fa fa-shopping-basket"></i>
             <h1>Your Basket</h1>
         </div>
-        <form action="Basket.php" method="post">
+        <form action="Basket.php" id="basketForm" method="post">
             <?php
             $_SESSION["total"] = 0;
 
@@ -46,11 +47,6 @@ if (!isset($_SESSION)) {
             } else {
                 $invalidBasket = 0;
                 foreach ($_SESSION["basket"] as $basketItem => $basketItem_value) {
-                    // echo
-                    // "HRERERERERERERERRERER" . $basketItem;
-                    // echo "xjbfdsgjfdfj" . $basketItem_value;
-
-
                     include 'DBlogin.php';
 
                     $conn = new mysqli($host, $user, $pass, $database);
@@ -69,32 +65,39 @@ where p.productID = ? AND pi.displayOrder = 1");
             ?>
                     <p id="regMessage"></p>
                     <?php
-                    echo "<div id='individualProduct" . $basketItem . "' class='individualProduct row'>"
+                    echo "<div id='individualProduct" . $basketItem . "' class='individualProduct row'>";
                     ?>
 
                     <div class="containerProduct col-2">
                         <div class="productImage">
                             <?php
+                            // echo  "<a href='productPage.php?productID=" . $basketItem . "'>";
+
                             $productImagePath = "images/products/" . $basketItem . "/" . $basket_product[0]["productImageFilename"];
-                            echo "<img src='" . $productImagePath . "' alt='" .
-                                $basket_product[0]["productImageAltText"]  . "' >" ?>
+                            echo "<a href='productPage.php?productID=" . $basketItem . "'><img src='" . $productImagePath . "' alt='" .
+                                $basket_product[0]["productImageAltText"]  . "' ></a>";
+
+                            // echo "<\a>";
+                            ?>
+
                             <!-- <img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img"> -->
                         </div>
                     </div>
+
                     <div class="containerProductDetails col-8">
                         <div class="productDetails">
                             <div class="firstRow">
                                 <div class="titleOfProduct">
                                     <?php
-                                    echo "<h1>" . $basket_product[0]["productTitle"] . "</h1>" ?>
+                                    // echo  "<a href='productPage.php?productID=" . $basketItem . "'>";
+                                    echo "<a href='productPage.php?productID=" . $basketItem . "'><h1>" . $basket_product[0]["productTitle"] . "</h1></a>" ?>
 
-                                    <!-- <h1>Title Of Product</h1> -->
                                 </div>
                                 <div class="quantityOfProduct">
                                     <label>Quantity:</label>
 
                                     <?php
-                                    echo "<select name='quantity' id='quantity' onchange='changeQuantity(" . $basketItem . ")'>'"
+                                    echo "<select name='quantity' id='quantity" . $basketItem . "' onchange='changeQuantity(" . $basketItem . ")'>'"
 
                                     ?>
 
@@ -126,20 +129,35 @@ where p.productID = ? AND pi.displayOrder = 1");
                                 <i class="fa fa-times" aria-hidden="true"></i>
                                 <h4>Remove</h4>
                             </div>
-                            <div class="quantityPriceOfProduct">
-                                <?php
-                                $productPrice = $basket_product[0]["productPrice"];
-                                if ($quantitySelected > 1) {
-                                    echo "<h3>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPrice, 2) . "</span></h3>";
-                                }
+                            <?php
+                            echo "<div id='quantityPriceOfProduct" . $basketItem . "' class='quantityPriceOfProduct '>"
+                            ?>
+                            <?php
+                            $productPrice = $basket_product[0]["productPrice"];
 
-                                $quantityPrice = $productPrice * $quantitySelected;
-                                $_SESSION["total"] += $quantityPrice;
-                                echo "<h1 id='totalPriceOfQuantity'>£" . number_format($quantityPrice, 2) . "</h1>";
-                                ?>
-                            </div>
+                            $productPriceArray[$basketItem] = $productPrice;
+
+
+                            // $productQuantityArray[$basketItem] = $quantitySelected;
+                            if ($quantitySelected > 1) {
+                                echo "<h3 id='quantityPerPrice" . $basketItem . "'>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPrice, 2) . "</span></h3>";
+                            } else {
+                                echo "<h3 id='quantityPerPrice" . $basketItem . "' class='hiddenQuantity'>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPrice, 2) . "</span></h3>";
+                            }
+
+
+
+                            $quantityPrice = $productPrice * $quantitySelected;
+                            $totalPriceOfEachProduct[$basketItem] = $quantityPrice;
+                            $_SESSION["total"] += $quantityPrice;
+
+
+
+                            echo "<h1 id='totalPriceOfQuantity" . $basketItem . "' >£" . number_format($quantityPrice, 2) . "</h1>";
+                            ?>
                         </div>
                     </div>
+    </div>
     </div>
     </div>
 <?php
@@ -149,17 +167,17 @@ where p.productID = ? AND pi.displayOrder = 1");
 <?php
 if ($invalidBasket == 0) {
 ?>
-    <div class="totalContainer">
+    <div id="totalContainer">
         <div class="total">
             <h1 class="totalHeader">Total:<h1>
                     <?php
-
-                    echo "<h1 class='totalAmount'>£" . number_format($_SESSION["total"], 2) . "<h1>";
+                    // echo "<h1 class='totalAmount'>£" . number_format($_SESSION["total"], 2) . "<h1>";
+                    echo "<h1 id='totalAmount'> £" . number_format($_SESSION["total"], 2)  . "<h1>";
                     ?>
 
         </div>
     </div>
-    <div class="checkoutDiv">
+    <div id="checkoutDiv">
         <div class="cardContainer rightPart">
             <a href="checkout.php">
 
@@ -236,7 +254,7 @@ if ($invalidBasket == 0) {
         float: right;
     }
 
-    .totalContainer {
+    #totalContainer {
         width: 100%;
         display: inline-block;
     }
@@ -245,7 +263,7 @@ if ($invalidBasket == 0) {
         float: left;
     }
 
-    .totalAmount {
+    #totalAmount {
         float: right;
     }
 
@@ -257,7 +275,7 @@ if ($invalidBasket == 0) {
         float: left;
     }
 
-    .checkoutDiv {
+    #checkoutDiv {
         margin-top: 50px;
         width: 100%;
         margin-left: auto;
@@ -277,7 +295,15 @@ if ($invalidBasket == 0) {
         border-radius: 2%;
         background-color: #FFFFFF;
         float: right;
-        margin-bottom: 50px;
+    }
+
+    .hiddenQuantity {
+        display: none;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
     }
 
     .productDetails {
@@ -452,65 +478,122 @@ if ($invalidBasket == 0) {
     }
 </style>
 <script>
-    function changeQuantity(id) {
-        var x = document.getElementById("quantity").value;
-        // alert(x);
-        // debugger;
+    var totalPriceOfEachProduct = <?php echo json_encode($totalPriceOfEachProduct); ?>;
 
-        $.ajax({
-            url: "basket_process.php",
-            type: "POST",
-            data: {
-                "update": id,
-                "quantity": x
-            },
-            success: function(result) {
-                debugger;
-                // document.getElementById("regMessage").style.display = "block";
-                // document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-                // console.log(result.abc);
+    function changeQuantity(id) {
+        var x = document.getElementById("quantity" + id).value;
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', "basket_process.php", true)
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("update=" + id + "&quantity=" + x);
+
+
+        // Create an event to receive the return.
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var passedPriceArray = <?php echo json_encode($productPriceArray); ?>;
+                var totalValueOfProduct = passedPriceArray[id] * x;
+
+                if (x > 1) {
+                    var element = document.getElementById("quantityPerPrice" + id);
+                    element.classList.remove("hiddenQuantity");
+                } else {
+                    var element = document.getElementById("quantityPerPrice" + id);
+                    element.classList.add("hiddenQuantity");
+                }
+
+                document.getElementById("totalPriceOfQuantity" + id).innerHTML = "£" + totalValueOfProduct.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                totalPriceOfEachProduct[id] = totalValueOfProduct;
+                var total = 0;
+                for (const [key, value] of Object.entries(totalPriceOfEachProduct)) {
+                    console.log(key, value);
+                    total = total + value
+                }
+
+                // debugger;
+                document.getElementById("totalAmount").innerHTML = "£" + total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+
+                var data = xhr.responseText;
+                console.log(data);
             }
-        });
+        }
     }
 
 
     function removeProductFromBasket(id) {
 
-        // debugger;
+        let xhr = new XMLHttpRequest();
 
-        $.ajax({
-            url: 'basket_process.php',
-            type: 'POST',
-            data: {
-                "remove": id
-            },
-            success: function(response) {
+        xhr.open('POST', "basket_process.php", true)
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("remove=" + id);
+
+
+        // Create an event to receive the return.
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var basketcount = document.getElementById('cartCount').innerHTML;
+                basketcount--;
+
+                if (basketcount > 0) {
+                    document.getElementById("cartCount").style.display = "inline";
+                } else {
+                    document.getElementById("cartCount").style.display = "none";
+
+                    const removeCheckout = document.getElementById("checkoutDiv");
+                    removeCheckout.remove();
+                    const removeTotal = document.getElementById("totalContainer");
+                    removeTotal.remove();
+                    addNoProducts();
+                }
+                document.getElementById("cartCount").innerHTML = basketcount;
+
                 removeFadeOut(document.getElementById('individualProduct' + id), 500);
-                // updateTotalPrice();
-                // debugger;
+                totalPriceOfEachProduct[id] = 0;
+                var total = 0;
+                for (const [key, value] of Object.entries(totalPriceOfEachProduct)) {
+                    console.log(key, value);
+                    total = total + value
+                }
+                
+                document.getElementById("totalAmount").innerHTML = "£" + total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-
-                // if (status == "error") {
-                // var message = "Sorry but there was an error. Please contact the University IT Support for more details: ";
-                // } else {
-                //     alert(id);
-                //     $("#resultsFound").text(response);
-                // }
+                var data = xhr.responseText;
+                console.log(data);
             }
-        });
-
-
-        function removeFadeOut(el, speed) {
-            var seconds = speed / 1000;
-            el.style.transition = "opacity " + seconds + "s ease";
-
-            el.style.opacity = 0;
-            setTimeout(function() {
-                el.parentNode.removeChild(el);
-            }, speed);
         }
+    }
 
 
+
+
+    function addNoProducts() {
+        setTimeout(function() {
+            const header = document.createElement("h1");
+
+            const node = document.createTextNode("No Products In the basket");
+            header.appendChild(node);
+            header.setAttribute("id", "NoProducts");
+
+            const addNoProducts = document.getElementById("basketForm");
+
+            addNoProducts.appendChild(header);
+        }, 500);
+    }
+
+
+    function removeFadeOut(el, speed) {
+        var seconds = speed / 1000;
+        el.style.transition = "opacity " + seconds + "s ease";
+
+        el.style.opacity = 0;
+        setTimeout(function() {
+            el.parentNode.removeChild(el);
+        }, speed);
     }
 
     function updateTotalPrice() {
@@ -518,25 +601,6 @@ if ($invalidBasket == 0) {
         if (count($_SESSION["basket"]) == 0) {
             $invalidBasket = 1;
         } ?>
-        // debugger;
-    }
-
-    function updateQuantityPrice() {
-        //TODO: Come back to
-
-
-
-        // <?php
-            // echo $productPrice = $basket_product[0]["productPrice"];
-            // if ($quantitySelected > 1) {
-            //     echo "<h3>Price Per Quantity: £" . number_format($productPrice, 2) . "</h3>";
-            // }
-
-            // $quantityPrice = $productPrice * $quantitySelected;
-            // $_SESSION["total"] += $quantityPrice;
-            // echo "<h1>£" . number_format($quantityPrice, 2) . "</h1>";
-            ?>
-
     }
 </script>
 

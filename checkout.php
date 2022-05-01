@@ -73,11 +73,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
 
     <title>Checkout - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!--    Offline use -->
-    <script src="jquery-3.4.1.min.js"></script>
 </head>
 
 <body>
@@ -955,14 +951,16 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         var section = sectionPart + "AddressForm";
 
         if (show) {
-            $("#" + section).show(500);
-            // turnSectionRequiredOnOff();
+
+            var element = document.getElementById(section);
+            element.style.display = 'inline-block'
             turnSectionRequiredOnOff(sectionPart, true);
 
 
         } else {
             turnSectionRequiredOnOff(sectionPart, false);
-            $("#" + section).hide(500);
+            var element = document.getElementById(section);
+            element.style.display = 'none'
         }
     }
 
@@ -1204,45 +1202,45 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         // outputMessage = "Successful so far"
         showHideMessage(true, outputMessage);
 
-        $.ajax({
-            url: "placeOrder.php",
-            type: "post",
-            dataType: 'json',
-            data: {
-                "billingMethod": billingMethod,
-                "deliveryMethod": deliveryMethod,
+        event.preventDefault();
 
-                // Send in billing details (even if null - won't be checked anyway)
-                "billingTitle": billingTitle,
-                "billingFirstName": billingFirstName,
-                "billingLastName": billingLastName,
-                "billingAddressLine1": billingAddressLine1,
-                "billingAddressLine2": billingAddressLine2,
-                "billingTownCity": billingTownCity,
-                "billingCounty": billingCounty,
-                "billingPostCode": billingPostCode,
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', "placeOrder.php", true)
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("billingMethod=" + billingMethod +
+            "&deliveryMethod=" + deliveryMethod +
+            "&billingTitle=" + billingTitle +
+            "&billingFirstName=" + billingLastName +
+            "&billingLastName=" + billingAddressLine1 +
+            "&billingAddressLine1=" + billingAddressLine2 +
+            "&billingAddressLine2=" + billingTownCity +
+            "&billingTownCity=" + billingCounty +
+            "&billingPostCode=" + billingPostCode +
 
 
-                // Send in delivery details (even if null - won't be checked anyway)
-                "deliveryTitle": deliveryTitle,
-                "deliveryFirstName": deliveryFirstName,
-                "deliveryLastName": deliveryLastName,
-                "deliveryAddressLine1": deliveryAddressLine1,
-                "deliveryAddressLine2": deliveryAddressLine2,
-                "deliveryTownCity": deliveryTownCity,
-                "deliveryCounty": deliveryCounty,
-                "deliveryPostCode": deliveryPostCode
-            },
-            success: function(result) {
-                document.getElementById("regMessage").style.display = "block";
-                // document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+            "&deliveryTitle=" + deliveryTitle +
+            "&deliveryFirstName=" + deliveryLastName +
+            "&deliveryLastName=" + deliveryAddressLine1 +
+            "&deliveryAddressLine1=" + deliveryAddressLine2 +
+            "&deliveryAddressLine2=" + deliveryTownCity +
+            "&deliveryTownCity=" + deliveryCounty +
+            "&deliveryPostCode=" + deliveryPostCode +
+            "&process=" + "Password"
+        );
+
+
+        // Create an event to receive the return.
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
                 window.location.href = "order_complete.php";
-            },
-            error: function(data) {
-                $("#regMessage").text(data.responseText);
-            },
-        });
-
+            } else if (xhr.readyState == 4 && (xhr.status == 400 || xhr.status == 500)) {
+                document.getElementById("regMessage").style.display = "block";
+                // var message = "An error occured while trying to do this action.";
+                document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+                console.log(xhr.responseText);
+            }
+        }
 
 
 

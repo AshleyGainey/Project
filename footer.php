@@ -22,8 +22,8 @@
         </div>
 
         <div class="SubCategory">
-            <a href="#">My Account</a>
-            <a href="#">Order Details</a>
+            <a href="account_welcome.php">My Account</a>
+            <a href="order_details.php">Order Details</a>
         </div>
     </div>
 
@@ -39,7 +39,6 @@
     </div>
 
     <div id="Copyright">
-        <h4>© Copyright <?php
-                    echo date("Y"); ?> Gadget Gainey</h4>
+        <h4>© Copyright <?php echo date("Y"); ?> Gadget Gainey</h4>
     </div>
 </footer>

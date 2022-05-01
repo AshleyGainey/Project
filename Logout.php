@@ -4,15 +4,9 @@
                 session_start();
         }
 
-
         unset($_SESSION['userID']);
         unset($_SESSION['userEmail']);
         unset($_SESSION['userFirstName']);
-
-        //TODO: Ashley - Remove once done
-        unset($_SESSION['basket']);
-        unset($_SESSION['basketQuantity']);
-
 
         header('Location: index.php');
 

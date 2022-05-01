@@ -4,12 +4,12 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
-if (isset($_SESSION['basket'])) {
-    echo "In Basket:";
-    // print_r($_SESSION['basket']);
-} else {
-    echo "In Basket: Nothing in basket";
-}
+// if (isset($_SESSION['basket'])) {
+//     echo "In Basket:";
+//     // print_r($_SESSION['basket']);
+// } else {
+//     echo "In Basket: Nothing in basket";
+// }
 
 
 // echo "Hi1";
@@ -18,7 +18,7 @@ if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['produc
     //Make sure the quantity and product ID are integers and set variables to use later on.
     $basket_product_ID = (int)$_POST['product_id'];
     $basket_quantity = (int)$_POST['quantity'];
-    echo "Hello2";
+    // echo "Hello2";
 
     include 'DBlogin.php';
 
@@ -56,10 +56,17 @@ if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['produc
                 //Update the quantity of the product since the product is already in the basket.
                 $_SESSION['basket'][$basket_product_ID] += $basket_quantity;
                 $_SESSION['basketQuantity'] = count($_SESSION['basket']);
+
+                header('HTTP/1.1 200 OK');
+                header('Content-Type: application/json; charset=UTF-8');
+                die(json_encode('Exists'));;
             } else {
                 //Add the product to the basket, due to it not being in there already
                 $_SESSION['basket'][$basket_product_ID] = $basket_quantity;
                 $_SESSION['basketQuantity'] = count($_SESSION['basket']);
+                header('HTTP/1.1 200 OK');
+                header('Content-Type: application/json; charset=UTF-8');
+                die(json_encode('NewItem'));;
             }
         } else {
             //Add the first product to the basket - there were no products in the basket previously 
@@ -68,6 +75,7 @@ if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['produc
             $_SESSION['basketQuantity'] = count($_SESSION['basket']);
         }
     }
+    
 }
 //Remove from basket by looking at the URL paramater of remove (which is the product id), check to see if it is in the basket and is numerical
 if (isset($_POST['remove']) && is_numeric($_POST['remove']) && isset($_SESSION['basket']) && isset($_SESSION['basket'][$_POST['remove']])) {
@@ -75,15 +83,18 @@ if (isset($_POST['remove']) && is_numeric($_POST['remove']) && isset($_SESSION['
     // print_r($_SESSION['basket'][$_POST['remove']]);
     unset($_SESSION['basket'][$_POST['remove']]);
     $_SESSION['basketQuantity'] = count($_SESSION['basket']);
+    header('HTTP/1.1 200 OK');
+    header('Content-Type: application/json; charset=UTF-8');
+    die(json_encode('Removed'));;
 }
 
 
 if (isset($_POST['update'], $_POST['quantity']) && isset($_SESSION['basket'])) {
 
-    print_r($_SESSION['basket'][$_POST['update']]);
+    // print_r($_SESSION['basket'][$_POST['update']]);
 
     $_SESSION['basket'][$_POST['update']] = $_POST['quantity'];
 
-    print_r($_SESSION['basket'][$_POST['update']]);
+    // print_r($_SESSION['basket'][$_POST['update']]);
     $_SESSION['basketQuantity'] = count($_SESSION['basket']);
 }

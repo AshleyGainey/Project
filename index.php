@@ -31,7 +31,7 @@ for ($sliderProducts = 0; $sliderProducts < 6; $sliderProducts = $sliderProducts
         // Check it has not already in the array
         while ($foundInproductIDCarousel == 0) {
             for ($arrayFinding = 0; $arrayFinding < $sliderProducts; $arrayFinding++) {
-                if ($productIDCarousel[$arrayFinding] == $productID) {     
+                if ($productIDCarousel[$arrayFinding] == $productID) {
                     $foundInproductIDCarousel = 1;
                 }
             }
@@ -71,7 +71,7 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
 
     $productID = $productIDCarousel[$carouselProduct];
 
-    echo $productID;
+    // echo $productID;
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $productID);
 
@@ -90,8 +90,8 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
         // select productCarouselImageFileName, productCarouselImageAltText from product where productID = ?
     }
 }
-print_r($picturesURLCarousel);
-print_r($picturesAltCarousel);
+// print_r($picturesURLCarousel);
+// print_r($picturesAltCarousel);
 
 
 ?>
@@ -108,11 +108,9 @@ print_r($picturesAltCarousel);
 
     <title>Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> -->
 
-    <!--    Offline use -->
-    <script src="jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -122,7 +120,7 @@ print_r($picturesAltCarousel);
         <!-- <div class="triangle"></div> -->
         <div class="carousel">
             <div class="row visible-md visible-lg">
-                <div id="contenedor-slider" class="contenedor-slider">
+                <div id="contenedor-slider" class="contenedor-slider" onmouseenter="mouseEnter()" onmouseleave="mouseLeave()">
                     <div id="slider" class="slider">
                         <?php
                         for ($slider = 0; $slider < count($picturesURLCarousel); $slider++) {
@@ -135,10 +133,10 @@ print_r($picturesAltCarousel);
                     </div>
 
                     <div class="sliderArrows">
-                        <a href=" #" id="left">
+                        <a href="#" id="left" onclick="left()">
                             <img src="images/Home/Right Arrow.svg" alt="Next Slide" />
                         </a>
-                        <a href="#" id="right">
+                        <a href="#" id="right" onclick="right()">
                             <img src="images/Home/Right Arrow.svg" alt="Previous Slide" />
                         </a>
                     </div>
@@ -162,28 +160,28 @@ print_r($picturesAltCarousel);
                 </div>
             </div>
         </div>
-
-        <div class="cardArea">
-            <div class="cardContainer leftPart">
-                <div class="card">
-                    <a href="#"><img src="Images\Home\About Gadget Gainey.png" class="slider__img">
-                    </a>
+        <h1 id="showInd">
+            <div class="cardArea">
+                <div class="cardContainer leftPart">
+                    <div class="card">
+                        <a href="#"><img src="Images\Home\About Gadget Gainey.png" class="slider__img">
+                        </a>
+                    </div>
+                    <div class="writingOfCard">
+                        <a href="#">About Us<img src="images/Home/Right Arrow.svg" alt="About Us" /></a>
+                    </div>
                 </div>
-                <div class="writingOfCard">
-                    <a href="#">About Us<img src="images/Home/Right Arrow.svg" alt="About Us" /></a>
+
+                <div class="cardContainer rightPart">
+                    <div class="card">
+                        <a href="#"><img src="Images\Home\Contact Us (without logo).png" class="slider__img">
+                        </a>
+                    </div>
+                    <div class="writingOfCard">
+                        <a href="#">Contact Us<img src="images/Home/Right Arrow.svg" alt="Contact Us" /></a>
+                    </div>
                 </div>
             </div>
-
-            <div class="cardContainer rightPart">
-                <div class="card">
-                    <a href="#"><img src="Images\Home\Contact Us (without logo).png" class="slider__img">
-                    </a>
-                </div>
-                <div class="writingOfCard">
-                    <a href="#">Contact Us<img src="images/Home/Right Arrow.svg" alt="Contact Us" /></a>
-                </div>
-            </div>
-        </div>
     </div>
 
 
@@ -448,63 +446,65 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
 
     <script>
         var oldArea;
-        $(document).ready(function() {
-            // $('#MainContent').css('padding-bottom', $('footer').height() - 50);
-            prevSliderNum = 1;
-            changeIndictors();
-
-        });
-
+        var prevSliderNum = 1;
+        var sliderNum = 1;
+        changeIndictors();
         var timer;
-        var sliderNum;
-        var prevSliderNum
 
-        sliderNum = 1;
-        // set a timed function call to wait for product xml to load
-        timer = window.setInterval(function() {
 
-            // Check if products have loaded
-        }, 100);
+        var slider = document.getElementById("slider");
 
-        // Your $(document).ready() event script code goes below here -v
+        // debugger;
+       let content = document.getElementById('slider');
+        let firstChild = content.firstElementChild;
+        let lastChild = content.lastElementChild;
+        firstChild.before(lastChild);
 
-        // Variable for the slider itself
-        var slider = $('#slider');
+        // // debugger;
+        // console.log(firstChild);
+
 
 
 
 
         // move the last image to the first place
-        $('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
+        // $('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
         // display the first image with a margin of -100%
-        slider.css('margin-left', '-' + 100 + '%');
+        // slider.css('margin-left', '-' + 100 + '%');
+        document.getElementById("slider").style.marginLeft = "-100%";
+
+
+
 
         function moveNext() {
             prevSliderNum = sliderNum;
             sliderNum++;
-            slider.animate({
-                marginLeft: '-' + 200 + '%'
-            }, 700, function() {
-                $('#slider .slider__section:first').insertAfter('#slider .slider__section:last');
-                slider.css('margin-left', '-' + 100 + '%');
-            });
+
+            let content = document.getElementById('slider');
+            let firstChild = content.firstElementChild;
+            let lastChild = content.lastElementChild;
+            // debugger;
+            lastChild.after(firstChild);
+
+            document.getElementById("slider").style.marginLeft = "-100%";
 
             if (sliderNum === 7) {
                 sliderNum = 1;
             }
             changeIndictors()
-            clearInterval(interval);
         }
 
         function movePrev() {
             prevSliderNum = sliderNum;
             sliderNum--;
-            slider.animate({
-                marginLeft: 0
-            }, 700, function() {
-                $('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
-                slider.css('margin-left', '-' + 100 + '%');
-            });
+
+            let content = document.getElementById('slider');
+            let firstChild = content.firstElementChild;
+            let lastChild = content.lastElementChild;
+            // debugger;
+            firstChild.before(lastChild);
+
+            document.getElementById("slider").style.marginLeft = "-100%";
 
             if (sliderNum === 0) {
                 sliderNum = 6;
@@ -513,6 +513,7 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
             clearInterval(interval);
         }
 
+
         function autoplay() {
             interval = setInterval(function() {
                 moveNext();
@@ -520,34 +521,30 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
             }, 5000);
         }
 
-        $('.sliderArrows #right').on('click', function() {
+        autoplay();
+
+        function mouseEnter() {
+            clearInterval(interval);
+        }
+
+        function mouseLeave() {
+            clearInterval(interval);
+            autoplay();
+        }
+
+        function left() {
+            movePrev();
+            clearInterval(interval);
+            autoplay();
+            // console.log("sliderNum" + sliderNum);
+        }
+
+        function right() {
             moveNext();
             clearInterval(interval);
             autoplay();
-            console.log("sliderNum" + sliderNum);
-        });
-
-        $('#slider').mouseenter(function() {
-            clearInterval(interval);
-        });
-
-        $('#slider').mouseleave(function() {
-            autoplay();
-        });
-
-        $('.sliderArrows #left').on('click', function() {
-            movePrev();
-            autoplay();
-            console.log("sliderNum" + sliderNum);
-        });
-
-
-
-        autoplay();
-
-
-
-
+            // console.log("sliderNum" + sliderNum);
+        }
 
         function goToSlide(slide) {
             var currentSlide = sliderNum;
@@ -573,15 +570,16 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         }
 
         function changeIndictors() {
+            // debugger;
+            var previousIndictor = document.getElementById("sliderIndicatorsButton" + prevSliderNum);
+            // console.log(previousIndictor);
+            // debugger;
+            previousIndictor.style.backgroundColor = "#1a1862";
 
-
-            var even = document.getElementById("sliderIndicatorsButton" + prevSliderNum);
-            console.log(even);
-            even.style.backgroundColor = "#1a1862";
-
-            var even = document.getElementById("sliderIndicatorsButton" + sliderNum);
-            console.log(even);
-            even.style.backgroundColor = "red";
+            var sliderIndictors = document.getElementById("sliderIndicatorsButton" + sliderNum);
+            // debugger;
+            // console.log(sliderIndictors);
+            sliderIndictors.style.backgroundColor = "red";
         }
     </script>
 

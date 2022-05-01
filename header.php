@@ -21,9 +21,9 @@ if (!isset($_SESSION)) {
         <div id="searchSection">
             <div class="searchBarDiv">
                 <div class="search">
-                    <form action="Results.php">
-                        <input type="search" class="searchInput" placeholder="Search our catalogue..." autocomplete="off" name="search" value="">
-                        <button type="submit" class="searchButton">
+                    <form id="searchForm" action="Results.php" method="get" onsubmit="searchValidation()">
+                        <input type="search" class="searchInput" placeholder="Search our catalogue..." autocomplete="off" name="search" id="searchInput" required>
+                        <button type="submit" id="searchButton">
                             <i class="fa fa-search"></i>
                         </button>
                     </form>
@@ -39,6 +39,7 @@ if (!isset($_SESSION)) {
                     <?php
                     $quantity;
                     if (isset($_SESSION['basketQuantity'])) {
+
                         $quantity = $_SESSION['basketQuantity'];
                         //TODO Ashley: How to update this when something has been added.
                         echo "<span id='cartCount'>" . $quantity . "</span>";
@@ -61,16 +62,35 @@ if (!isset($_SESSION)) {
             ?>
             <div class="navToolButtons">
                 <i class="fa fa-user-circle-o"></i>
-                <h2><?php
-                    if (isset($_SESSION["userFirstName"])) {
-                        echo $_SESSION['userFirstName'];
-                    } else {
-                        echo "Account";
-                    }
-                    ?></h2>
+                <h2 id="userFirstName"><?php
+                                        if (isset($_SESSION["userFirstName"])) {
+                                            echo $_SESSION['userFirstName'];
+                                        } else {
+                                            echo "Account";
+                                        }
+                                        ?></h2>
 
 
             </div>
             </a>
         </div>
+        <script>
+            function searchValidation() {
+                event.preventDefault();
+                var search = document.getElementById("searchInput").value
+
+                if (search && search.length > 0) {
+                    document.getElementById("searchForm").submit()
+                }
+            }
+            var count = document.getElementById('cartCount');
+            if (count != null) {
+                count = count.innerHTML;
+                if (count > 0) {
+                    document.getElementById("cartCount").style.display = "inline";
+                } else {
+                    document.getElementById("cartCount").style.display = "none";
+                }
+            }
+        </script>
 </header>

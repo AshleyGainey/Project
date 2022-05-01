@@ -55,11 +55,7 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
     <title>Order Details - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!--    Offline use -->
-    <script src="jquery-3.4.1.min.js"></script>
 </head>
 
 <body>
@@ -82,7 +78,7 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
                 $orderID = $order['orderID'];
                 $totalPrice = $order['totalPrice'];
                 $DateAndTime = $order['DateAndTime'];
-                
+
                 $billingTitle = $order['billingTitle'];
                 $billingFirstName = $order['billingFirstName'];
                 $billingLastName = $order['billingLastName'];
@@ -118,7 +114,7 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
                     "</h1>
                         </div>
                         <div class='rightPart'>
-                            <h2>Total Price: £" . $totalPrice .
+                            <h2>Total Price: £" . number_format($totalPrice, 2) .
                     "</h1>
                         </div>
                     </div>
@@ -202,7 +198,7 @@ INNER JOIN product_image pi ON p.productID = pi.productID
                         <div class='billingAddress'>
                             <h2>Billing Address</h2>
                             <div class='nameBilling'>
-                                <h3 class='titleBilling'>." . $billingTitle . "</h3>
+                                <h3 class='titleBilling'>" . $billingTitle . "</h3>
                                 <h3 class='FirstNameBilling'>" . $billingFirstName . "</h3>
                                 <h3 class='FirstNameBilling'>" . $billingLastName . "</h3>
                             </div>
@@ -218,7 +214,7 @@ INNER JOIN product_image pi ON p.productID = pi.productID
                         <div class='deliveryAddress'>
                             <h2>Delivery Address</h2>
                             <div class='nameBilling'>
-                                 <h3 class='titleBilling'>." . $deliveryTitle . "</h3>
+                                 <h3 class='titleBilling'>" . $deliveryTitle . "</h3>
                                 <h3 class='FirstNameBilling'>" . $deliveryFirstName . "</h3>
                                 <h3 class='FirstNameBilling'>" . $deliveryLastName . "</h3>
                             </div>
@@ -568,7 +564,7 @@ INNER JOIN product_image pi ON p.productID = pi.productID
     .titleOfProduct {
         display: inline-block;
         float: left;
-        /* width: 80%; */
+        width: 80%;
 
         word-wrap: break-word;
     }

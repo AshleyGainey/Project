@@ -12,7 +12,7 @@ if (!$conn) {
 
 $query =
     'SELECT p.productID, p.productTitle, 
-p.productDescription, p.productPrice, pi.productImageFilename, pi.productImageAltText, pi.displayOrder
+p.productDescription, p.productPrice, p.productTotalQuantity, pi.productImageFilename, pi.productImageAltText, pi.displayOrder
         FROM product 
 AS p RIGHT JOIN product_image pi
  ON pi.productID = p.productID where p.productID = ' . $_GET['productID'];
@@ -32,7 +32,7 @@ if (empty($productInfo)) {
     $productDescription;
     $productDescriptionCorrect;
     $productPrice;
-
+    $productQuantity = 0;
     $productImage = [];
     $productAltText = [];
 
@@ -44,7 +44,7 @@ if (empty($productInfo)) {
             $productTitle = $product['productTitle'];
             $productDescription = $product['productDescription'];
             $productDescriptionCorrect = str_replace("\\n", "\n", $productDescription);
-
+            $productQuantity = $product['productTotalQuantity'];
             $productPrice = $product['productPrice'];
         }
 
@@ -72,11 +72,8 @@ mysqli_close($conn)
     <title>
         <?php echo $productTitle; ?> - Gadget Gainey Store </title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <!--    Offline use -->
-    <script src="jquery-3.4.1.min.js"></script>
 </head>
 
 <body>
@@ -104,10 +101,10 @@ mysqli_close($conn)
                         $arrLength = count($productImage);
                         if ($arrLength > 1) {
                             echo "<div class='sliderArrows'>
-                            <a id='left'>
+                            <a id='left' id='left' onclick='left()'>
                                 <img src='images/Home/Right Arrow.svg' alt='Next Slide' />
                             </a>
-                            <a id='right'>
+                            <a id='right' id='right' onclick='right()'>
                                 <img src='images/Home/Right Arrow.svg' alt='Previous Slide' />
                             </a>
                         </div>" ?>
@@ -138,10 +135,34 @@ mysqli_close($conn)
                     <h1 class="productPrice">£<?php echo $productPrice ?></h2>
                         <h3 class="productFreeDelivery">Free Delivery & Returns</h3>
                 </div>
-                <form id="addToProductForm" action="/account_welcome.php" method="post">
+                <form id="addToProductForm" action="/account_welcome.php" method="post" onclick="addToBasket()">
                     <div id="AddtoBasketButtonDiv">
-                        <button id="AddToBasketButton" type="submit" class="btn btn-success">
-                            <i class="fa fa-shopping-basket"></i>Add to Basket</button>
+                        <?php
+                        $basketItem = 0;
+                        if (isset($_SESSION['basket'])) {
+                            if (count($_SESSION['basket']) > 0) {
+                                if (!empty($_SESSION['basket'][$_GET['productID']]))
+                                    $basketItem = $_SESSION['basket'][$_GET['productID']];
+                            }
+                        }
+
+
+                        $totalQuantity = $productQuantity - $basketItem;
+                        if ($totalQuantity == 0) {
+                            // echo "OutOfStock";
+                            echo "<button id='AddToBasketButton' type='submit' class='btn btn-success disabled'>
+                            <i class='fa fa-shopping-basket'></i><h5 id='basketText'>Out Of Stock</h5></button>";
+                        } else if ($basketItem > 9) {
+                            // echo "QuantityLimit";
+                            echo "<button id='AddToBasketButton' type='submit' class='btn btn-success disabled'>
+                            <i class='fa fa-shopping-basket'></i><h5 id='basketText'>Quantity Limit hit</h5></button>";
+                        } else {
+                            // echo "NormalBasket";
+                            echo "<button id='AddToBasketButton' type='submit' class='btn btn-success'>
+                            <i class='fa fa-shopping-basket'></i><h5 id='basketText'>Add to Basket</h5></button>";
+                        }
+                        ?>
+
                     </div>
                     <p id="regMessage"></p>
                 </form>
@@ -174,6 +195,10 @@ mysqli_close($conn)
         white-space: pre-wrap;
     }
 
+    #regMessage {
+        text-align: center;
+        margin-top: 20px;
+    }
 
 
 
@@ -243,11 +268,9 @@ mysqli_close($conn)
     }
 
     #AddToBasketButton {
-        background-color: #1a1862;
         padding: 10px;
         width: 200px;
         border: none;
-        cursor: pointer;
 
         color: white;
         font-size: 20px;
@@ -255,6 +278,16 @@ mysqli_close($conn)
         border-radius: 10px;
         text-align: center;
         margin: 0 auto;
+    }
+
+    .btn-success {
+        cursor: pointer;
+        background-color: #1a1862;
+    }
+
+    .disabled {
+        background-color: #333333;
+        cursor: not-allowed;
     }
 
     #AddToBasketButton i {
@@ -276,7 +309,7 @@ mysqli_close($conn)
 
 
     .row {
-        display: inline-block;
+        display: flex;
     }
 
 
@@ -515,6 +548,7 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         transform: translateY(-50%);
     }
 
+
     /* Old Traingle method
 
         .triangle {
@@ -592,71 +626,116 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
 <script>
     var oldArea;
     var timer;
-    var sliderNum;
-    var prevSliderNum
-    var picturesLength
-    $(document).ready(function() {
-        // $('#MainContent').css('padding-bottom', $('footer').height() - 50);
-        prevSliderNum = 1;
-        picturesLength = "<?php echo $arrLength ?>";
-        picturesLength = parseInt(picturesLength);
+    var sliderNum = 1;
+    var prevSliderNum = 1;
+    var picturesLength;
+    changeIndictors();
+    var timer;
 
-        if (picturesLength > 1) {
-            changeIndictors()
-        }
+    var productQuantityTimes = 0;
+    var productQuantityAfterLoad = 0;
+    var productQuantityBeforeLoad = <?php
+                                    if (isset($_SESSION['basket'])) {
+                                        if (count($_SESSION['basket']) > 0) {
+                                            if (!empty($_SESSION['basket'][$_GET['productID']])) {
+                                                echo $_SESSION['basket'][$_GET['productID']];
+                                            } else {
+                                                echo 0;
+                                            }
+                                        } else {
+                                            echo 0;
+                                        }
+                                    } else {
+                                        echo 0;
+                                    }
+                                    ?>;
 
 
-        let lengthOfSlider = picturesLength * 100;
 
-        let result = lengthOfSlider + "%";
+    var element = document.getElementById("AddToBasketButton");
+    if (element.classList.contains("disabled")) {
+        document.getElementById("AddToBasketButton").disabled = true;
+    }
 
-        // console.log(picturesLength)
-        // Resolves issue with only one image then get rid of the margin left -100 (no image will be shown after, so don't need a margin left)
-        if (picturesLength == 1) {
-            document.getElementById("slider").style.marginLeft = 0;
-        }
-        document.getElementById("slider").style.width = result
-        // changeIndictors();
-    });
 
-    sliderNum = 1;
+    // $('#MainContent').css('padding-bottom', $('footer').height() - 50);
+    prevSliderNum = 1;
+    picturesLength = <?php echo $arrLength ?>;
 
-    var slider = $('#slider');
+    if (picturesLength > 1) {
+        changeIndictors()
+    }
+
+
+    let lengthOfSlider = picturesLength * 100;
+
+    let result = lengthOfSlider + "%";
+
+    // console.log(picturesLength)
+    // Resolves issue with only one image then get rid of the margin left -100 (no image will be shown after, so don't need a margin left)
+    if (picturesLength == 1) {
+        document.getElementById("slider").style.marginLeft = 0;
+    }
+    document.getElementById("slider").style.width = result
+    // changeIndictors();
+
+
+
+
+    var slider = document.getElementById("slider");
+
+    // debugger;
+    let content = document.getElementById('slider');
+    let firstChild = content.firstElementChild;
+    let lastChild = content.lastElementChild;
+    firstChild.before(lastChild);
+
+    // // debugger;
+    // console.log(firstChild);
+
 
 
 
 
     // move the last image to the first place
-    $('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
+    // $('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
     // display the first image with a margin of -100%
-    slider.css('margin-left', '-' + 100 + '%');
+    // slider.css('margin-left', '-' + 100 + '%');
+    document.getElementById("slider").style.marginLeft = "-100%";
+
+
+
 
     function moveNext() {
         prevSliderNum = sliderNum;
         sliderNum++;
-        slider.animate({
-            marginLeft: '-' + 200 + '%'
-        }, 700, function() {
-            $('#slider .slider__section:first').insertAfter('#slider .slider__section:last');
-            slider.css('margin-left', '-' + 100 + '%');
-        });
+
+        let content = document.getElementById('slider');
+        let firstChild = content.firstElementChild;
+        let lastChild = content.lastElementChild;
+        // debugger;
+        lastChild.after(firstChild);
+
+        document.getElementById("slider").style.marginLeft = "-100%";
+
         var picturePath = picturesLength + 1;
         if (sliderNum === picturePath) {
             sliderNum = 1;
         }
-        // console.log(document.getElementById("slider").style.width);
         changeIndictors()
     }
 
     function movePrev() {
         prevSliderNum = sliderNum;
         sliderNum--;
-        slider.animate({
-            marginLeft: 0
-        }, 700, function() {
-            $('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
-            slider.css('margin-left', '-' + 100 + '%');
-        });
+
+        let content = document.getElementById('slider');
+        let firstChild = content.firstElementChild;
+        let lastChild = content.lastElementChild;
+        // debugger;
+        firstChild.before(lastChild);
+
+        document.getElementById("slider").style.marginLeft = "-100%";
 
         if (sliderNum === 0) {
             sliderNum = picturesLength;
@@ -664,18 +743,15 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         changeIndictors()
     }
 
-
-
-    $('.sliderArrows #right').on('click', function() {
-        moveNext();
-        console.log("sliderNum" + sliderNum);
-    });
-
-
-    $('.sliderArrows #left').on('click', function() {
+    function left() {
         movePrev();
-        console.log("sliderNum" + sliderNum);
-    });
+        // console.log("sliderNum" + sliderNum);
+    }
+
+    function right() {
+        moveNext();
+        // console.log("sliderNum" + sliderNum);
+    }
 
 
 
@@ -704,70 +780,98 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
     }
 
     function changeIndictors() {
-        var even = document.getElementById("sliderIndicatorsButton" + prevSliderNum);
-        console.log(even);
-        even.style.backgroundColor = "#1a1862";
+        // debugger;
+        var previousIndictor = document.getElementById("sliderIndicatorsButton" + prevSliderNum);
+        // console.log(previousIndictor);
+        // debugger;
+        previousIndictor.style.backgroundColor = "#1a1862";
 
-        var even = document.getElementById("sliderIndicatorsButton" + sliderNum);
-        console.log(even);
-        even.style.backgroundColor = "red";
+        var sliderIndictors = document.getElementById("sliderIndicatorsButton" + sliderNum);
+        // debugger;
+        // console.log(sliderIndictors);
+        sliderIndictors.style.backgroundColor = "red";
+    }
+    var productFromDB = <?php echo $productQuantity ?>;
+
+    function addToBasket() {
+        event.preventDefault();
+
+        if (document.getElementById('AddToBasketButton').disabled == false) {
+            var productID = "<?php echo $productID ?>";
+            console.log(productID);
+            let xhr = new XMLHttpRequest();
+
+            xhr.open('POST', "basket_process.php", true)
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send("product_id=" + productID + "&quantity=" + 1);
+
+
+            // Create an event to receive the return.
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById("regMessage").style.display = "block";
+
+                    document.getElementById('regMessage').innerHTML = "Added to basket"
+
+                    document.getElementById('regMessage').style.opacity = "1";
+                    // document.getElementById('regMessage').style.removeProperty("opacity");
+                    document.getElementById('regMessage').style.filter = "alpha(opacity='1')";
+                    setTimeout(function() {
+                        fade(document.getElementById('regMessage'));
+                    }, 2000);
+
+                    var result = JSON.parse(xhr.responseText);
+
+                    //TODO AShley: Doesn't work
+                    if (result == "NewItem") {
+                        var basketcount = document.getElementById('cartCount').innerHTML;
+                        basketcount++;
+                        if (basketcount > 0) {
+                            document.getElementById("cartCount").style.display = "inline";
+                        } else {
+                            document.getElementById("cartCount").style.display = "none";
+                        }
+                        document.getElementById("cartCount").innerHTML = basketcount;
+                    }
+
+                    productQuantityAfterLoad++;
+
+                    var productQuantityTotal = productQuantityBeforeLoad + productQuantityAfterLoad;
+
+
+                    if (productQuantityTotal === 10) {
+                        console.log("limit");
+                        var element = document.getElementById("AddToBasketButton");
+                        element.classList.add("disabled");
+                        document.getElementById('basketText').innerHTML = "Quantity Limit hit";
+                        document.getElementById("AddToBasketButton").disabled = true;
+
+                    } else if (productFromDB === productQuantityTotal) {
+                        console.log("NowOutOfStock");
+                        var element = document.getElementById("AddToBasketButton");
+                        element.classList.add("disabled");
+                        document.getElementById('basketText').innerHTML = "Out Of Stock";
+                        document.getElementById("AddToBasketButton").disabled = true;
+
+                    } else {
+                        console.log("Fine");
+                    }
+                }
+            }
+        }
     }
 
 
-
-    $("#addToProductForm").submit(function(event) {
-        event.preventDefault();
-
-        var productID = "<?php echo $productID ?>";
-        console.log(productID);
-
-
-        $.ajax({
-            url: "basket_process.php", //the page containing php script
-            type: "post", //request type,
-            dataType: 'json',
-            data: {
-                product_id: productID,
-                quantity: 1
-            },
-            success: function(result) {
-                debugger;
-                // document.getElementById("regMessage").style.display = "block";
-                // document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-                // console.log(result.abc);
+    function fade(element) {
+        var op = 1; // initial opacity
+        var timer = setInterval(function() {
+            if (op <= 0.1) {
+                clearInterval(timer);
+                element.style.display = 'none';
             }
-        });
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // //Do more validation with Ajax this time
-        // $("#regMessage").load("basket_process.php", {
-        //     product_id: productID,
-        //     quantity: 1
-        // }, function(response, status, xhr) {
-        //     debugger;
-        //     document.getElementById("regMessage").style.display = "block";
-        //     document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-
-        //     // if (status == "error") {
-        //     //     // var message = "An error occured while trying to do this action.";
-        //     //     document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-        //     // }
-        //     if (status == "success") {
-        //         // window.location.href = "account_welcome.php";
-        //     }
-        // })
-
-
-    });
+            element.style.opacity = op;
+            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+            op -= op * 0.1;
+        }, 10);
+    }
 </script>

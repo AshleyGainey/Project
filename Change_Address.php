@@ -23,7 +23,7 @@ $stmt->execute();
 
 $res = $stmt->get_result();
 $mainaddressDB = mysqli_fetch_all($res, MYSQLI_ASSOC);
-print_r($mainaddressDB);
+// print_r($mainaddressDB);
 
 $userTitle = $mainaddressDB[0]['title'];
 $userFirstName = $mainaddressDB[0]['firstName'];
@@ -46,11 +46,7 @@ $userPostCode = $mainaddressDB[0]['postcode'];
 
     <title>Change Address Details - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!--    Offline use -->
-    <script src="jquery-3.4.1.min.js"></script>
 </head>
 
 <body>
@@ -227,9 +223,9 @@ $userPostCode = $mainaddressDB[0]['postcode'];
         /* display: inline-block; */
     }
 
-    input[type="text"] {
+    /* input[type="text"] {
         padding: 9%;
-    }
+    } */
 
     .buttons {
         margin-top: 50px;
@@ -425,29 +421,33 @@ $userPostCode = $mainaddressDB[0]['postcode'];
             showHideMessage(true, outputMessage);
             return false;
         }
-        $.ajax({
-            url: "change_details.php",
-            type: "POST",
-            data: {
-                "title": title,
-                "firstName": firstName,
-                "lastName": lastName,
-                "addressLine1": addressLine1,
-                "addressLine2": addressLine2,
-                "townCity": townCity,
-                "county": county,
-                "postcode": postCode,
-                "process": "Address"
-            },
-            success: function(result) {
+
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', "change_details.php", true)
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("title=" + title +
+            "&firstName=" + firstName +
+            "&lastName=" + lastName +
+            "&addressLine1=" + addressLine1 +
+            "&addressLine2=" + addressLine2 +
+            "&townCity=" + townCity +
+            "&county=" + county +
+            "&postcode=" + postCode +
+            "&process=" + "Address"
+        );
+
+
+        // Create an event to receive the return.
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
                 window.location.href = "account_welcome.php";
-                // document.getElementById("regMessage").style.display = "block";
-                // document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-                // console.log(result.abc);
-            },
-            error: function(data) {
-                $("#regMessage").text(data.responseText);
+            } else if (xhr.readyState == 4 && (xhr.status == 400 || xhr.status == 500)) {
+                    document.getElementById("regMessage").style.display = "block";
+                    document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText;
+                    console.log(xhr.responseText);
+                }
             }
-        });
-    }
+        }
 </script>

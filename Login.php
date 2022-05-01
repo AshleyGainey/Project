@@ -28,11 +28,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 
     <title>Login/Register - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!--    Offline use -->
-    <script src="jquery-3.4.1.min.js"></script>
 </head>
 
 <body>
@@ -43,14 +39,14 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
             <div class="button location">
                 <div id="LoginButton" class="buttonContainer selected">
                     <div class="writingOfButton">
-                        <a href="#Login" onclick="ShowSection(false, true)">Login</a>
+                        <a href="#Login" onclick="ShowSection(false)">Login</a>
                     </div>
                 </div>
             </div>
             <div class="button location">
                 <div id="RegisterButton" class="buttonContainer unselected">
                     <div class="writingOfButton">
-                        <a href="#Register" onclick="ShowSection(true, true)">Register</a>
+                        <a href="#Register" onclick="ShowSection(true)">Register</a>
                     </div>
                 </div>
             </div>
@@ -58,10 +54,10 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 
         <div class="allElementss" id="Login">
             <div class="allElements">
-                <form id="LoginForm" action="/account_welcome.php" method="post">
+                <form id="LoginForm" action="/account_welcome.php" method="post" onsubmit="loginFormSubmit()">
                     <div class="cardContainer">
                         <p>Email</p>
-                        <input id="loginEmail" type="text" class="searchInput" placeholder="Email">
+                        <input id="loginEmail" type="email" class="searchInput" placeholder="Email">
                     </div>
                     <div class="cardContainer">
                         <p>Password</p>
@@ -75,14 +71,14 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         <div class="allElementss" id="Register">
             <div class="allElements">
                 <h5>Account Details</h5>
-                <form action="/account_welcome.php" id="RegisterForm" method="post">
+                <form action="/account_welcome.php" id="RegisterForm" method="post" onsubmit="registerFormSubmit()">
                     <div class="cardContainer inline">
                         <p>Email<span class="required">*</span></p>
-                        <input id="regEmail" type="text" class="searchInput" placeholder="Email" minlength=4 maxlength=128>
+                        <input id="regEmail" type="email" class="searchInput" placeholder="Email" minlength=4 maxlength=128>
                     </div>
                     <div class="cardContainer inline">
                         <p>Password<span class="required">*</span></p>
-                        <input id="regPassword" type="password" class="searchInput" placeholder="Password" minlength=12 maxlength=128>
+                        <input id="regPassword" type="password" class="searchInput" placeholder="Password" minlength=12 maxlength=128 onkeyup="keyUpRegPassword()">
                     </div>
                     <div id="passwordValidationMessage">
                         <h2>Password must contain at least:</h2>
@@ -95,7 +91,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                     </div>
                     <div class="cardContainer floatRight">
                         <p>Confirm Password<span class="required">*</span></p>
-                        <input id="regConfirmPassword" type="password" class="searchInput" placeholder="Confirm Password" minlength=12 maxlength=128>
+                        <input id="regConfirmPassword" type="password" class="searchInput" placeholder="Confirm Password" onfocusout="focusOutRegConfirmPassword()" onkeyup="keyUpRegConfirmPassword()" minlength=12 maxlength=128>
                     </div>
                     <div id="confirmPasswordValidationMessage">
                         <p id="passwordMatch" class="hide">Passwords do not match</p>
@@ -285,10 +281,10 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         height: 30px;
         font-size: 1.5em;
         border-radius: 25px;
-        padding-top: 2%;
-        padding-bottom: 2%;
-        padding-right: 2%;
-        padding-left: 3%;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-right: 2px;
+        padding-left: 3px;
         background: none;
         font-family: Century-Gothic, sans-serif;
         color: #FFFFFF;
@@ -365,19 +361,15 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 </style>
 
 <script>
-    $(document).ready(function() {
-        activeModes();
-        // isAlreadyLoggedIn();
-    });
-
+    activeModes();
     var passwordRequirementMet = 0;
 
 
     //If user clicks on either buttons (Register/Login) then change the form and show which
     // form is active by the colour of the button
-    function ShowSection(ShowRegister, animation) {
-        var show;
-        var hide;
+    function ShowSection(ShowRegister) {
+        var show = null;
+        var hide = null;
 
         if (ShowRegister === true) {
             show = "Register";
@@ -388,19 +380,23 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
             hide = "Register";
         }
 
-        if (animation) {
-            $("#" + hide).hide(500);
-            $("#" + show).delay(500).show(500);
-        } else {
-            $("#" + hide).hide();
-            $("#" + show).show();
-        }
 
-        $("#" + hide + "Button").removeClass("selected");
-        $("#" + hide + "Button").addClass("unselected");
+        var hideSection = document.getElementById(hide);
+        hideSection.style.display = 'none';
 
-        $("#" + show + "Button").addClass("selected");
-        $("#" + show + "Button").removeClass("unselected");
+
+        var showSection = document.getElementById(show);
+        showSection.style.display = 'flex';
+
+
+        var hideButton = document.getElementById(hide + "Button");
+        hideButton.classList.add("unselected");
+        hideButton.classList.remove("selected");
+
+
+        var show = document.getElementById(show + "Button");
+        show.classList.add("selected");
+        show.classList.remove("unselected");
     }
 
 
@@ -413,15 +409,15 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         if (afterURL.length != 0) {
             //Show Register if #Register
             if (afterURL == "Register") {
-                ShowSection(true, false);
+                ShowSection(true);
 
             } else {
                 //Show Login if anything other than Register
-                ShowSection(false, false);
+                ShowSection(false);
             }
         } else {
             // Show Login if nothing there
-            ShowSection(false, false);
+            ShowSection(false);
         }
     }
 
@@ -430,141 +426,144 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 
 
     //If the password match is shown and the confirm password is the same as the password, then remove the error
-    $("#regConfirmPassword").keyup(function() {
+    function keyUpRegConfirmPassword() {
         var passwordText = document.getElementById("regPassword").value;
         var confirmPasswordText = document.getElementById("regConfirmPassword").value;
         if (passwordText == confirmPasswordText) {
-            $("#passwordMatch").addClass("hide");
-            $("#passwordMatch").removeClass("show");
+            var element = document.getElementById("passwordMatch");
+            element.classList.add("hide");
+            element.classList.remove("show");
         }
-    });
-
-    //If the password match is shown and the confirm password is the same as the password, then remove the error
-    $("#regPassword").keyup(function() {
-        var passwordText = document.getElementById("regPassword").value;
-        var confirmPasswordText = document.getElementById("regConfirmPassword").value;
-        if (passwordText == confirmPasswordText) {
-            $("#passwordMatch").addClass("hide");
-            $("#passwordMatch").removeClass("show");
-        }
-    });
-
-
+    }
 
     // Show/Hide the password doesn't match error based on what the password and the confirm password text is.
-    $("#regConfirmPassword").focusout(function() {
+    function focusOutRegConfirmPassword() {
         var passwordText = document.getElementById("regPassword").value;
         var confirmPasswordText = document.getElementById("regConfirmPassword").value;
 
 
         if (passwordText !== confirmPasswordText) {
-            $("#passwordMatch").removeClass("hide");
-            $("#passwordMatch").addClass("show");
+            var element = document.getElementById("passwordMatch");
+            element.classList.remove("hide");
+            element.classList.add("show");
         } else {
-            $("#passwordMatch").addClass("hide");
-            $("#passwordMatch").removeClass("show");
+            var element = document.getElementById("passwordMatch");
+            element.classList.add("hide");
+            element.classList.remove("show");
         }
-    });
+    }
 
-
-
-    //When the user presses a key on regPassword then do the following
-    $("#regPassword").keyup(function() {
+    function keyUpRegPassword() {
         var passwordText = document.getElementById("regPassword").value;
         var confirmPasswordText = document.getElementById("regConfirmPassword").value;
 
         //Check if 5 Uppercase or lowercase letters are in the textbox
         if (passwordText.match(/[a-zA-Z]{5}/g)) {
-            $("#lowerCase").removeClass("invalid");
-            $("#lowerCase").addClass("valid");
+            var lowerCase = document.getElementById("lowerCase");
+            lowerCase.classList.remove("invalid");
+            lowerCase.classList.add("valid");
             passwordRequirementMet++;
         } else {
-            $("#lowerCase").removeClass("valid");
-            $("#lowerCase").addClass("invalid");
+            var lowerCase = document.getElementById("lowerCase");
+            lowerCase.classList.remove("valid");
+            lowerCase.classList.add("invalid");
             passwordRequirementMet--;
         }
 
         //Check if Numbers are in the textbox
         if (passwordText.match(/[0-9]{2}/g)) {
-            $("#number").removeClass("invalid");
-            $("#number").addClass("valid");
+            var number = document.getElementById("number");
+            number.classList.remove("invalid");
+            number.classList.add("valid");
             passwordRequirementMet++;
         } else {
-            $("#number").removeClass("valid");
-            $("#number").addClass("invalid");
+            var number = document.getElementById("number");
+            number.classList.remove("valid");
+            number.classList.add("invalid");
             passwordRequirementMet--;
         }
 
         //Check if the Password hits the min length
         if (passwordText.length >= 12) {
-            $("#minLength").removeClass("invalid");
-            $("#minLength").addClass("valid");
+            var minLength = document.getElementById("minLength");
+            minLength.classList.remove("invalid");
+            minLength.classList.add("valid");
             passwordRequirementMet++;
         } else {
-            $("#minLength").removeClass("valid");
-            $("#minLength").addClass("invalid");
+            var minLength = document.getElementById("minLength");
+            minLength.classList.remove("valid");
+            minLength.classList.add("invalid");
             passwordRequirementMet--;
         }
 
         //Check if the Password doesn't hit the max length
         if (passwordText.length < 128) {
-            $("#maxLength").removeClass("invalid");
-            $("#maxLength").addClass("valid");
+            var maxLength = document.getElementById("maxLength");
+            maxLength.classList.remove("invalid");
+            maxLength.classList.add("valid");
             passwordRequirementMet++;
         } else {
-            $("#maxLength").removeClass("valid");
-            $("#maxLength").addClass("invalid");
+            var maxLength = document.getElementById("maxLength");
+            maxLength.classList.remove("valid");
+            maxLength.classList.add("invalid");
             passwordRequirementMet--;
         }
 
         if (confirmPasswordText != "") {
             if (passwordText !== confirmPasswordText) {
-                $("#passwordMatch").removeClass("hide");
-                $("#passwordMatch").addClass("show");
+                var passwordMatch = document.getElementById("passwordMatch");
+                passwordMatch.classList.remove("hide");
+                passwordMatch.classList.add("show");
             } else {
-                $("#passwordMatch").addClass("hide");
-                $("#passwordMatch").removeClass("show");
+                var passwordMatch = document.getElementById("passwordMatch");
+                passwordMatch.classList.remove("show");
+                passwordMatch.classList.add("hide");
             }
         }
-    });
+    }
 
 
-    $("#RegisterForm").submit(function(event) {
+    function registerFormSubmit() {
 
         event.preventDefault();
-        var emailAddress = $("#regEmail").val();
-        var password = $("#regPassword").val();
+        var emailAddress = document.getElementById("regEmail").value;
+        var password = document.getElementById("regPassword").value;
+        var confirmPassword = document.getElementById("regConfirmPassword").value;
+
 
         //Personal Information values
-        var title = $("#regTitle").val();
-        var firstName = $("#regFirstName").val();
-        var lastName = $("#regLastName").val();
-        var addressLine1 = $("#regAddressLine1").val();
-        var addressLine2 = $("#regAddressLine2").val();
-        var townCity = $("#regTownCity").val();
-        var county = $("#regCounty").val();
-        var postcode = $("#regPostCode").val();
-        //Do more validation with Ajax this time
-        $("#regMessage").load("passwordCheck.php", {
-            emailAddress: emailAddress,
-            password: password,
-            title: title,
-            firstName: firstName,
-            lastName: lastName,
-            addressLine1: addressLine1,
-            addressLine2: addressLine2,
-            townCity: townCity,
-            county: county,
-            postcode: postcode,
-            Register: true
-        }, function(response, status, xhr) {
-            debugger;
-            if (status == "error") {
-                var message = "An error occured while registering. Please see below :";
-                document.getElementById("regMessage").style.display = "block";
-                $("#regMessage").html(message + xhr.status + "" + xhr.statusText)
-            }
-            if (status == "success") {
+        var title = document.getElementById("regTitle").value;
+        var firstName = document.getElementById("regFirstName").value;
+        var lastName = document.getElementById("regLastName").value;
+        var addressLine1 = document.getElementById("regAddressLine1").value;
+        var addressLine2 = document.getElementById("regAddressLine2").value;
+        var townCity = document.getElementById("regTownCity").value;
+        var county = document.getElementById("regCounty").value;
+        var postcode = document.getElementById("regPostCode").value;
+        var title = document.getElementById("regTitle").value;
+
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', "passwordCheck.php", true)
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("emailAddress=" + emailAddress +
+            "&password=" + password +
+            "&confirmPassword=" + confirmPassword +
+            "&title=" + title +
+            "&firstName=" + firstName +
+            "&lastName=" + lastName +
+            "&addressLine1=" + addressLine1 +
+            "&addressLine2=" + addressLine2 +
+            "&townCity=" + townCity +
+            "&county=" + county +
+            "&postcode=" + postcode +
+            "&Register=" + true);
+
+
+        // Create an event to receive the return.
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
                 var goTocheckout = "<?php
                                     if (isset($_SESSION['comeBackToCheckOut'])) {
                                         echo true;
@@ -581,35 +580,35 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                 } else {
                     window.location.href = "account_welcome.php#Register";
                 }
-            }
-        })
-    });
-
-
-
-
-
-    $("#LoginForm").submit(function(event) {
-        event.preventDefault();
-        var emailAddress = $("#loginEmail").val();
-        var password = $("#loginPassword").val();
-        //Do more validation with Ajax this time
-        $("#regMessage").load("passwordCheck.php", {
-            emailAddress: emailAddress,
-            password: password,
-            Login: true
-        }, function(response, status, xhr) {
-            if (status == "error") {
-                // var message = "An error occured while trying to do this action.";
+            } else {
+                var message = "An error occured while registering. Please see below :";
                 document.getElementById("regMessage").style.display = "block";
-                document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+                document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText;
             }
-            if (status == "success") {
-                debugger;
+        }
+    }
 
 
+
+
+
+    function loginFormSubmit() {
+        event.preventDefault();
+        var emailAddress = document.getElementById("loginEmail").value;
+        var password = document.getElementById("loginPassword").value;
+
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', "passwordCheck.php", true)
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("emailAddress=" + emailAddress + "&password=" + password + "&Login=" + true);
+
+
+        // Create an event to receive the return.
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
                 var goTocheckout = "<?php echo $comeBackToCheckOut ?>";
-
 
                 if (goTocheckout) {
                     <?php
@@ -620,7 +619,10 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                 } else {
                     window.location.href = "account_welcome.php#Login";
                 }
+            } else {
+                document.getElementById("regMessage").style.display = "block";
+                document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
             }
-        })
-    });
+        }
+    }
 </script>
