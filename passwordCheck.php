@@ -6,18 +6,19 @@ if (!isset($_SESSION)) {
 //If registering
 if (isset($_POST['Register'])) {
     include 'DBlogin.php';
-    $email =    $_POST['emailAddress'];
-    $title = $_POST['title'];
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
-    $addressLine1 = $_POST['addressLine1'];
-    $addressLine2 = $_POST['addressLine2'];
-    $townCity =    $_POST['townCity'];
-    $county =    $_POST['county'];
-    $postcode =    $_POST['postcode'];
-
+    $email =  trim($_POST['emailAddress']);
+    $title = trim($_POST['title']);
+    $firstName = trim($_POST['firstName']);
+    $lastName = trim($_POST['lastName']);
+    $addressLine1 = trim($_POST['addressLine1']);
+    $addressLine2 = trim($_POST['addressLine2']);
+    $townCity =    trim($_POST['townCity']);
+    $county =   trim($_POST['county']);
+    //Remove any space (for instance 'L1 34Q') from Postcode 
+    $postcode = str_replace(' ', '', $_POST['postcode']);
+    // $postcode = trim($_POST['password']);
     $password = $_POST['password'];
-    $confirmPassword = $_POST['confirmPassword'];
+    $confirmPassword = trim($_POST['confirmPassword']);
 
     //Server Side checking to see if any feilds  and Confirm Password is correct
     if (empty($email)) {
@@ -82,16 +83,50 @@ if (isset($_POST['Register'])) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password length is not strong enough. It must be a minimum of 12 characters.'));
-        // Server Side checking to see if Password has enough complexity (second check, less than 128 characters)
     }
-
 
     if (strlen($password) > 127) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password length is too strong. It must be within 128 characters.'));
-        // Server Side checking to see if Password has enough complexity (third check, at least 5 letters)
     }
+
+
+    if (strlen($firstName) < 2) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - First Name length is too weak. It must be a minimum of 2 characters.'));
+    }
+
+    if (strlen($firstName) > 255) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - First Name length is too strong. It must be a maximum of 255 characters.'));
+    }
+    if (!(preg_match('/^\D+$/', $firstName))) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Incorrect Format for First Name. First Name should not contain numbers'));
+    }
+
+    if (strlen($lastName) < 2) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Last Name length is too weak. It must be a minimum of 2 characters.'));
+    }
+
+    if (strlen($lastName) > 255) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Last Name length is too strong. It must be a maximum of 255 characters.'));
+    }
+
+    if (!(preg_match('/^\D+$/', $lastName))) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Incorrect Format for Last Name. Last Name should not contain numbers'));
+    }
+
     if (!(preg_match('/[a-zA-Z]{5}/', $password))) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -103,6 +138,55 @@ if (isset($_POST['Register'])) {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password complexity has not been met. The password needs to have at least 2 numbers'));
     }
+
+    if (strlen($addressLine1) < 2) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Address Line 1 length is too weak. It must be a minimum of 2 characters.'));
+    }
+
+    if (strlen($addressLine1) > 255) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Address Line 1 length is too strong. It must be a maximum of 255 characters.'));
+    }
+
+    if (strlen($addressLine2) < 2) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Address Line 2 length is too weak. It must be a minimum of 2 characters.'));
+    }
+
+    if (strlen($addressLine2) > 255) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Address Line 2 length is too strong. It must be a maximum of 255 characters.'));
+    }
+
+    if (strlen($country) < 2) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - County length is too weak. It must be a minimum of 2 characters.'));
+    }
+
+    if (strlen($country) > 255) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - County length is too strong. It must be a maximum of 255 characters.'));
+    }
+
+    if (strlen($postcode) < 2) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Postcode length is too weak. It must be a minimum of 2 characters.'));
+    }
+
+    if (strlen($postcode) > 8) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Postcode length is too strong. It must be a maximum of 8 characters.'));
+    }
+
     //Server Side checking to see if Password and Confirm Password is correct
     if ($password !== $confirmPassword) {
         header('HTTP/1.1 400 Bad Request Server');
@@ -172,7 +256,8 @@ VALUES (?, ?, ?, ?)");
     $_SESSION['userLastName'] = $lastName;
 } else if (isset($_POST['Login'])) {
     include 'DBlogin.php';
-    $email =    $_POST['emailAddress'];
+    $email = trim($_POST['emailAddress']);
+
     $password = $_POST['password'];
 
     if (empty($email)) {
@@ -191,7 +276,32 @@ VALUES (?, ?, ?, ?)");
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Incorrect Format for email. Please fill it out correctly. \'FirstPartOfEmail@EmailDomain.com\'. '));
-    } 
+    }
+
+
+    if (strlen($email) < 4) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Email length is too weak. It must be a minimum of 4 characters.'));
+    }
+
+    if (strlen($email) > 255) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Email length is too strong. It must be a maximum of 255 characters.'));
+    }
+
+    if (strlen($password) < 12) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Password length is too weak. It must be a minimum of 12 characters.'));
+    }
+
+    if (strlen($password) > 128) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Password length is too strong. It must be a maximum of 128 characters.'));
+    }
 
 
     $conn = mysqli_connect($host, $user, $pass, $database);
@@ -203,11 +313,11 @@ VALUES (?, ?, ?, ?)");
         echo 'Connection error: ' . mysqli_connect_error();
     }
 
-   
-    $query = 'SELECT u.userID, u.userEmail, u.userPassword, a.firstName, a.lastName From user u INNER JOIN address a ON u.mainAddressID = a.addressID where userEmail = "' . $email . '" LIMIT 1';
 
-
-    $result = mysqli_query($conn, $query);
+    $stmt = $conn->prepare('SELECT u.userID, u.userEmail, u.userPassword, a.firstName, a.lastName From user u INNER JOIN address a ON u.mainAddressID = a.addressID where userEmail = ? LIMIT 1');
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     $user = mysqli_fetch_all($result, MYSQLI_ASSOC);
     $rows = mysqli_num_rows($result);

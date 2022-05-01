@@ -6,8 +6,9 @@
             if (!$conn) {
                 echo 'Connection error: ' . mysqli_connect_error();
             }
-
-
+            $firstPartOfBind = "";
+            $SecondPartOfBind = [];
+            //Prepare statement cannot work with dynamic statements - Therefore, we need a different way to prevent SQL Injection
             $query =
                 'SELECT p.productID, p.productTitle, 
 p.productDescription, p.productPrice, pi.productImageFilename, pi.productImageAltText
@@ -15,52 +16,44 @@ p.productDescription, p.productPrice, pi.productImageFilename, pi.productImageAl
 AS p RIGHT JOIN product_image pi
  ON pi.productID = p.productID WHERE pi.displayOrder = 1';
 
-            $query = $query . " AND (p.productTitle LIKE '%";
+            $query = $query . " AND (p.productTitle LIKE ";
             // $query = $_GET['search'];
             $search_exploded = explode(" ", $_GET['search']);
 
-
             for ($i = 0; $i < sizeof($search_exploded); $i++) {
-                $query = $query . $search_exploded[$i] . "%'";
+                $firstPartOfBind = $firstPartOfBind . "s";
+
+                $item = "%" . $search_exploded[$i] . "%";
+
+                array_push($SecondPartOfBind, $item);
+
+                $query = $query . "?";
 
                 if ($i !== sizeof($search_exploded) - 1) {
-                    $query = $query . " AND p.productTitle LIKE '%";
+                    $query = $query . " AND p.productTitle LIKE ";
                 } else {
                     $query = $query . ")";
                 }
             }
 
+            // echo $query;
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param($firstPartOfBind, ...$SecondPartOfBind);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            $result = mysqli_query($conn, $query);
-
-            $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            $rows = mysqli_num_rows($result);
-
-            // print_r($products);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $products = $result->fetch_all(MYSQLI_ASSOC);
+            // $rows = mysqli_num_rows($result);
+            $rows = sizeOf($products);
 
             //Free  memory and close the connection
             mysqli_free_result($result);
-            mysqli_close($conn)
+            mysqli_close($conn);
+
+
+
+
+
             ?>
 
             <!DOCTYPE html>
@@ -71,7 +64,7 @@ AS p RIGHT JOIN product_image pi
                 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-                <title>Results for <?php echo $_GET['search']; ?> - Gadget Gainey Store</title>
+                <title>Results for "<?php echo $_GET['search']; ?>" - Gadget Gainey Store</title>
                 <link rel="stylesheet" type="text/css" href="style.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
             </head>
@@ -259,3 +252,9 @@ AS p RIGHT JOIN product_image pi
                     text-align: center;
                 }
             </style>
+            <script>
+                var search = "<?php echo $_GET['search'] ?>";
+                if (search) {
+                    document.getElementById('searchInput').value = search;
+                }
+            </script>

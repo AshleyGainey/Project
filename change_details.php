@@ -36,19 +36,17 @@ if ($_POST['process'] == "Email") {
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-
-        $sql = "UPDATE user SET userEmail = '" . $new_email . "' where userID = " . $userID;
-
-
-        if ($conn->query($sql) === TRUE) {
-            echo "Record updated successfully";
-            $_SESSION['userEmail'] = $new_email;
-        } else {
-            echo "Error updating record: " . $conn->error;
-            header('HTTP/1.1 Internal Server Error');
-            header('Content-Type: application/json; charset=UTF-8');
-            die(json_encode('ERROR' + $conn->error));
-        }
+            $stmt = $conn->prepare("UPDATE user SET userEmail = ? where userID = ?");
+            $stmt->bind_param("i", $userEmail, $userID);
+           if ($stmt->execute()) {
+                echo "Record updated successfully";
+                $_SESSION['userEmail'] = $new_email;
+           } else {
+                echo "Error updating record: " . $conn->error;
+                header('HTTP/1.1 Internal Server Error');
+                header('Content-Type: application/json; charset=UTF-8');
+                die(json_encode('ERROR - Cannot execute Update Query'));
+           }
     } else {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -110,10 +108,6 @@ if ($_POST['process'] == "Email") {
     }
     }
 } else if ($_POST['process'] == "Address") {
-    // update address a INNER JOIN user u ON a.addressID = u.mainAddressID 
-    // set a.title = ?, a.firstName = ?, a.lastName = ?, a.addressLine1 = ?, a.addressLine2 = ?, a.townCity = ?, a.county = ?, a.postCode = ? 
-    // where u.userID = ?;
-
     include 'DBlogin.php';
     $title = $_POST['title'];
     $firstName = $_POST['firstName'];

@@ -140,6 +140,7 @@ INNER JOIN product_image pi ON p.productID = pi.productID
                     $res,
                     MYSQLI_ASSOC
                 );
+                $total = 0;
 
                 foreach ($productsPurchased as $individualProduct) {
                     $productID = $individualProduct['productID'];
@@ -178,7 +179,7 @@ INNER JOIN product_image pi ON p.productID = pi.productID
                     }
 
                     $quantityPrice = $productPrice * $productQuantity;
-                    $_SESSION["total"] += $quantityPrice;
+                    $total += $quantityPrice;
                     echo "<h3 class='totalPriceOfQuantity'>£" . number_format($quantityPrice, 2) . "</h1>";
 
                     echo "</div>

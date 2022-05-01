@@ -6,7 +6,33 @@ if (!isset($_SESSION)) {
     @session_start();
 }
 
-// print_r('session: ' . $_SESSION['userID']);
+
+    $productPriceArray = array();
+    $productQuantityArray = array();
+    $total = 0;
+    foreach ($_SESSION["basket"] as $basketItem => $basketItem_value) {
+        include 'DBlogin.php';
+
+        $conn = new mysqli($host, $user, $pass, $database);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $stmt = $conn->prepare("SELECT productPrice FROM product where productID = ?");
+        $stmt->bind_param("i", $basketItem);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $basket_product = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        // echo "Hello" + $basket_product[0]["productPrice"];
+        $productTotal = $basket_product[0]["productPrice"] * $basketItem_value;
+        $total = $total + $productTotal;
+        // echo $total;
+    }
+
+
+
+    // echo "Hello" . $_POST['totalAmountTextBox'];
+    // print_r('session: ' . $_SESSION['userID']);
 
 if (!isset($_SESSION['basket'])) {
     header('Location: basket.php');
@@ -88,7 +114,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                 <div class="total">
                     <h1 class="totalHeader">Total:</h1>
                     <?php
-                    echo "<h1 class='totalAmount'>£" . number_format($_SESSION["total"], 2) . "<h1>";
+    echo "<h1 class='totalAmount'>£" . number_format($total, 2) . "<h1>";
                     ?>
                 </div>
             </div>

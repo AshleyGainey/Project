@@ -57,11 +57,11 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                 <form id="LoginForm" action="/account_welcome.php" method="post" onsubmit="loginFormSubmit()">
                     <div class="cardContainer">
                         <p>Email</p>
-                        <input id="loginEmail" type="email" class="searchInput" placeholder="Email">
+                        <input id="loginEmail" type="email" class="searchInput" placeholder="Email" minlength=4 maxlength=255 required>
                     </div>
                     <div class="cardContainer">
                         <p>Password</p>
-                        <input id="loginPassword" type="password" class="searchInput" placeholder="Password">
+                        <input id="loginPassword" type="password" class="searchInput" placeholder="Password" minlength=12 maxlength=128 required>
                     </div>
                     <input type="submit" value="Login">
                 </form>
@@ -74,11 +74,11 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                 <form action="/account_welcome.php" id="RegisterForm" method="post" onsubmit="registerFormSubmit()">
                     <div class="cardContainer inline">
                         <p>Email<span class="required">*</span></p>
-                        <input id="regEmail" type="email" class="searchInput" placeholder="Email" minlength=4 maxlength=128>
+                        <input id="regEmail" type="email" class="searchInput" placeholder="Email" minlength=4 maxlength=128 required>
                     </div>
                     <div class="cardContainer inline">
                         <p>Password<span class="required">*</span></p>
-                        <input id="regPassword" type="password" class="searchInput" placeholder="Password" minlength=12 maxlength=128 onkeyup="keyUpRegPassword()">
+                        <input id="regPassword" type="password" class="searchInput" placeholder="Password" minlength=12 maxlength=128 onkeyup="keyUpRegPassword()" required>
                     </div>
                     <div id="passwordValidationMessage">
                         <h2>Password must contain at least:</h2>
@@ -91,7 +91,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                     </div>
                     <div class="cardContainer floatRight">
                         <p>Confirm Password<span class="required">*</span></p>
-                        <input id="regConfirmPassword" type="password" class="searchInput" placeholder="Confirm Password" onfocusout="focusOutRegConfirmPassword()" onkeyup="keyUpRegConfirmPassword()" minlength=12 maxlength=128>
+                        <input id="regConfirmPassword" type="password" class="searchInput" placeholder="Confirm Password" onfocusout="focusOutRegConfirmPassword()" onkeyup="keyUpRegConfirmPassword()" minlength=12 maxlength=128 required>
                     </div>
                     <div id="confirmPasswordValidationMessage">
                         <p id="passwordMatch" class="hide">Passwords do not match</p>
