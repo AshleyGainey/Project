@@ -50,10 +50,14 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+    <meta name="author" content="Ashley Gainey">
+    <meta name="description" content="View Order History, purchased on Gadget Gainey!">
 
 
-    <title>Order Details - Gadget Gainey Store</title>
+    <title>Order History - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>

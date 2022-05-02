@@ -23,9 +23,11 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
+    <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+    <meta name="author" content="Ashley Gainey">
+    <meta name="description" content="Login or Register for a Gadget Gainey account to get access to your order history!">
     <title>Login/Register - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -54,7 +56,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 
         <div class="allElementss" id="Login">
             <div class="allElements">
-                <form id="LoginForm" action="/account_welcome.php" method="post" onsubmit="loginFormSubmit()">
+                <form id="LoginForm" action="" method="post" onsubmit="loginFormSubmit()">
                     <div class="cardContainer">
                         <p>Email</p>
                         <input id="loginEmail" type="email" class="searchInput" placeholder="Email" minlength=4 maxlength=255 required>
@@ -71,7 +73,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         <div class="allElementss" id="Register">
             <div class="allElements">
                 <h5>Account Details</h5>
-                <form action="/account_welcome.php" id="RegisterForm" method="post" onsubmit="registerFormSubmit()">
+                <form action="" id="RegisterForm" method="post" onsubmit="registerFormSubmit()">
                     <div class="cardContainer inline">
                         <p>Email<span class="required">*</span></p>
                         <input id="regEmail" type="email" class="searchInput" placeholder="Email" minlength=4 maxlength=128 required>
@@ -545,7 +547,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('POST', "passwordCheck.php", true)
+        xhr.open('POST', "LoginRegisterProcess.php", true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.send("emailAddress=" + emailAddress +
             "&password=" + password +
@@ -564,6 +566,8 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         // Create an event to receive the return.
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
+                document.getElementById("regMessage").style.display = "none";
+
                 var goTocheckout = "<?php
                                     if (isset($_SESSION['comeBackToCheckOut'])) {
                                         echo true;
@@ -600,7 +604,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 
         let xhr = new XMLHttpRequest();
 
-        xhr.open('POST', "passwordCheck.php", true)
+        xhr.open('POST', "LoginRegisterProcess.php", true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.send("emailAddress=" + emailAddress + "&password=" + password + "&Login=" + true);
 
@@ -608,6 +612,8 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         // Create an event to receive the return.
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
+                document.getElementById("regMessage").style.display = "none";
+
                 var goTocheckout = "<?php echo $comeBackToCheckOut ?>";
 
                 if (goTocheckout) {

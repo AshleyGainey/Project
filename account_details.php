@@ -1,10 +1,11 @@
 <?php
+// If the session hasn't started. Start it
 if (!isset($_SESSION)) {
     @ob_start();
     @session_start();
 }
 
-
+//If you try to come to this page *using the URL or by navigating to it) and you haven't signed in yet, redirect to the Login page to sign in
 if (!isset($_SESSION['userID'])) {
     header('Location: Login.php');
 }
@@ -15,11 +16,14 @@ if (!isset($_SESSION['userID'])) {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
     <title>Account Details - Gadget Gainey Store</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+    <meta name="author" content="Ashley Gainey">
+    <meta name="description" content="Change Your Account Details of your Gadget Gainey account. Details include Changing your Email, Changing your password and changing your main address.">
+
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 

@@ -103,11 +103,14 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
+    <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+    <meta name="author" content="Ashley Gainey">
+    <meta name="description" content="Welcome to the world of Gadget Gainey! Providing the best products with a great price. Providing kids toys, technology, accessories to you with amazing customer service! We care for our customers which is key to success!">
     <title>Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+
     <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> -->
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -455,7 +458,7 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         var slider = document.getElementById("slider");
 
         // debugger;
-       let content = document.getElementById('slider');
+        let content = document.getElementById('slider');
         let firstChild = content.firstElementChild;
         let lastChild = content.lastElementChild;
         firstChild.before(lastChild);

@@ -37,14 +37,11 @@ if (!isset($_SESSION)) {
                 <div class="navToolButtons">
                     <i class="fa fa-shopping-basket"></i>
                     <?php
-                    $quantity;
-                    if (isset($_SESSION['basketQuantity'])) {
-
-                        $quantity = $_SESSION['basketQuantity'];
-                        //TODO Ashley: How to update this when something has been added.
-                        echo "<span id='cartCount'>" . $quantity . "</span>";
+                    $quantity = 0;
+                    if (isset($_SESSION['basket'])) {
+                        $quantity = count($_SESSION['basket']);
                     }
-
+                    echo "<span id='cartCount'>" . $quantity . "</span>";
                     ?>
                     <h2>Basket</h2>
                 </div>
@@ -77,12 +74,13 @@ if (!isset($_SESSION)) {
         <script>
             function searchValidation() {
                 event.preventDefault();
-                var search = document.getElementById("searchInput").value
-
+                var search = document.getElementById("searchInput").value.trim();
+                document.getElementById("searchInput").value = search;
                 if (search && search.length > 0) {
                     document.getElementById("searchForm").submit()
                 }
             }
+
             var count = document.getElementById('cartCount');
             if (count != null) {
                 count = count.innerHTML;

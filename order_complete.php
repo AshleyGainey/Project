@@ -14,7 +14,6 @@ if (!isset($_SESSION['orderID'])) {
 $orderID = $_SESSION['orderID'];
 
 unset($_SESSION['basket']);
-unset($_SESSION['basketQuantity']);
 unset($_SESSION['orderID']);
 ?>
 
@@ -24,7 +23,15 @@ unset($_SESSION['orderID']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+    <meta name="author" content="Ashley Gainey">
+    <meta name="description" content="Order Complete!">
 
+    <!-- Don't let any search engine index this page -->
+    <meta name="robots" content="noindex" />
 
     <title>Order Complete! - Gadget Gainey Store</title>
     <link rel="stylesheet" type="text/css" href="style.css">

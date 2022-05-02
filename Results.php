@@ -3,6 +3,11 @@
 
             $conn = mysqli_connect($host, $user, $pass, $database);
 
+            if (trim($_GET['search'])) {
+
+            }
+
+
             if (!$conn) {
                 echo 'Connection error: ' . mysqli_connect_error();
             }

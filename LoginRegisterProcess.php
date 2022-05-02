@@ -90,9 +90,9 @@ if (isset($_POST['Register'])) {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password length is too strong. It must be within 128 characters.'));
     }
-    if ($title !== "Mr" || $title !== "Master" ||
-        $title !== "Miss" || $title !== "Mrs" || $title !== "Ms" ||
-        $title !== "Dr") {
+    if (!$title === "Mr" || !$title === "Master" ||
+        !$title === "Miss" || !$title === "Mrs" || !$title === "Ms" ||
+        !$title === "Dr") {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Title from list is not selected - Please select from the list'));
@@ -182,13 +182,13 @@ if (isset($_POST['Register'])) {
         die(json_encode('ERROR - Town/City length is too strong. It must be a maximum of 255 characters.'));
     }
 
-    if (strlen($country) < 2) {
+    if (strlen($county) < 2) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - County length is too weak. It must be a minimum of 2 characters.'));
     }
 
-    if (strlen($country) > 255) {
+    if (strlen($county) > 255) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - County length is too strong. It must be a maximum of 255 characters.'));
@@ -230,8 +230,6 @@ if (isset($_POST['Register'])) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - There is already an account with that email address. Please Log in or Register with a different email address'));
-
-        return false;
     }
 
     // print_r('Still continuing');
@@ -245,18 +243,6 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
     $stmt->execute();
     $addressID = mysqli_insert_id($conn);
-
-    // print_r($addressID);
-    // $res = $stmt->get_result();
-
-    // $row = $res->fetch_assoc();
-
-
-
-
-
-
-
 
 
     $stmt2 = $conn->prepare("INSERT INTO user (userEmail, userPassword, mainAddressID, typeOfUser)
@@ -350,7 +336,6 @@ VALUES (?, ?, ?, ?)");
     }
 
 
-    // print_r($user);
     if (password_verify($password, $user[0]['userPassword'])) {
 
         header('Content-Type: application/json');
@@ -363,7 +348,9 @@ VALUES (?, ?, ?, ?)");
         // header('Location: Login.php');
         exit();
 
-        return true;
+        header('HTTP/1.1 200 OK');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('Success'));
         // echo "Password verified +" .  $_SESSION['userFirstName'];
         
     } else {

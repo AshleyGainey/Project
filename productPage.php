@@ -43,6 +43,7 @@ if (empty($productInfo)) {
             $productID = $product['productID'];
             $productTitle = $product['productTitle'];
             $productDescription = $product['productDescription'];
+
             $productDescriptionCorrect = str_replace("\\n", "\n", $productDescription);
             $productQuantity = $product['productTotalQuantity'];
             $productPrice = $product['productPrice'];
@@ -69,9 +70,22 @@ mysqli_close($conn)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        <?php echo $productTitle; ?> - Gadget Gainey Store </title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <title><?php echo $productTitle; ?> - Gadget Gainey Store </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+    <meta name="author" content="Ashley Gainey">
+
+    <meta name="description" <?php
+                                $productDescriptionForMeta = str_replace("\n", " ", $productDescription);
+                                $productDescriptionForMeta = str_replace('"', '', $productDescriptionForMeta);
+
+                                $productDescriptionForMeta = implode(' ', array_slice(explode(' ', $productDescriptionForMeta), 0, 100));
+                                $productDescriptionForMeta = $productDescriptionForMeta . "...";
+    
+    echo "content='" . $productTitle . " - " . $productDescriptionForMeta . "'" ?>>
+
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
@@ -804,10 +818,11 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
             xhr.open('POST', "basket_process.php", true)
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.send("product_id=" + productID + "&quantity=" + 1);
-
+            debugger;
 
             // Create an event to receive the return.
             xhr.onreadystatechange = function() {
+                debugger;
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     document.getElementById("regMessage").style.display = "block";
 
@@ -822,10 +837,12 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
 
                     var result = JSON.parse(xhr.responseText);
 
-                    //TODO AShley: Doesn't work
+                    debugger;
                     if (result == "NewItem") {
+                        debugger;
                         var basketcount = document.getElementById('cartCount').innerHTML;
                         basketcount++;
+                        debugger;
                         if (basketcount > 0) {
                             document.getElementById("cartCount").style.display = "inline";
                         } else {

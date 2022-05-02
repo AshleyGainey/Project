@@ -55,7 +55,6 @@ if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['produc
             if (array_key_exists($basket_product_ID, $_SESSION['basket'])) {
                 //Update the quantity of the product since the product is already in the basket.
                 $_SESSION['basket'][$basket_product_ID] += $basket_quantity;
-                $_SESSION['basketQuantity'] = count($_SESSION['basket']);
 
                 header('HTTP/1.1 200 OK');
                 header('Content-Type: application/json; charset=UTF-8');
@@ -63,7 +62,6 @@ if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['produc
             } else {
                 //Add the product to the basket, due to it not being in there already
                 $_SESSION['basket'][$basket_product_ID] = $basket_quantity;
-                $_SESSION['basketQuantity'] = count($_SESSION['basket']);
                 header('HTTP/1.1 200 OK');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('NewItem'));;
@@ -72,7 +70,9 @@ if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['produc
             //Add the first product to the basket - there were no products in the basket previously 
             // (add the product ID as the key and the quantity as the value)
             $_SESSION['basket'] = array($basket_product_ID => $basket_quantity);
-            $_SESSION['basketQuantity'] = count($_SESSION['basket']);
+            header('HTTP/1.1 200 OK');
+            header('Content-Type: application/json; charset=UTF-8');
+            die(json_encode('NewItem'));;
         }
     }
     
@@ -82,7 +82,6 @@ if (isset($_POST['remove']) && is_numeric($_POST['remove']) && isset($_SESSION['
     // print_r($_SESSION['basket']);
     // print_r($_SESSION['basket'][$_POST['remove']]);
     unset($_SESSION['basket'][$_POST['remove']]);
-    $_SESSION['basketQuantity'] = count($_SESSION['basket']);
     header('HTTP/1.1 200 OK');
     header('Content-Type: application/json; charset=UTF-8');
     die(json_encode('Removed'));;
@@ -96,5 +95,8 @@ if (isset($_POST['update'], $_POST['quantity']) && isset($_SESSION['basket'])) {
     $_SESSION['basket'][$_POST['update']] = $_POST['quantity'];
 
     // print_r($_SESSION['basket'][$_POST['update']]);
-    $_SESSION['basketQuantity'] = count($_SESSION['basket']);
+
+    header('HTTP/1.1 200 OK');
+    header('Content-Type: application/json; charset=UTF-8');
+    die(json_encode('Updated'));;
 }

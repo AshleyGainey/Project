@@ -89,7 +89,7 @@ if ($_POST['process'] == "Email") {
             die("Connection failed: " . $conn->connect_error);
         }
             $stmt = $conn->prepare("UPDATE user SET userEmail = ? where userID = ?");
-            $stmt->bind_param("i", $userEmail, $userID);
+            $stmt->bind_param("si", $userEmail, $userID);
            if ($stmt->execute()) {
                 echo "Record updated successfully";
                 $_SESSION['userEmail'] = $new_email;
@@ -239,9 +239,9 @@ if ($_POST['process'] == "Email") {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Post Code is empty. Please fill it out.'));
     }
-    if ($title !== "Mr" || $title !== "Master" ||
-    $title !== "Miss" || $title !== "Mrs" || $title !== "Ms" ||
-    $title !== "Dr") {
+    if (!$title === "Mr" || !$title == "Master" ||
+    !$title === "Miss" || !$title === "Mrs" || !$title === "Ms" ||
+    !$title === "Dr") {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Title from list is not selected - Please select from the list'));
@@ -282,18 +282,6 @@ if ($_POST['process'] == "Email") {
         die(json_encode('ERROR - Incorrect Format for Last Name. Last Name should not contain numbers'));
     }
 
-    if (!(preg_match('/[a-zA-Z]{5}/', $password))) {
-        header('HTTP/1.1 400 Bad Request Server');
-        header('Content-Type: application/json; charset=UTF-8');
-        die(json_encode('ERROR - Password complexity has not been met. The password needs to have at least 5 letters (Uppercase or lowercase)'));
-        // Server Side checking to see if Password has enough complexity (third check, at least 2 numbers)
-    }
-    if (!(preg_match('/[0-9]{2}/', $password))) {
-        header('HTTP/1.1 400 Bad Request Server');
-        header('Content-Type: application/json; charset=UTF-8');
-        die(json_encode('ERROR - Password complexity has not been met. The password needs to have at least 2 numbers'));
-    }
-
     if (strlen($addressLine1) < 2) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -318,25 +306,25 @@ if ($_POST['process'] == "Email") {
         die(json_encode('ERROR - Address Line 2 length is too strong. It must be a maximum of 255 characters.'));
     }
 
-    if (strlen($country) < 2) {
+    if (strlen($county) < 2) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - County length is too weak. It must be a minimum of 2 characters.'));
     }
 
-    if (strlen($country) > 255) {
+    if (strlen($county) > 255) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - County length is too strong. It must be a maximum of 255 characters.'));
     }
 
-    if (strlen($postcode) < 2) {
+    if (strlen($postCode) < 2) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Postcode length is too weak. It must be a minimum of 2 characters.'));
     }
 
-    if (strlen($postcode) > 8) {
+    if (strlen($postCode) > 8) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Postcode length is too strong. It must be a maximum of 8 characters.'));
