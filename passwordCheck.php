@@ -161,13 +161,25 @@ if (isset($_POST['Register'])) {
     if (!empty($addressLine2) && strlen($addressLine2) < 2) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
-        die(json_encode('ERROR - Address Line 2 length is too weak. It must be a minimum of 2 characters.'));
+        die(json_encode('ERROR - Address Line 2 length is too weak. It must be a minimum of 2 characters if not blank.'));
     }
 
     if (strlen($addressLine2) > 255) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Address Line 2 length is too strong. It must be a maximum of 255 characters.'));
+    }
+
+    if (strlen($townCity) < 2) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Town/City length is too weak. It must be a minimum of 2 characters.'));
+    }
+
+    if (strlen($townCity) > 255) {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Town/City length is too strong. It must be a maximum of 255 characters.'));
     }
 
     if (strlen($country) < 2) {

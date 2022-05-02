@@ -309,7 +309,7 @@ if ($_POST['process'] == "Email") {
     if (!empty($addressLine2) && strlen($addressLine2) < 2) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
-        die(json_encode('ERROR - Address Line 2 length is too weak. It must be a minimum of 2 characters.'));
+        die(json_encode('ERROR - Address Line 2 length is too weak. It must be a minimum of 2 characters if not blank.'));
     }
 
     if (strlen($addressLine2) > 255) {
