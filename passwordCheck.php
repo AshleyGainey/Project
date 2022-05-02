@@ -20,7 +20,7 @@ if (isset($_POST['Register'])) {
     $password = $_POST['password'];
     $confirmPassword = trim($_POST['confirmPassword']);
 
-    //Server Side checking to see if any feilds  and Confirm Password is correct
+    //Server Side checking to see if any fields  and Confirm Password is correct
     if (empty($email)) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -90,6 +90,13 @@ if (isset($_POST['Register'])) {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password length is too strong. It must be within 128 characters.'));
     }
+    if ($title !== "Mr" || $title !== "Master" ||
+        $title !== "Miss" || $title !== "Mrs" || $title !== "Ms" ||
+        $title !== "Dr") {
+        header('HTTP/1.1 400 Bad Request Server');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Title from list is not selected - Please select from the list'));
+    }
 
 
     if (strlen($firstName) < 2) {
@@ -151,7 +158,7 @@ if (isset($_POST['Register'])) {
         die(json_encode('ERROR - Address Line 1 length is too strong. It must be a maximum of 255 characters.'));
     }
 
-    if (strlen($addressLine2) < 2) {
+    if (!empty($addressLine2) && strlen($addressLine2) < 2) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Address Line 2 length is too weak. It must be a minimum of 2 characters.'));

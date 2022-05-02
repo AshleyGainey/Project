@@ -284,7 +284,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         padding-top: 2px;
         padding-bottom: 2px;
         padding-right: 2px;
-        padding-left: 3px;
+        padding-left: 10px;
         background: none;
         font-family: Century-Gothic, sans-serif;
         color: #FFFFFF;
