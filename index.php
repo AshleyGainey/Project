@@ -5,7 +5,7 @@ if (!isset($_SESSION)) {
     @session_start();
 }
 
-include 'DBlogin.php';
+include 'DatabaseLoginDetails.php';
 
 $conn = mysqli_connect($host, $user, $pass, $database);
 

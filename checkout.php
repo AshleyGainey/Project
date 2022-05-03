@@ -1,6 +1,4 @@
 <?php
-// print_r('session here: ' . isset($_SESSION));
-
 if (!isset($_SESSION)) {
     @ob_start();
     @session_start();
@@ -11,7 +9,7 @@ $productPriceArray = array();
 $productQuantityArray = array();
 $total = 0;
 foreach ($_SESSION["basket"] as $basketItem => $basketItem_value) {
-    include 'DBlogin.php';
+    include 'DatabaseLoginDetails.php';
 
     $conn = new mysqli($host, $user, $pass, $database);
     // Check connection
@@ -46,7 +44,7 @@ if (!isset($_SESSION['userID'])) {
 
 // Query for getting the address
 
-include 'DBlogin.php';
+include 'DatabaseLoginDetails.php';
 
 $conn = mysqli_connect($host, $user, $pass, $database);
 
@@ -292,7 +290,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
             </form>
 
         </div>
-        <p id="regMessage"></p>
+        <p id="errorMessage"></p>
     </div>
 
 
@@ -306,7 +304,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         margin-bottom: 50px;
     }
 
-    .navToolButtons i {
+    .headerSideButtons i {
         font-size: 5em;
         padding-bottom: 10px;
         color: #FFFFFF
@@ -932,7 +930,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         display: inline;
     }
 
-    #regMessage {
+    #errorMessage {
         display: none;
     }
 
@@ -1022,17 +1020,17 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         var outputMessage = ""
         if (billingAddressChecked && deliveryAddressChecked) {
             outputMessage = "";
-            document.getElementById("regMessage").style.display = "none";
+            document.getElementById("errorMessage").style.display = "none";
         }
     }
 
 
     function showHideMessage(show, message) {
         if (show) {
-            document.getElementById("regMessage").innerHTML = message;
-            document.getElementById("regMessage").style.display = "block";
+            document.getElementById("errorMessage").innerHTML = message;
+            document.getElementById("errorMessage").style.display = "block";
         } else {
-            document.getElementById("regMessage").style.display = "none";
+            document.getElementById("errorMessage").style.display = "none";
         }
     }
 
@@ -1044,7 +1042,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         var outputMessage = ""
         if (billingAddressChecked && deliveryAddressChecked) {
             outputMessage = "";
-            document.getElementById("regMessage").style.display = "none";
+            document.getElementById("errorMessage").style.display = "none";
             showHideMessage(false, null);
         } else {
             outputMessage = "Both billing and delivery address needs to be filled out. Please select a value or enter a new address";
@@ -1261,9 +1259,9 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
             if (xhr.readyState == 4 && xhr.status == 200) {
                 window.location.href = "order_complete.php";
             } else if (xhr.readyState == 4 && (xhr.status == 400 || xhr.status == 500)) {
-                document.getElementById("regMessage").style.display = "block";
+                document.getElementById("errorMessage").style.display = "block";
                 // var message = "An error occured while trying to do this action.";
-                document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+                document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
                 console.log(xhr.responseText);
             }
         }

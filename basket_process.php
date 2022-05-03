@@ -11,7 +11,7 @@ if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['produc
     $basket_product_ID = (int)$_POST['product_id'];
     $basket_quantity = (int)$_POST['quantity'];
 
-    include 'DBlogin.php';
+    include 'DatabaseLoginDetails.php';
 
     $conn = new mysqli($host, $user, $pass, $database);
     // Check connection

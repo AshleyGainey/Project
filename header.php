@@ -35,14 +35,14 @@ if (!isset($_SESSION)) {
 
         <div id="buttonsSection">
             <a id="basket" href="Basket.php">
-                <div class="navToolButtons">
+                <div class="headerSideButtons">
                     <i class="fa fa-shopping-basket"></i>
                     <?php
                     $quantity = 0;
                     if (isset($_SESSION['basket'])) {
                         $quantity = count($_SESSION['basket']);
                     }
-                    echo "<span id='cartCount'>" . $quantity . "</span>";
+                    echo "<span id='basketCount'>" . $quantity . "</span>";
                     ?>
                     <h2>Basket</h2>
                 </div>
@@ -58,7 +58,7 @@ if (!isset($_SESSION)) {
                 echo "<a id='account' href='Login.php'>";
             }
             ?>
-            <div class="navToolButtons">
+            <div class="headerSideButtons">
                 <i class="fa fa-user-circle-o"></i>
                 <h2 id="userFirstName"><?php
                                         if (isset($_SESSION["userFirstName"])) {
@@ -82,13 +82,13 @@ if (!isset($_SESSION)) {
                 }
             }
 
-            var count = document.getElementById('cartCount');
+            var count = document.getElementById('basketCount');
             if (count != null) {
                 count = count.innerHTML;
                 if (count > 0) {
-                    document.getElementById("cartCount").style.display = "inline";
+                    document.getElementById("basketCount").style.display = "inline";
                 } else {
-                    document.getElementById("cartCount").style.display = "none";
+                    document.getElementById("basketCount").style.display = "none";
                 }
             }
         </script>

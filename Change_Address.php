@@ -10,7 +10,7 @@ if (!isset($_SESSION['userID'])) {
 }
 
 
-include 'DBlogin.php';
+include 'DatabaseLoginDetails.php';
 // Connect to the DB
 $conn = mysqli_connect($host, $user, $pass, $database);
 
@@ -70,7 +70,7 @@ $userPostCode = $mainaddressDB[0]['postcode'];
     <div id="bodyOfPage">
         <div>
             <!-- Title of Page -->
-            <p>Change Your Main Address</p>
+            <h2>Change Your Main Address</h2>
         </div>
         <div id="AddressChangeContainer">
             <!-- Form to submit updated values -->
@@ -125,53 +125,53 @@ $userPostCode = $mainaddressDB[0]['postcode'];
                     <p>First Name<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the first name that is in the DB -->
                     <?php
-                    echo "<input id='firstName' type='text' class='searchInput' value='" . $userFirstName . "' placeholder='First Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
+                    echo "<input id='firstName' type='text' class='changeDetailsInput' value='" . $userFirstName . "' placeholder='First Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
                     ?>
                 </div>
                 <div class="fieldContainer ">
                     <p>Last Name<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the last name that is in the DB -->
                     <?php
-                    echo "<input id='lastName' type='text' class='searchInput' value='" . $userLastName . "' placeholder='Last Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
+                    echo "<input id='lastName' type='text' class='changeDetailsInput' value='" . $userLastName . "' placeholder='Last Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
                     ?>
                 </div>
                 <div class="fieldContainer">
                     <p>Address Line 1<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the address line 1 that is in the DB -->
                     <?php
-                    echo "<input id='addressLine1' type='text' class='searchInput' value='" . $userAddressLine1 . "'  placeholder='Address Line 1' minlength=2 maxlength=255 required>";
+                    echo "<input id='addressLine1' type='text' class='changeDetailsInput' value='" . $userAddressLine1 . "'  placeholder='Address Line 1' minlength=2 maxlength=255 required>";
                     ?>
                 </div>
                 <div class="fieldContainer">
                     <p>Address Line 2</p>
                     <!-- Create an text input element with the value being the address line 2 (if filled out) that is in the DB -->
                     <?php
-                    echo "<input id='addressLine2' type='text' class='searchInput' value='" . $userAddressLine2 . "' placeholder='Address Line 2' minlength=2 maxlength=255>";
+                    echo "<input id='addressLine2' type='text' class='changeDetailsInput' value='" . $userAddressLine2 . "' placeholder='Address Line 2' minlength=2 maxlength=255>";
                     ?>
                 </div>
                 <div class="fieldContainer">
                     <p>Town/City<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the Town/City that is in the DB -->
                     <?php
-                    echo "<input id='townCity' type='text' class='searchInput' value='" . $userTownCity . "' placeholder='Town/City' minlength=2 maxlength=255 required>";
+                    echo "<input id='townCity' type='text' class='changeDetailsInput' value='" . $userTownCity . "' placeholder='Town/City' minlength=2 maxlength=255 required>";
                     ?>
                 </div>
                 <div class="fieldContainer">
                     <p>County<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the County that is in the DB -->
                     <?php
-                    echo "<input id='county' type='text' class='searchInput' value='" . $userCounty . "' placeholder='County' minlength=2 maxlength=255 required>"
+                    echo "<input id='county' type='text' class='changeDetailsInput' value='" . $userCounty . "' placeholder='County' minlength=2 maxlength=255 required>"
                     ?>
                 </div>
                 <div class="fieldContainer">
                     <p>Post Code<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the Post Code that is in the DB -->
                     <?php
-                    echo  "<input id='postCode' type='text' class='searchInput' value='" . $userPostCode . "' placeholder='Post Code' minlength=5 maxlength=8 required>"
+                    echo  "<input id='postCode' type='text' class='changeDetailsInput' value='" . $userPostCode . "' placeholder='Post Code' minlength=5 maxlength=8 required>"
                     ?>
                 </div>
                 <!-- Create a button of type submit which will send the data to the backend  -->
-                <input type="submit" value="Save">
+                <input type="submit" class="changeDetailsInput" value=" Save">
             </form>
             <!-- Make text that will display any errors if there are any. -->
             <p id="errorMessage"></p>
@@ -183,56 +183,15 @@ $userPostCode = $mainaddressDB[0]['postcode'];
 
 </html>
 <style>
-    .required {
-        color: red;
-    }
-
-    input {
-        margin: 0;
-        padding: 0;
-        height: 30px;
-        font-size: 1.5em;
-        border-radius: 25px;
-        padding-top: 2%;
-        padding-bottom: 2%;
-        padding-right: 2%;
-        padding-left: 3%;
-        background: none;
-        font-family: Century-Gothic, sans-serif;
-        color: #FFFFFF;
-        border: 3px solid #FFFFFF;
-        outline: none;
-    }
-
-    input[type=submit] {
-        margin-left: 10px;
-        box-shadow: 0 0 0 5px #FFFFFF;
-        border-radius: 2%;
-        height: 75px;
-        width: 250px;
-        overflow: hidden;
-        position: relative;
-        background-color: #1a1862;
-    }
-
-
     #AddressChangeContainer {
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
-
     .fieldContainer {
         margin-top: 20px;
         margin-bottom: 20px;
-    }
-
-
-    select:hover {
-        border-color: #1a1862;
-        cursor: pointer;
-        border-width: 3px;
     }
 
     select {
@@ -255,8 +214,10 @@ $userPostCode = $mainaddressDB[0]['postcode'];
         background-color: #bfbfbf;
     }
 
-    #errorMessage {
-        display: none;
+    select:hover {
+        border-color: #1a1862;
+        cursor: pointer;
+        border-width: 3px;
     }
 </style>
 
@@ -320,7 +281,7 @@ $userPostCode = $mainaddressDB[0]['postcode'];
             showHideMessage(true, outputMessage);
             return false;
         }
-        // If passed all checkks, post the results to the backend for further validation and if passed them, then add to the database
+        // If passed all checks, post the results to the backend for further validation and if passed them, then add to the database
         let xhr = new XMLHttpRequest();
 
         xhr.open('POST', "change_details.php", true)
@@ -336,7 +297,6 @@ $userPostCode = $mainaddressDB[0]['postcode'];
             "&process=" + "Address"
         );
 
-
         // On return of the call
         xhr.onreadystatechange = function() {
             //See if it is ready and the status is OK
@@ -349,6 +309,16 @@ $userPostCode = $mainaddressDB[0]['postcode'];
                 document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText;
                 console.log(xhr.responseText);
             }
+        }
+    }
+
+    //Method to show and hide the errorMessage and set its value
+    function showHideMessage(show, message) {
+        if (show) {
+            document.getElementById("errorMessage").innerHTML = message;
+            document.getElementById("errorMessage").style.display = "block";
+        } else {
+            document.getElementById("errorMessage").style.display = "none";
         }
     }
 </script>

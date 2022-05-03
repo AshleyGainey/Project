@@ -5,7 +5,7 @@ if (!isset($_SESSION)) {
 }
 //If registering
 if (isset($_POST['Register'])) {
-    include 'DBlogin.php';
+    include 'DatabaseLoginDetails.php';
     $email =  trim($_POST['emailAddress']);
     $title = trim($_POST['title']);
     $firstName = trim($_POST['firstName']);
@@ -260,7 +260,7 @@ VALUES (?, ?, ?, ?)");
     $_SESSION['userFirstName'] = $firstName;
     $_SESSION['userLastName'] = $lastName;
 } else if (isset($_POST['Login'])) {
-    include 'DBlogin.php';
+    include 'DatabaseLoginDetails.php';
     $email = trim($_POST['emailAddress']);
 
     $password = $_POST['password'];

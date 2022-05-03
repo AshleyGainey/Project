@@ -19,28 +19,7 @@ body {
     margin-right: 50px;
 }
 
-.navToolButtons {
-    text-align: center;
-    cursor: pointer;
-    margin: auto;
-    padding-right: 10px;
-    padding-top: 20px;
-    width: 100px;
-    display: inline-block;
-}
-
-.navToolButtons h2 {
-    color: #FFFFFF;
-    display: inline;
-}
-
-#userFirstName {
-    overflow-wrap: anywhere;
-}
-
-
-/*For footer staying at bottom*/
-
+/*Start of For footer staying at bottom*/
 html {
     height: 100%;
     position: relative;
@@ -58,9 +37,70 @@ body::after {
     display: block;
     height: 191px;
 }
-
 /*End of footer*/
 
 .rotateArrow {
     transform: scaleY(-1);
 }
+/* Start of - Change Details Shared Styling */
+.firstRowOfCards {
+    display: inline-block;
+    width: 100%;
+    margin-top: 50px;
+}
+
+.secondRowOfCards {
+    margin-top: 50px;
+    width: 100%;
+    margin-left: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.leftPart {
+    float: left;
+}
+
+.rightPart {
+    float: right;
+}
+
+.required {
+    color: red;
+}
+
+#errorMessage {
+    margin-top: 25px;
+    text-align: center;
+    display: none;
+}
+
+.changeDetailsInput {
+    margin: 0;
+    padding: 0;
+    height: 30px;
+    font-size: 1.5em;
+    border-radius: 25px;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-right: 2%;
+    padding-left: 3%;
+    background: none;
+    font-family: Century-Gothic, sans-serif;
+    color: #FFFFFF;
+    border: 3px solid #FFFFFF;
+    outline: none;
+    width: 100%;
+}
+
+.changeDetailsInput[type=submit] {
+    margin-left: 10px;
+    box-shadow: 0 0 0 5px #FFFFFF;
+    border-radius: 2%;
+    height: 75px;
+    overflow: hidden;
+    position: relative;
+    background-color: #1a1862;
+}
+/* End of - Change Details Shared Styling */

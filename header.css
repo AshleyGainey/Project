@@ -43,11 +43,8 @@
      background: #1a1862;
      color: #fff;
      border-radius: 25px;
-     cursor: pointer;
- }
- 
- #searchButton {
-     font-size: 2em;
+    cursor: pointer;
+        font-size: 2em;
  }
  
  #AboutGGCategory {
@@ -71,7 +68,7 @@
      color: #FFFFFF
  }
  
- .navToolButtons i {
+.headerSideButtons i {
      font-size: 5em;
      padding-bottom: 10px;
      color: #FFFFFF
@@ -82,7 +79,7 @@
      height: auto;
  }
  
- #cartCount {
+#basketCount {
     font-size: 25px;
     background: #ff0000;
     color: #fff;
@@ -136,11 +133,27 @@
  .SubCategory a {
      padding-left: 20px;
  }
-#cartCount {
+#basketCount {
     font-weight: 900;
     position: absolute;
     border-radius: 60%;
-    /* height: 14px; */
-    /* width: 8px; */
     margin-left: -30px;
+}
+.headerSideButtons {
+    text-align: center;
+    cursor: pointer;
+    margin: auto;
+    padding-right: 10px;
+    padding-top: 20px;
+    width: 100px;
+    display: inline-block;
+}
+
+.headerSideButtons h2 {
+    color: #FFFFFF;
+    display: inline;
+}
+
+#userFirstName {
+    overflow-wrap: anywhere;
 }

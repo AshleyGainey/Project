@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-include 'DBlogin.php';
+include 'DatabaseLoginDetails.php';
 
 $conn = mysqli_connect($host, $user, $pass, $database);
 
@@ -178,7 +178,7 @@ mysqli_close($conn)
                         ?>
 
                     </div>
-                    <p id="regMessage"></p>
+                    <p id="errorMessage"></p>
                 </form>
             </div>
         </div>
@@ -209,7 +209,7 @@ mysqli_close($conn)
         white-space: pre-wrap;
     }
 
-    #regMessage {
+    #errorMessage {
         text-align: center;
         margin-top: 20px;
     }
@@ -824,15 +824,15 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
             xhr.onreadystatechange = function() {
                 debugger;
                 if (xhr.readyState == 4 && xhr.status == 200) {
-                    document.getElementById("regMessage").style.display = "block";
+                    document.getElementById("errorMessage").style.display = "block";
 
-                    document.getElementById('regMessage').innerHTML = "Added to basket"
+                    document.getElementById('errorMessage').innerHTML = "Added to basket"
 
-                    document.getElementById('regMessage').style.opacity = "1";
-                    // document.getElementById('regMessage').style.removeProperty("opacity");
-                    document.getElementById('regMessage').style.filter = "alpha(opacity='1')";
+                    document.getElementById('errorMessage').style.opacity = "1";
+                    // document.getElementById('errorMessage').style.removeProperty("opacity");
+                    document.getElementById('errorMessage').style.filter = "alpha(opacity='1')";
                     setTimeout(function() {
-                        fade(document.getElementById('regMessage'));
+                        fade(document.getElementById('errorMessage'));
                     }, 2000);
 
                     var result = JSON.parse(xhr.responseText);
@@ -840,15 +840,15 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
                     debugger;
                     if (result == "NewItem") {
                         debugger;
-                        var basketcount = document.getElementById('cartCount').innerHTML;
+                        var basketcount = document.getElementById('basketCount').innerHTML;
                         basketcount++;
                         debugger;
                         if (basketcount > 0) {
-                            document.getElementById("cartCount").style.display = "inline";
+                            document.getElementById("basketCount").style.display = "inline";
                         } else {
-                            document.getElementById("cartCount").style.display = "none";
+                            document.getElementById("basketCount").style.display = "none";
                         }
-                        document.getElementById("cartCount").innerHTML = basketcount;
+                        document.getElementById("basketCount").innerHTML = basketcount;
                     }
 
                     productQuantityAfterLoad++;

@@ -11,7 +11,7 @@ $deliveryAddressID;
 
 
 function getMainAddressID() {
-    include 'DBlogin.php';
+    include 'DatabaseLoginDetails.php';
 
     $conn = mysqli_connect($host, $user, $pass, $database);
 
@@ -61,7 +61,7 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
         //Check if already in DB (main address or just a normal address)
         if (isset($_POST['billingFirstName']) && isset($_POST['billingLastName']) && isset($_POST['billingAddressLine1']) && isset($_POST['billingTownCity']) && isset($_POST['billingCounty']) && isset($_POST['billingPostCode'])) {
 
-            include 'DBlogin.php';
+            include 'DatabaseLoginDetails.php';
 
             $conn = mysqli_connect($host, $user, $pass, $database);
 
@@ -253,7 +253,7 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
         //Check if already in DB (main address or just a normal address)
         if (isset($_POST['deliveryFirstName']) && isset($_POST['deliveryLastName']) && isset($_POST['deliveryAddressLine1']) && isset($_POST['deliveryTownCity']) && isset($_POST['deliveryCounty']) && isset($_POST['deliveryPostCode'])) {
 
-            include 'DBlogin.php';
+            include 'DatabaseLoginDetails.php';
 
             $conn = mysqli_connect($host, $user, $pass, $database);
 
@@ -448,7 +448,7 @@ foreach ($_SESSION['basket'] as $productID => $productQuantity) {
         return false;
     }
 
-    include 'DBlogin.php';
+    include 'DatabaseLoginDetails.php';
 
     $conn = mysqli_connect($host, $user, $pass, $database);
 

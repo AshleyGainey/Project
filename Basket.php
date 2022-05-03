@@ -27,6 +27,7 @@ $totalPriceOfEachProduct = array();
     <!-- Description of the page -->
     <meta name="description" content="View, edit and remove from your basket!">
 
+    <!-- Link to the shared classes and ID style sheet -->
     <link rel="stylesheet" type="text/css" href="sharedStyles.css">
 </head>
 
@@ -53,7 +54,7 @@ $totalPriceOfEachProduct = array();
             // Not invalid so keep looping through the basket session array, getting out the key (the Product ID) and the value (the quantity)
             $invalidBasket = 0;
             foreach ($_SESSION["basket"] as $basketItem => $basketItem_value) {
-                include 'DBlogin.php';
+                include 'DatabaseLoginDetails.php';
 
                 $conn = new mysqli($host, $user, $pass, $database);
                 // Check connection
@@ -547,16 +548,16 @@ if ($invalidBasket == 0) {
             //See if it is ready and the status is OK
             if (xhr.readyState == 4 && xhr.status == 200) {
                 //If it is, then we decrease the basket count seen at the top and write it to the DOM.
-                var basketcount = document.getElementById('cartCount').innerHTML;
+                var basketcount = document.getElementById('basketCount').innerHTML;
                 basketcount--;
 
                 //If more than 0, keep it displaying, 
 
                 if (basketcount > 0) {
-                    document.getElementById("cartCount").style.display = "inline";
+                    document.getElementById("basketCount").style.display = "inline";
                 } else {
                     // if basket count is no longer more than 0, then hide it from the view of the user 
-                    document.getElementById("cartCount").style.display = "none";
+                    document.getElementById("basketCount").style.display = "none";
 
                     // and also remove the checkout button and total container
                     const removeCheckout = document.getElementById("checkoutDiv");
@@ -565,7 +566,7 @@ if ($invalidBasket == 0) {
                     removeTotal.remove();
                     addNoProducts();
                 }
-                document.getElementById("cartCount").innerHTML = basketcount;
+                document.getElementById("basketCount").innerHTML = basketcount;
 
                 //Removing the DOM element by getting the element and then the product id that is being removed and fade it out
                 removeFadeOut(document.getElementById('individualProduct' + id));
@@ -609,7 +610,7 @@ if ($invalidBasket == 0) {
         }, 500);
     }
 
-//Fade out the element that is being passed in by changing the opacity.
+    //Fade out the element that is being passed in by changing the opacity.
     function removeFadeOut(element) {
         element.style.transition = "opacity " + 0.5 + "s ease";
 

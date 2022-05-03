@@ -38,7 +38,7 @@ if (!isset($_SESSION['userID'])) {
     <div id="bodyOfPage">
         <div>
             <!-- Show Welcome message (with be generated in JavaScript) -->
-            <p id="welcome">Welcome!</p>
+            <h2 id="welcome">Welcome!</h2>
         </div>
         <div class="allCards">
             <div class="firstRowOfCards">
@@ -140,14 +140,6 @@ if (!isset($_SESSION['userID'])) {
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
         width: 100%
-    }
-
-    .leftPart {
-        float: left;
-    }
-
-    .rightPart {
-        float: right;
     }
 </style>
 

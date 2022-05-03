@@ -1,5 +1,5 @@
             <?php
-            include 'DBlogin.php';
+                                include 'DatabaseLoginDetails.php';
 
             $conn = mysqli_connect($host, $user, $pass, $database);
 

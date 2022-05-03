@@ -144,7 +144,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
             </div>
         </div>
     </div>
-    <p id="regMessage"></p>
+    <p id="errorMessage"></p>
     </div>
     </div>
     </div>
@@ -352,7 +352,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         display: inline;
     }
 
-    #regMessage {
+    #errorMessage {
         display: none;
     }
 
@@ -566,7 +566,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         // Create an event to receive the return.
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                document.getElementById("regMessage").style.display = "none";
+                document.getElementById("errorMessage").style.display = "none";
 
                 var goTocheckout = "<?php
                                     if (isset($_SESSION['comeBackToCheckOut'])) {
@@ -586,8 +586,8 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                 }
             } else {
                 var message = "An error occured while registering. Please see below :";
-                document.getElementById("regMessage").style.display = "block";
-                document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText;
+                document.getElementById("errorMessage").style.display = "block";
+                document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText;
             }
         }
     }
@@ -612,7 +612,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         // Create an event to receive the return.
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                document.getElementById("regMessage").style.display = "none";
+                document.getElementById("errorMessage").style.display = "none";
 
                 var goTocheckout = "<?php echo $comeBackToCheckOut ?>";
 
@@ -626,8 +626,8 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                     window.location.href = "account_welcome.php#Login";
                 }
             } else {
-                document.getElementById("regMessage").style.display = "block";
-                document.getElementById('regMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+                document.getElementById("errorMessage").style.display = "block";
+                document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
             }
         }
     }
