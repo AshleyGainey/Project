@@ -16,20 +16,20 @@ $conn = mysqli_connect($host, $user, $pass, $database);
 
 
 $stmt = $conn->prepare(
-    "select po.orderID, po.totalPrice, po.DateAndTime,
+    "SELECT po.orderID, po.totalPrice, po.DateAndTime,
 
-bua.title As billingTitle, bua.firstName As billingFirstName, bua.lastName As billingLastName, bua.addressLine1 As billingAddressLine1, bua.addressLine2 As billingAddressLine2, bua.townCity As billingtownCity, bua.county As billingCounty, bua.postCode As billingPostCode,
-dua.title As deliveryTitle, dua.firstName As deliveryFirstName, dua.lastName As deliveryLastName, dua.addressLine1 As deliveryAddressLine1, dua.addressLine2 As deliveryAddressLine2, dua.townCity As deliverytownCity, dua.county As deliveryCounty, dua.postCode As deliveryPostCode
+ba.title As billingTitle, ba.firstName As billingFirstName, ba.lastName As billingLastName, ba.addressLine1 As billingAddressLine1, ba.addressLine2 As billingAddressLine2, ba.townCity As billingtownCity, ba.county As billingCounty, ba.postCode As billingPostCode,
+da.title As deliveryTitle, da.firstName As deliveryFirstName, da.lastName As deliveryLastName, da.addressLine1 As deliveryAddressLine1, da.addressLine2 As deliveryAddressLine2, da.townCity As deliverytownCity, da.county As deliveryCounty, da.postCode As deliveryPostCode
 
 
 FROM purchase_order po
 
-INNER JOIN address AS bua
-ON po.billingAddressID = bua.addressID
+INNER JOIN address AS ba
+ON po.billingAddressID = ba.addressID
 
 
-INNER JOIN address AS dua
-ON po.deliveryAddressID = dua.addressID
+INNER JOIN address AS da
+ON po.deliveryAddressID = da.addressID
 
 
 
@@ -113,11 +113,11 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
                 </div>
                 <div class='eachOrderInner'>
                     <div class='rowOne'>
-                        <div class='leftPart'>
+                        <div class='leftSection'>
                             <h2>Order Number: " . sprintf('%05d', $orderID) .
                     "</h1>
                         </div>
-                        <div class='rightPart'>
+                        <div class='rightSection'>
                             <h2>Total Price: £" . number_format($totalPrice, 2) .
                     "</h1>
                         </div>
@@ -361,8 +361,8 @@ INNER JOIN product_image pi ON p.productID = pi.productID
         word-break: keep-all;
     }
 
-    .leftPart,
-    .rightPart {
+    .leftSection,
+    .rightSection {
         display: inline-block;
     }
 
@@ -459,12 +459,7 @@ INNER JOIN product_image pi ON p.productID = pi.productID
         width: 100%
     }
 
-    /* 
-    .leftPart {
-        float: left;
-    } */
-
-    .rightPart {
+    .rightSection {
         float: right;
     }
 

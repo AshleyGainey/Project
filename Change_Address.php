@@ -15,7 +15,7 @@ include 'DatabaseLoginDetails.php';
 $conn = mysqli_connect($host, $user, $pass, $database);
 
 // Query for getting the main address, binding the userID to the query
-$stmt = $conn->prepare("select ua.title, ua.firstName, ua.lastName, ua.addressID, ua.addressLine1, ua.addressLine2, ua.townCity, ua.county, ua.postcode from user u INNER JOIN address ua ON u.mainAddressID = ua.addressID where u.userID  = ?");
+$stmt = $conn->prepare("SELECT a.title, a.firstName, a.lastName, a.addressID, a.addressLine1, a.addressLine2, a.townCity, a.county, a.postcode from user u INNER JOIN address a ON u.mainAddressID = a.addressID where u.userID  = ?");
 $userID =    $_SESSION['userID'];
 $stmt->bind_param("s", $userID);
 
@@ -125,53 +125,53 @@ $userPostCode = $mainaddressDB[0]['postcode'];
                     <p>First Name<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the first name that is in the DB -->
                     <?php
-                    echo "<input id='firstName' type='text' class='changeDetailsInput' value='" . $userFirstName . "' placeholder='First Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
+                    echo "<input id='firstName' type='text' class='changeOrAddDetailsInput' value='" . $userFirstName . "' placeholder='First Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
                     ?>
                 </div>
                 <div class="fieldContainer ">
                     <p>Last Name<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the last name that is in the DB -->
                     <?php
-                    echo "<input id='lastName' type='text' class='changeDetailsInput' value='" . $userLastName . "' placeholder='Last Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
+                    echo "<input id='lastName' type='text' class='changeOrAddDetailsInput' value='" . $userLastName . "' placeholder='Last Name' required pattern='^\D+$' minlength=2 maxlength=255 required>";
                     ?>
                 </div>
                 <div class="fieldContainer">
                     <p>Address Line 1<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the address line 1 that is in the DB -->
                     <?php
-                    echo "<input id='addressLine1' type='text' class='changeDetailsInput' value='" . $userAddressLine1 . "'  placeholder='Address Line 1' minlength=2 maxlength=255 required>";
+                    echo "<input id='addressLine1' type='text' class='changeOrAddDetailsInput' value='" . $userAddressLine1 . "'  placeholder='Address Line 1' minlength=2 maxlength=255 required>";
                     ?>
                 </div>
                 <div class="fieldContainer">
                     <p>Address Line 2</p>
                     <!-- Create an text input element with the value being the address line 2 (if filled out) that is in the DB -->
                     <?php
-                    echo "<input id='addressLine2' type='text' class='changeDetailsInput' value='" . $userAddressLine2 . "' placeholder='Address Line 2' minlength=2 maxlength=255>";
+                    echo "<input id='addressLine2' type='text' class='changeOrAddDetailsInput' value='" . $userAddressLine2 . "' placeholder='Address Line 2' minlength=2 maxlength=255>";
                     ?>
                 </div>
                 <div class="fieldContainer">
                     <p>Town/City<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the Town/City that is in the DB -->
                     <?php
-                    echo "<input id='townCity' type='text' class='changeDetailsInput' value='" . $userTownCity . "' placeholder='Town/City' minlength=2 maxlength=255 required>";
+                    echo "<input id='townCity' type='text' class='changeOrAddDetailsInput' value='" . $userTownCity . "' placeholder='Town/City' minlength=2 maxlength=255 required>";
                     ?>
                 </div>
                 <div class="fieldContainer">
                     <p>County<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the County that is in the DB -->
                     <?php
-                    echo "<input id='county' type='text' class='changeDetailsInput' value='" . $userCounty . "' placeholder='County' minlength=2 maxlength=255 required>"
+                    echo "<input id='county' type='text' class='changeOrAddDetailsInput' value='" . $userCounty . "' placeholder='County' minlength=2 maxlength=255 required>"
                     ?>
                 </div>
                 <div class="fieldContainer">
                     <p>Post Code<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the Post Code that is in the DB -->
                     <?php
-                    echo  "<input id='postCode' type='text' class='changeDetailsInput' value='" . $userPostCode . "' placeholder='Post Code' minlength=5 maxlength=8 required>"
+                    echo  "<input id='postCode' type='text' class='changeOrAddDetailsInput' value='" . $userPostCode . "' placeholder='Post Code' minlength=5 maxlength=8 required>"
                     ?>
                 </div>
                 <!-- Create a button of type submit which will send the data to the backend  -->
-                <input type="submit" class="changeDetailsInput" value=" Save">
+                <input type="submit" class="changeOrAddDetailsInput" value=" Save">
             </form>
             <!-- Make text that will display any errors if there are any. -->
             <p id="errorMessage"></p>

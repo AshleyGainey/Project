@@ -1,55 +1,41 @@
 <head>
+    <!-- Shows what the title of the tab is-->
     <title>Error 404 - Gadget Gainey Store</title>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- Put a viewport on this page -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Keywords of the site for search engine optimisation -->
     <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+    <!-- Author of the site -->
     <meta name="author" content="Ashley Gainey">
+    <!-- Description of the page -->
     <meta name="description" content="Oops, we can't find the page you are looking for.">
+    <meta name="robots" content="noindex" />
+    <!-- Link to the shared classes and ID style sheet -->
     <link rel="stylesheet" type="text/css" href="sharedStyles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
+    <!-- Add the header at the top before any other material -->
     <?php include "./header.php" ?>
 
     <div id="bodyOfPage">
-        <h1>Well...Things here didn't go to plan!</h1>
-        <div class="imageBodyContainer">
-            <img class="polaroidsImg" src="images/404.png" />
-            <div class="containing">
-                <p>Sorry, we couldn't find that page you were looking for. It might be an old link or it has been moved.</p>
-                <p>Try one of the pages below instead!</p>
-
-
-                <a href="index.php">
-                    <p>Home Page</p>
-                    <a id="previousButton" onclick="goBack()">
-                        <p>Go back to previous page</p>
-                    </a>
-                </a>
-            </div>
+        <div>
+            <!-- Title of Page and more -->
+            <h2>Error 404: Cannot Find the Page you are looking for! Your Email</h2>
+            <p>Sorry, we couldn't find that page you were looking for. It might be an old link or it has been moved.</p>
+            <p>Try going back or navigating to the <a href="index.php">Home Page</a> for great offers!</p>
         </div>
     </div>
+    <?php include "./footer.php" ?>
 </body>
-
-
-<?php include "./footer.php" ?>
-
 <style>
-    .imageBodyContainer {
-        display: flex;
-        flex-wrap: nowrap;
+    #bodyOfPage {
+        text-align: center;
     }
 
-    .polaroidsImg {
-        width: 20%;
-        height: 20%;
-        margin-left: 20%;
-    }
-
-
-    .containing {
-        padding: 0% 10% 10% 10%;
+    h2 {
+        margin-bottom: 20px;
     }
 </style>

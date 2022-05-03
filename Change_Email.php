@@ -1,10 +1,11 @@
 <?php
+// If the session hasn't started. Start it (can then use session variables)
 if (!isset($_SESSION)) {
     @ob_start();
     session_start();
 }
-
-if (!isset($_SESSION['userID'])) {
+    //If you try to come to this page (using the URL or by navigating to it) and you haven't signed in yet, redirect to the Login page to sign in
+    if (!isset($_SESSION['userID'])) {
     header('Location: Login.php');
 }
 ?>
@@ -46,14 +47,14 @@ if (!isset($_SESSION['userID'])) {
                     <p>Old Email</p>
                     <!-- Textfield of the old Email address (in a disabled state), the value equal to the old email from the session variable of userEmail -->
                     <?php
-                    echo "<input type='text' id='oldEmail' class='changeDetailsInput' disabled value='" . $_SESSION['userEmail'] . "' > ";
+                    echo "<input type='text' id='oldEmail' class='changeOrAddDetailsInput' disabled value='" . $_SESSION['userEmail'] . "' > ";
                     ?>
                 </div>
                 <div class="fieldContainer rightPart">
                     <!-- Description of field and required span -->
                     <p>New Email<span class="required">*</span></p>
                     <!-- Create an text input element - it will be used to get the requested new email. -->
-                    <input type="email" id="newEmail" class="changeDetailsInput" placeholder="New Email" required minlength=4 maxlength=255>
+                    <input type="email" id="newEmail" class="changeOrAddDetailsInput" placeholder="New Email" required minlength=4 maxlength=255>
                 </div>
             </div>
             <div class="secondRowOfCards">
@@ -61,14 +62,14 @@ if (!isset($_SESSION['userID'])) {
                     <!-- Description of field and required span -->
                     <p>Your Password<span class="required">*</span></p>
                     <!-- For this change, they will need to enter their password, therefore, create a new text input and have it as the password textfield -->
-                    <input type="password" id="password" class="changeDetailsInput" placeholder="Your Password" required minlength=12 maxlength=128>
+                    <input type="password" id="password" class="changeOrAddDetailsInput" placeholder="Your Password" required minlength=12 maxlength=128>
                 </div>
             </div>
 
             <div class="secondRowOfCards">
                 <div class="fieldContainer rightPart">
                     <!-- Create a button of type submit which will send the data to the backend  -->
-                    <input type="submit" class="changeDetailsInput" value="Save">
+                    <input type="submit" class="changeOrAddDetailsInput" value="Save">
                 </div>
             </div>
         </form>
@@ -136,7 +137,6 @@ if (!isset($_SESSION['userID'])) {
                 // If not, show the error message in the errorMessage element with what it got back from the PHP file
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
-                console.log(xhr.responseText);
             }
         }
     }

@@ -121,10 +121,8 @@ AS p RIGHT JOIN product_image pi
                                 </div>
                             <?php } ?>
                         </div>
-                        <!-- <div id="showMoreResultsDiv" class="centreDiv">
-                            <button class="centreText ShowMoreResults NunitoFont">Show More Results
-                            </button>
-                        </div> -->
+                    </div>
+                </div>
                         <?php include "./footer.php" ?>
             </body>
 

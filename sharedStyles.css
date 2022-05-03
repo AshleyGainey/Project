@@ -68,6 +68,7 @@ body::after {
 
 .required {
     color: red;
+    margin-left: 2px;
 }
 
 #errorMessage {
@@ -76,7 +77,7 @@ body::after {
     display: none;
 }
 
-.changeDetailsInput {
+.changeOrAddDetailsInput {
     margin: 0;
     padding: 0;
     height: 30px;
@@ -94,7 +95,7 @@ body::after {
     width: 100%;
 }
 
-.changeDetailsInput[type=submit] {
+.changeOrAddDetailsInput[type=submit] {
     margin-left: 10px;
     box-shadow: 0 0 0 5px #FFFFFF;
     border-radius: 2%;

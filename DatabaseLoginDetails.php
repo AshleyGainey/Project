@@ -1,5 +1,5 @@
-<!-- Holds the details for the database connection -->
 <?php
+// Holds the details for the database connection
 $host = 'localhost';
 $database = 'gadgetgainey';
 $user = 'root';

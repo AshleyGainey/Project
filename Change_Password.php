@@ -50,14 +50,14 @@ if (!isset($_SESSION['userID'])) {
                     <div class="fieldContainer leftPart">
                         <p>Old Password<span class="required">*</span></p>
                         <!-- Textfield of the old Password -->
-                        <input id="oldPassword" type="password" class="changeDetailsInput" placeholder="Old Password" required minlength=12 maxlength=128>
+                        <input id="oldPassword" type="password" class="changeOrAddDetailsInput" placeholder="Old Password" required minlength=12 maxlength=128>
                     </div>
 
                     <div class="fieldContainer rightPart">
                         <!-- Description of field and required span -->
                         <p>New Password<span class="required">*</span></p>
                         <!-- Textfield of the new Password -->
-                        <input type="password" id="newPassword" class="changeDetailsInput" placeholder="New Password" required minlength=12 maxlength=128>
+                        <input type="password" id="newPassword" class="changeOrAddDetailsInput" placeholder="New Password" required minlength=12 maxlength=128>
                     </div>
                 </div>
                 <div class="secondRowOfCards">
@@ -65,14 +65,14 @@ if (!isset($_SESSION['userID'])) {
                         <!-- Description of field and required span -->
                         <p>Confirm New Password<span class="required">*</span></p>
                         <!-- Textfield of confirming the new password -->
-                        <input type="password" id="confirmPassword" class="changeDetailsInput" placeholder="Confirm New Password" required minlength=12 maxlength=128>
+                        <input type="password" id="confirmPassword" class="changeOrAddDetailsInput" placeholder="Confirm New Password" required minlength=12 maxlength=128>
                     </div>
                 </div>
 
                 <div class="secondRowOfCards">
                     <div class="fieldContainer rightPart">
                         <!-- Create a button of type submit which will send the data to the backend  -->
-                        <input type="submit" class="changeDetailsInput" value="Save">
+                        <input type="submit" class="changeOrAddDetailsInput" value="Save">
                     </div>
                 </div>
             </div>
