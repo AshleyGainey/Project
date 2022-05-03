@@ -4,7 +4,6 @@
             $conn = mysqli_connect($host, $user, $pass, $database);
 
             if (trim($_GET['search'])) {
-
             }
 
 
@@ -70,14 +69,14 @@ AS p RIGHT JOIN product_image pi
 
 
                 <title>Results for "<?php echo $_GET['search']; ?>" - Gadget Gainey Store</title>
-                <link rel="stylesheet" type="text/css" href="style.css">
+                <link rel="stylesheet" type="text/css" href="sharedStyles.css">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
             </head>
 
             <body>
                 <?php include "./header.php" ?>
 
-                <div id="mainBody">
+                <div id="bodyOfPage">
                     <div id="resultsFor">
                         <h1>
                             <?php

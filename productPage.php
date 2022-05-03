@@ -70,7 +70,7 @@ mysqli_close($conn)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="sharedStyles.css">
     <title><?php echo $productTitle; ?> - Gadget Gainey Store </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
@@ -82,8 +82,8 @@ mysqli_close($conn)
 
                                 $productDescriptionForMeta = implode(' ', array_slice(explode(' ', $productDescriptionForMeta), 0, 100));
                                 $productDescriptionForMeta = $productDescriptionForMeta . "...";
-    
-    echo "content='" . $productTitle . " - " . $productDescriptionForMeta . "'" ?>>
+
+                                echo "content='" . $productTitle . " - " . $productDescriptionForMeta . "'" ?>>
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -93,7 +93,7 @@ mysqli_close($conn)
 <body>
     <?php include "./header.php" ?>
 
-    <div id="mainBody">
+    <div id="bodyOfPage">
         <div class="row">
             <div class="carousel">
                 <div class="row visible-md visible-lg">
@@ -513,7 +513,7 @@ mysqli_close($conn)
 
     /* Add a margin to the main_container that is inside the main body, this is because we 
 want something up against the Nav (for instance the breadcrumb/the carousel)*/
-    #mainBody {
+    #bodyOfPage {
         margin-top: 30px;
         margin-left: 50px;
         margin-right: 50px;
@@ -622,7 +622,7 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         width: 500px;
     }
 
-    #mainBody {
+    #bodyOfPage {
         margin: 50px;
     }
 

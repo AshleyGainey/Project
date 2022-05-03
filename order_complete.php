@@ -34,14 +34,14 @@ unset($_SESSION['orderID']);
     <meta name="robots" content="noindex" />
 
     <title>Order Complete! - Gadget Gainey Store</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="sharedStyles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
     <?php include "./header.php" ?>
 
-    <div id="mainBody">
+    <div id="bodyOfPage">
         <div id="orderComplete">
             <img src="Images\OrderComplete\confetti-svgrepo-com.svg" id="confettiIcon">
             <h1> Your Order is Complete!</h1>
@@ -88,7 +88,7 @@ unset($_SESSION['orderID']);
         margin-bottom: 10px;
     }
 
-    #mainBody {
+    #bodyOfPage {
         margin-top: 30px;
         margin-left: 50px;
         margin-right: 50px;

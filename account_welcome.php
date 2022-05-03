@@ -1,39 +1,48 @@
 <?php
+// If the session hasn't started. Start it (can then use session variables)
 if (!isset($_SESSION)) {
     @ob_start();
     session_start();
 }
-// print_r('UserID: ' . $_SESSION['userID']);
-// if (!isset($_SESSION['userID'])) {
-//     header('Location: Login.php#hello');
-// }
+
+//If you try to come to this page (using the URL or by navigating to it) and you haven't signed in yet, redirect to the Login page to sign in
+if (!isset($_SESSION['userID'])) {
+    header('Location: Login.php');
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <!-- Shows what the title of the tab is-->
     <title>My Account - Gadget Gainey Store</title>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- Put a viewport on this page -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Keywords of the site for search engine optimisation -->
     <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+    <!-- Author of the site -->
     <meta name="author" content="Ashley Gainey">
+    <!-- Description of the page -->
     <meta name="description" content="Welcome to your Gadget Gainey account! Change your account details and look at your order history!">
 
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="sharedStyles.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 </head>
 
 <body>
     <?php include "./header.php" ?>
 
-    <div id="mainBody">
+    <div id="bodyOfPage">
         <div>
+            <!-- Show Welcome message (with be generated in JavaScript) -->
             <p id="welcome">Welcome!</p>
         </div>
-        <div class="cardArea">
-            <div class="firstRow">
+        <div class="allCards">
+            <div class="firstRowOfCards">
+                <!-- Show Account Details with text around a container -->
                 <div class="cardContainer leftPart">
                     <div class="card">
                         <div class="writingOfCard">
@@ -41,7 +50,7 @@ if (!isset($_SESSION)) {
                         </div>
                     </div>
                 </div>
-
+                <!-- Show Order History Details with text around a container -->
                 <div class="cardContainer rightPart">
                     <div class="card">
                         <div class="writingOfCard">
@@ -50,7 +59,8 @@ if (!isset($_SESSION)) {
                     </div>
                 </div>
             </div>
-            <div class="secondRow">
+            <div class="secondRowOfCards">
+                <!-- On a seperate row, show Log Out text around a container -->
                 <div class="card cardContainer" id="logOut">
                     <div class="writingOfCard">
                         <a>Log Out</a>
@@ -60,44 +70,12 @@ if (!isset($_SESSION)) {
         </div>
 
     </div>
+    <!-- Add the footer at the bottom after any other material -->
     <?php include "./footer.php" ?>
 </body>
 
 </html>
 <style>
-    #confettiIcon {
-        width: 200px;
-        margin-bottom: 50px;
-        color: #FFFFFF;
-    }
-
-    #orderComplete {
-        text-align: center;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-    }
-
-    #orderComplete h1 {
-        margin-bottom: 10px;
-    }
-
-    #mainBody {
-        margin-top: 30px;
-        margin-left: 50px;
-        margin-right: 50px;
-
-        /* Was having an issue if I typed more than expected for the search, then it would destroy the padding 
-	so have added word-wrap, this should apply to the main_container, no matter whether it is a heading 
-	(h1, h2, h3 etc.), paragraph (p) or something other */
-        word-wrap: break-word;
-
-    }
-
-
-
     .card {
         box-shadow: 0 0 0 5px #FFFFFF;
         border-radius: 2%;
@@ -107,18 +85,18 @@ if (!isset($_SESSION)) {
         position: relative;
     }
 
-    .firstRow {
+    .firstRowOfCards {
         display: inline-block;
         width: 100%;
         margin-top: 50px;
     }
 
-    .secondRow .card {
+    .secondRowOfCards .card {
         background-color: #1a1862;
         color: #FFFFFF
     }
 
-    .secondRow {
+    .secondRowOfCards {
         margin-top: 50px;
         width: 100%;
         float: left;
@@ -128,7 +106,7 @@ if (!isset($_SESSION)) {
         align-items: center;
     }
 
-    .secondRow .card .writingOfCard a {
+    .secondRowOfCards .card .writingOfCard a {
         color: #FFFFFF
     }
 
@@ -174,34 +152,24 @@ if (!isset($_SESSION)) {
 </style>
 
 <script>
+    //See if account_welcome.php is set to Register or Login by the account_welcome.php#Register or account_welcome.php#Login and show 'welcome back' or 'welcome' message
+    var url = window.location.href;
+    var afterURL = url.substring(url.indexOf("#") + 1);
+
+    if (afterURL.length != 0) {
+        //Show Register if #Register
+        if (afterURL == "Register") {
+            document.getElementById("welcome").innerHTML = "Welcome" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
+
+        } else {
+            //Show Login if anything other than Register
+            document.getElementById("welcome").innerHTML = "Welcome back" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
+        }
+    } else {
+        document.getElementById("welcome").innerHTML = "Welcome" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
+    }
+
     document.getElementById("logOut").onclick = function() {
         document.location = 'logout.php';
     };
-
-    document.addEventListener("DOMContentLoaded", function() {
-        activeModes();
-    });
-
-    // window.addEventListener("load", function() {
-    //     activeModes();
-    // });
-
-    function activeModes() {
-        //See if account_welcome.php is set to Register or Login by the account_welcome.php#Register or account_welcome.php#Login and show 'welcome back' or 'welcome' message
-        var url = window.location.href;
-        var afterURL = url.substring(url.indexOf("#") + 1);
-
-        if (afterURL.length != 0) {
-            //Show Register if #Register
-            if (afterURL == "Register") {
-                document.getElementById("welcome").innerHTML = "Welcome" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
-
-            } else {
-                //Show Login if anything other than Register
-                document.getElementById("welcome").innerHTML = "Welcome back" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
-            }
-        } else {
-            document.getElementById("welcome").innerHTML = "Welcome" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
-        }
-    }
 </script>

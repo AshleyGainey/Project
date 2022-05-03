@@ -109,7 +109,7 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
     <meta name="author" content="Ashley Gainey">
     <meta name="description" content="Welcome to the world of Gadget Gainey! Providing the best products with a great price. Providing kids toys, technology, accessories to you with amazing customer service! We care for our customers which is key to success!">
     <title>Gadget Gainey Store</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="sharedStyles.css">
 
     <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> -->
 
@@ -118,7 +118,7 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
 
 <body>
     <?php include "./header.php" ?>
-    <div id="mainBody">
+    <div id="bodyOfPage">
         <!-- Old Triangle method -->
         <!-- <div class="triangle"></div> -->
         <div class="carousel">
@@ -332,7 +332,7 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
 
         /* Add a margin to the main_container that is inside the main body, this is because we 
 want something up against the Nav (for instance the breadcrumb/the carousel)*/
-        #mainBody {
+        #bodyOfPage {
             margin-top: 30px;
             margin-left: 50px;
             margin-right: 50px;

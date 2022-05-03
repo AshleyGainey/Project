@@ -1,0 +1,66 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+@font-face {
+    font-family: Century-Gothic;
+    src: url('/fonts/Century Gothic.ttf') format("truetype");
+}
+
+body {
+    background-color: #bfbfbf;
+    font-family: 'Century Gothic', sans-serif;
+}
+
+#bodyOfPage {
+    margin-top: 30px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.navToolButtons {
+    text-align: center;
+    cursor: pointer;
+    margin: auto;
+    padding-right: 10px;
+    padding-top: 20px;
+    width: 100px;
+    display: inline-block;
+}
+
+.navToolButtons h2 {
+    color: #FFFFFF;
+    display: inline;
+}
+
+#userFirstName {
+    overflow-wrap: anywhere;
+}
+
+
+/*For footer staying at bottom*/
+
+html {
+    height: 100%;
+    position: relative;
+}
+
+body {
+    min-height: 100%;
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+
+body::after {
+    content: '';
+    display: block;
+    height: 191px;
+}
+
+/*End of footer*/
+
+.rotateArrow {
+    transform: scaleY(-1);
+}

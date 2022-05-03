@@ -1,14 +1,14 @@
 <?php
+// If the session hasn't started. Start it (can then use session variables)
 if (!isset($_SESSION)) {
     @ob_start();
     session_start();
 }
-// echo $_POST['process'];
+// If the user is changing the Email
 if ($_POST['process'] == "Email") {
-    include 'DBlogin.php';
     $new_email = $_POST['emailAddress'];
     $password = $_POST['password'];
-    //Server Side checking to see if any fields  and Confirm Password is correct
+    //Server Side checking to see if any fields is empty and Confirm Password is correct
     if (empty($new_email)) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -19,13 +19,14 @@ if ($_POST['process'] == "Email") {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password is empty. Please fill it out.'));
     }
-
+    // Server Side checking to see if new email is at least 4 characters long.
     if (strlen($new_email) < 4) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Email length is too weak. It must be a minimum of 4 characters.'));
     }
 
+    // Server Side checking to see if new email is not longer than 255 characters long
     if (strlen($new_email) > 255) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -46,7 +47,7 @@ if ($_POST['process'] == "Email") {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password not correct'));
     }
-    // //Password complexity has not been met, therefore, don't go to the database to check if it is correct
+    // Password complexity has not been met, therefore, don't go to the database to check if it is correct
     if (!(preg_match('/[0-9]{2}/', $password))) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -58,41 +59,59 @@ if ($_POST['process'] == "Email") {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password not correct'));
     }
-
+    // Server Side checking to see if Password has enough complexity (first check, at least 127 characters)
     if (strlen($password) > 127) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password not correct'));
     }
 
+    // Hash the password by using Bcyrpt
     $hash = password_hash($password, PASSWORD_BCRYPT, array('cost' => 11));
+    // Get the user ID from the session
     $userID = $_SESSION['userID'];
 
+    //Get the Database login details
+    include 'DBlogin.php';
+    //Make the connection
     $conn = mysqli_connect($host, $user, $pass, $database);
+    //Prepare the statement - query to get the user password from the database so it can be compared
     $stmt = $conn->prepare("SELECT userPassword From user where userID = ?");
+    //Bind the variable to the prepared statement
     $stmt->bind_param("s", $userID);
-    $stmt->execute();
+    // Execute the query
+    if (!$stmt->execute()) {
+        //Couldn't execute query so stop there
+        header('HTTP/1.1 500 Internal Server Error');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Could not update your email address.'));
+    }
+
+    //Get results from the database
     $res = $stmt->get_result();
-
+    //Store the result in a variable
     $userFromDB = mysqli_fetch_all($res, MYSQLI_ASSOC);
-    // $rows = mysqli_num_rows($result);
 
-    // echo $stmt;
+    //Check if the password they have entered is the same as what is in the database by using password_verify (have to use if encrypted)
     if (password_verify($password, $userFromDB[0]['userPassword'])) {
 
-
-
-
+        // If correct, then we can update the record
         $conn = new mysqli($host, $user, $pass, $database);
         // Check connection
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
+            //Prepare the statement - query to update the user's email
             $stmt = $conn->prepare("UPDATE user SET userEmail = ? where userID = ?");
+            // Bind the parameters
             $stmt->bind_param("si", $userEmail, $userID);
+            // Execute query
            if ($stmt->execute()) {
-                echo "Record updated successfully";
-                $_SESSION['userEmail'] = $new_email;
+            $_SESSION['userEmail'] = $new_email;
+            header('HTTP/1.1 200 OK');
+            header('Content-Type: application/json; charset=UTF-8');
+            die(json_encode('Executed successfully'));
+            
            } else {
                 echo "Error updating record: " . $conn->error;
                 header('HTTP/1.1 Internal Server Error');
@@ -295,7 +314,7 @@ if ($_POST['process'] == "Email") {
     }
 
     if (!empty($addressLine2) && strlen($addressLine2) < 2) {
-        header('HTTP/1.1 400 Bad Request Server');
+        header('cardContainer400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Address Line 2 length is too weak. It must be a minimum of 2 characters if not blank.'));
     }

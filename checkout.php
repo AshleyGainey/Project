@@ -7,32 +7,32 @@ if (!isset($_SESSION)) {
 }
 
 
-    $productPriceArray = array();
-    $productQuantityArray = array();
-    $total = 0;
-    foreach ($_SESSION["basket"] as $basketItem => $basketItem_value) {
-        include 'DBlogin.php';
+$productPriceArray = array();
+$productQuantityArray = array();
+$total = 0;
+foreach ($_SESSION["basket"] as $basketItem => $basketItem_value) {
+    include 'DBlogin.php';
 
-        $conn = new mysqli($host, $user, $pass, $database);
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-        $stmt = $conn->prepare("SELECT productPrice FROM product where productID = ?");
-        $stmt->bind_param("i", $basketItem);
-        $stmt->execute();
-        $res = $stmt->get_result();
-        $basket_product = mysqli_fetch_all($res, MYSQLI_ASSOC);
-        // echo "Hello" + $basket_product[0]["productPrice"];
-        $productTotal = $basket_product[0]["productPrice"] * $basketItem_value;
-        $total = $total + $productTotal;
-        // echo $total;
+    $conn = new mysqli($host, $user, $pass, $database);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
+    $stmt = $conn->prepare("SELECT productPrice FROM product where productID = ?");
+    $stmt->bind_param("i", $basketItem);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    $basket_product = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    // echo "Hello" + $basket_product[0]["productPrice"];
+    $productTotal = $basket_product[0]["productPrice"] * $basketItem_value;
+    $total = $total + $productTotal;
+    // echo $total;
+}
 
 
 
-    // echo "Hello" . $_POST['totalAmountTextBox'];
-    // print_r('session: ' . $_SESSION['userID']);
+// echo "Hello" . $_POST['totalAmountTextBox'];
+// print_r('session: ' . $_SESSION['userID']);
 
 if (!isset($_SESSION['basket'])) {
     header('Location: basket.php');
@@ -98,13 +98,13 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
 
 
     <title>Checkout - Gadget Gainey Store</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="sharedStyles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
     <?php include "./header.php" ?>
-    <div id="mainBody">
+    <div id="bodyOfPage">
         <div class="title">
             <i class="fa fa-shopping-cart"></i>
             <h1>Checkout</h1>
@@ -114,7 +114,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                 <div class="total">
                     <h1 class="totalHeader">Total:</h1>
                     <?php
-    echo "<h1 class='totalAmount'>£" . number_format($total, 2) . "<h1>";
+                    echo "<h1 class='totalAmount'>£" . number_format($total, 2) . "<h1>";
                     ?>
                 </div>
             </div>
@@ -300,7 +300,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
     <?php include "./footer.php" ?>
 </body>
 <style>
-    #mainBody {
+    #bodyOfPage {
         margin-left: 50px;
         margin-right: 50px;
         margin-bottom: 50px;
@@ -739,7 +739,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
 
 
     /* FOR THE NEW BILLING/DELIVERY ADDRESS FORMS */
-    #mainBody {
+    #bodyOfPage {
         margin-top: 30px;
         margin-left: 50px;
         margin-right: 50px;

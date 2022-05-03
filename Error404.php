@@ -6,14 +6,14 @@
     <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
     <meta name="author" content="Ashley Gainey">
     <meta name="description" content="Oops, we can't find the page you are looking for.">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="sharedStyles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
     <?php include "./header.php" ?>
 
-    <div id="mainBody">
+    <div id="bodyOfPage">
         <h1>Well...Things here didn't go to plan!</h1>
         <div class="imageBodyContainer">
             <img class="polaroidsImg" src="images/404.png" />

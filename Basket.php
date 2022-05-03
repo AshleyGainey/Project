@@ -1,52 +1,56 @@
 <?php
-// print_r('session here: ' . isset($_SESSION));
-
+// If the session hasn't started. Start it (can then use session variables)
 if (!isset($_SESSION)) {
     @ob_start();
     @session_start();
 }
-
-// print_r('session: ' . $_SESSION['userID']);
-
-$picturesURLCarousel = array();
+//Store Product Price's in an array for later
 $productPriceArray = array();
+//Store Total Price's in an array for later
 $totalPriceOfEachProduct = array();
-// $productQuantityArray = array();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <!-- Shows what the title of the tab is-->
     <title>Your Basket - Gadget Gainey Store</title>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- Put a viewport on this page -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Keywords of the site for search engine optimisation -->
     <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+    <!-- Author of the site -->
     <meta name="author" content="Ashley Gainey">
+    <!-- Description of the page -->
     <meta name="description" content="View, edit and remove from your basket!">
 
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="sharedStyles.css">
 </head>
 
 <body>
     <?php include "./header.php" ?>
-    <div id="mainBody">
+    <div id="bodyOfPage">
         <div class="title">
+            <!-- Title of Page with an icon (better accessibility) -->
             <i class="fa fa-shopping-basket"></i>
             <h1>Your Basket</h1>
         </div>
         <?php
         $total = 0;
 
+        // Check to see if there is a basket session set, if not, don't show any other elements other than 
+        // displaying a header saying 'No products in the basket'
         if (!isset($_SESSION["basket"])) {
             $invalidBasket = 1;
-            echo "<h1 id='NoProducts'>No Products In the basket</h1>";
+            echo "<h1 id='NoProducts'>No Products in the basket</h1>";
         } else if (count($_SESSION["basket"]) == 0) {
             $invalidBasket = 1;
-            echo "<h1 id='NoProducts'>No Products In the basket</h1>";
+            echo "<h1 id='NoProducts'>No Products in the basket</h1>";
         } else {
+            // Not invalid so keep looping through the basket session array, getting out the key (the Product ID) and the value (the quantity)
             $invalidBasket = 0;
             foreach ($_SESSION["basket"] as $basketItem => $basketItem_value) {
                 include 'DBlogin.php';
@@ -56,61 +60,65 @@ $totalPriceOfEachProduct = array();
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);
                 }
-
+                //Select all the information needed for the product (product title, image (alt text and image file name), price, the quantity in the DB.
                 $stmt = $conn->prepare("SELECT p.productTitle, pi.productImageFilename, pi.productImageAltText, p.productPrice, p.productTotalQuantity FROM product p INNER JOIN product_image pi ON p.productID = pi.productID
 where p.productID = ? AND pi.displayOrder = 1");
                 $stmt->bind_param("i", $basketItem);
-                $stmt->execute();
+
+                if (!$stmt->execute()) {
+                    header('HTTP/1.1 500 Internal Server Error');
+                    header('Content-Type: application/json; charset=UTF-8');
+                    die(json_encode('ERROR - Could not retrieve the data of the item from the database.'));
+                }
+                //Get results from the database
                 $res = $stmt->get_result();
                 $basket_product = mysqli_fetch_all($res, MYSQLI_ASSOC);
-                // print_r($basket_product);
+
+                // Now add the structure of the product information
+                // Starting with a div container to contain everything of that product
+                echo "<div id='individualProduct" . $basketItem . "' class='individualProduct'>";
         ?>
-                <p id="regMessage"></p>
-                <?php
-                echo "<div id='individualProduct" . $basketItem . "' class='individualProduct row'>";
-                ?>
-
-                <div class="containerProduct col-2">
+                <!-- Container for the whole of the Product Image -->
+                <div class="containerProduct">
+                    <!-- Container for the Product Image -->
                     <div class="productImage">
+                        <!-- insert the Product Image, getting the correct URL and the alternative text for the image -->
                         <?php
-                        // echo  "<a href='productPage.php?productID=" . $basketItem . "'>";
-
                         $productImagePath = "images/products/" . $basketItem . "/" . $basket_product[0]["productImageFilename"];
                         echo "<a href='productPage.php?productID=" . $basketItem . "'><img src='" . $productImagePath . "' alt='" .
                             $basket_product[0]["productImageAltText"]  . "' ></a>";
-
-                        // echo "<\a>";
                         ?>
-
-                        <!-- <img src="Images\Home\Gadget Gainey - No Image Available.gif" class="slider__img"> -->
                     </div>
                 </div>
-
-                <div class="containerProductDetails col-8">
+                <!-- Container for all the other information of the product -->
+                <div class="containerProductDetails">
                     <div class="productDetails">
+                        <!-- First Row includes the title of the product and the quantity in the basket-->
                         <div class="firstRow">
                             <div class="titleOfProduct">
                                 <?php
-                                // echo  "<a href='productPage.php?productID=" . $basketItem . "'>";
+                                //Output the Title, with a link to the original product
                                 echo "<a href='productPage.php?productID=" . $basketItem . "'><h1>" . $basket_product[0]["productTitle"] . "</h1></a>" ?>
 
                             </div>
                             <div class="quantityOfProduct">
                                 <label>Quantity:</label>
-
                                 <?php
+                                //Output the Quantity Dropdown
                                 echo "<select name='quantity' id='quantity" . $basketItem . "' onchange='changeQuantity(" . $basketItem . ")'>'"
-
                                 ?>
 
-                                <?php
-                                $quantity = $basket_product[0]["productTotalQuantity"];
-                                $quantitySelected = $basketItem_value;
 
+                                <?php
+                                //Get the quantity from the Database and if over 10, then just say the user can order the limit for a user (10)
+                                $quantity = $basket_product[0]["productTotalQuantity"];
+                                // Also get the quantity that is in the basket for that product
+                                $quantitySelected = $basketItem_value;
 
                                 if ($quantity > 10) {
                                     $quantity = 10;
                                 }
+                                // Loop through, adding the dropdown values (1-10 if database holds more than 10 as its total quantity, 1-x if the database holds less than 10 (x being what the database has))
                                 for ($i = 1; $i < $quantity + 1; $i++) {
                                     $selectOption = "<option value='" . $i . "'";
                                     if ($i == $quantitySelected) {
@@ -124,6 +132,7 @@ where p.productID = ? AND pi.displayOrder = 1");
                                 </select>
                             </div>
                         </div>
+                        <!-- Second row contains the Remove Product button and the quantity prices of the product in the basket -->
                         <div class="secondRow">
                             <?php
                             echo "<div class='RemoveProduct' onclick='removeProductFromBasket(" . $basketItem . ")'>"
@@ -132,29 +141,28 @@ where p.productID = ? AND pi.displayOrder = 1");
                             <h4>Remove</h4>
                         </div>
                         <?php
-                        echo "<div id='quantityPriceOfProduct" . $basketItem . "' class='quantityPriceOfProduct '>"
+                        // Div to hold the prices (appending the product id for the div id)
+                        echo "<div id='quantityPriceOfProduct" . $basketItem . "' class='quantityPriceOfProduct'>"
                         ?>
                         <?php
                         $productPrice = $basket_product[0]["productPrice"];
 
                         $productPriceArray[$basketItem] = $productPrice;
 
-
-                        // $productQuantityArray[$basketItem] = $quantitySelected;
+                        // If the quantity from the basket is more than 1, then display text telling the user how much it is for one of the products. If not more than one, then create it, but add the hiddenQuantity class which hides the element.
                         if ($quantitySelected > 1) {
                             echo "<h3 id='quantityPerPrice" . $basketItem . "'>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPrice, 2) . "</span></h3>";
                         } else {
                             echo "<h3 id='quantityPerPrice" . $basketItem . "' class='hiddenQuantity'>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPrice, 2) . "</span></h3>";
                         }
 
-
-
+                        // Work out the total amount for the product (price times quantity) and add it to the total price of the basket
                         $quantityPrice = $productPrice * $quantitySelected;
                         $totalPriceOfEachProduct[$basketItem] = $quantityPrice;
                         $total += $quantityPrice;
 
 
-
+                        // Output the price with the quantity included
                         echo "<h1 id='totalPriceOfQuantity" . $basketItem . "' >£" . number_format($quantityPrice, 2) . "</h1>";
                         ?>
                     </div>
@@ -167,8 +175,10 @@ where p.productID = ? AND pi.displayOrder = 1");
         }
 ?>
 <?php
+// After printing out each product in the basket, and only if there are items in the basket
 if ($invalidBasket == 0) {
 ?>
+    <!-- Then output the total price that is in the basket -->
     <div id="totalContainer">
         <div class="total">
             <h1 class="totalHeader">Total:<h1>
@@ -179,6 +189,7 @@ if ($invalidBasket == 0) {
 
         </div>
     </div>
+    <!-- And show a checkout button to get to the checkout page-->
     <div id="checkoutDiv">
         <div class="cardContainer rightPart">
             <a href="checkout.php">
@@ -201,19 +212,6 @@ if ($invalidBasket == 0) {
 <?php include "./footer.php" ?>
 </body>
 <style>
-    #mainBody {
-        margin-left: 50px;
-        margin-right: 50px;
-        margin-bottom: 50px;
-    }
-
-    .navToolButtons i {
-        font-size: 5em;
-        padding-bottom: 10px;
-        color: #FFFFFF
-    }
-
-
     #NoProducts {
         display: flex;
         justify-content: center;
@@ -480,24 +478,31 @@ if ($invalidBasket == 0) {
     }
 </style>
 <script>
+    //When first loaded, get the total Price of each product
     var totalPriceOfEachProduct = <?php echo json_encode($totalPriceOfEachProduct); ?>;
 
+    //When triggered (by the quantity select dropdown)
     function changeQuantity(id) {
-        var x = document.getElementById("quantity" + id).value;
+        //Get the quantity from the dropdown
+        var quantity = document.getElementById("quantity" + id).value;
 
+        //Then make a request to the basket_process.php and send in the values
         let xhr = new XMLHttpRequest();
-
         xhr.open('POST', "basket_process.php", true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.send("update=" + id + "&quantity=" + x);
+        xhr.send("update=" + id + "&quantity=" + quantity);
 
 
-        // Create an event to receive the return.
+        // On return of the call
         xhr.onreadystatechange = function() {
+            //See if it is ready and the status is OK
             if (xhr.readyState == 4 && xhr.status == 200) {
+                //If it is, then work out the new total price on the client side 
+                //By getting all of the prices from the PHP variable productPriceArray
                 var passedPriceArray = <?php echo json_encode($productPriceArray); ?>;
-                var totalValueOfProduct = passedPriceArray[id] * x;
-
+                //Then getting the price of the relevant product, times that by the updated quantity
+                var totalValueOfProduct = passedPriceArray[id] * quantity;
+                //Logic to show/hide the quantity per product if over/under the quantity of 1
                 if (x > 1) {
                     var element = document.getElementById("quantityPerPrice" + id);
                     element.classList.remove("hiddenQuantity");
@@ -506,19 +511,21 @@ if ($invalidBasket == 0) {
                     element.classList.add("hiddenQuantity");
                 }
 
+                //Update the total product price
                 document.getElementById("totalPriceOfQuantity" + id).innerHTML = "£" + totalValueOfProduct.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
+                // Update the array, at the index of the product id, of every total product page
                 totalPriceOfEachProduct[id] = totalValueOfProduct;
+                //Now calculate the new total overall price by looping through the totalPriceOfEachProduct array
                 var total = 0;
                 for (const [key, value] of Object.entries(totalPriceOfEachProduct)) {
                     console.log(key, value);
                     total = total + value
                 }
 
-                // debugger;
+                // Display the total back to the page
                 document.getElementById("totalAmount").innerHTML = "£" + total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-
+            } else {
+                //If other than status OK or it is not ready, then log it to console for IT Technicians to take a look at it if the user contacts us
                 var data = xhr.responseText;
                 console.log(data);
             }
@@ -528,24 +535,30 @@ if ($invalidBasket == 0) {
 
     function removeProductFromBasket(id) {
 
+        //Make a request to the basket_process.php and send in the value of the id we want to remove
         let xhr = new XMLHttpRequest();
-
         xhr.open('POST', "basket_process.php", true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.send("remove=" + id);
 
 
-        // Create an event to receive the return.
+        // On return of the call
         xhr.onreadystatechange = function() {
+            //See if it is ready and the status is OK
             if (xhr.readyState == 4 && xhr.status == 200) {
+                //If it is, then we decrease the basket count seen at the top and write it to the DOM.
                 var basketcount = document.getElementById('cartCount').innerHTML;
                 basketcount--;
+
+                //If more than 0, keep it displaying, 
 
                 if (basketcount > 0) {
                     document.getElementById("cartCount").style.display = "inline";
                 } else {
+                    // if basket count is no longer more than 0, then hide it from the view of the user 
                     document.getElementById("cartCount").style.display = "none";
 
+                    // and also remove the checkout button and total container
                     const removeCheckout = document.getElementById("checkoutDiv");
                     removeCheckout.remove();
                     const removeTotal = document.getElementById("totalContainer");
@@ -554,16 +567,24 @@ if ($invalidBasket == 0) {
                 }
                 document.getElementById("cartCount").innerHTML = basketcount;
 
-                removeFadeOut(document.getElementById('individualProduct' + id), 500);
+                //Removing the DOM element by getting the element and then the product id that is being removed and fade it out
+                removeFadeOut(document.getElementById('individualProduct' + id));
+                //Removed value so therefore update the price of that product to 0.
                 totalPriceOfEachProduct[id] = 0;
+
+                //Now calculate the new total overall price by looping through the totalPriceOfEachProduct array
                 var total = 0;
                 for (const [key, value] of Object.entries(totalPriceOfEachProduct)) {
                     console.log(key, value);
                     total = total + value
                 }
-
+                // Display the total back to the page
                 document.getElementById("totalAmount").innerHTML = "£" + total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
+                var data = xhr.responseText;
+                console.log(data);
+            } else {
+                //If other than status OK or it is not ready, then log it to console for IT Technicians to take a look at it if the user contacts us
                 var data = xhr.responseText;
                 console.log(data);
             }
@@ -572,12 +593,13 @@ if ($invalidBasket == 0) {
 
 
 
-
+    //Last product has been removed so therefore show the No Procducts in the basket text. 
+    //Do this by creating the header and then adding it to the basketForm
     function addNoProducts() {
         setTimeout(function() {
             const header = document.createElement("h1");
 
-            const node = document.createTextNode("No Products In the basket");
+            const node = document.createTextNode("No Products in the basket");
             header.appendChild(node);
             header.setAttribute("id", "NoProducts");
 
@@ -587,22 +609,14 @@ if ($invalidBasket == 0) {
         }, 500);
     }
 
+//Fade out the element that is being passed in by changing the opacity.
+    function removeFadeOut(element) {
+        element.style.transition = "opacity " + 0.5 + "s ease";
 
-    function removeFadeOut(el, speed) {
-        var seconds = speed / 1000;
-        el.style.transition = "opacity " + seconds + "s ease";
-
-        el.style.opacity = 0;
+        element.style.opacity = 0;
         setTimeout(function() {
-            el.parentNode.removeChild(el);
-        }, speed);
-    }
-
-    function updateTotalPrice() {
-        <?php
-        if (count($_SESSION["basket"]) == 0) {
-            $invalidBasket = 1;
-        } ?>
+            element.parentNode.removeChild(element);
+        }, 0.5);
     }
 </script>
 

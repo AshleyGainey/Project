@@ -20,14 +20,14 @@ if (!isset($_SESSION['userID'])) {
     <meta name="author" content="Ashley Gainey">
     <meta name="description" content="Change your email of your Gadget Gainey account!">
 
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="sharedStyles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
     <?php include "./header.php" ?>
 
-    <div id="mainBody">
+    <div id="bodyOfPage">
         <div>
             <p>Change Your Email</p>
         </div>
@@ -68,7 +68,7 @@ if (!isset($_SESSION['userID'])) {
 
 </html>
 <style>
-    #mainBody {
+    #bodyOfPage {
         margin-top: 30px;
         margin-left: 50px;
         margin-right: 50px;
