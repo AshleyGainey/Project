@@ -131,6 +131,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
 </head>
 
 <body>
+    <!-- Add the header at the top before any other material -->
     <?php include "./header.php" ?>
     <div id="bodyOfPage">
         <div class="title">
@@ -339,7 +340,6 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         <p id="errorMessage"></p>
     </div>
     <!-- Add the footer at the bottom after any other material -->
-
     <?php include "./footer.php" ?>
 </body>
 <style>

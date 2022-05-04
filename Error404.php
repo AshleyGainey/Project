@@ -22,12 +22,13 @@
 
     <div id="bodyOfPage">
         <div>
-            <!-- Title of Page and more -->
+            <!-- Title of Page and a description of why they are being forwarded to this page -->
             <h2>Error 404: Cannot Find the Page you are looking for! Your Email</h2>
             <p>Sorry, we couldn't find that page you were looking for. It might be an old link or it has been moved.</p>
             <p>Try going back or navigating to the <a href="index.php">Home Page</a> for great offers!</p>
         </div>
     </div>
+    <!-- Add the footer at the bottom after any other material -->
     <?php include "./footer.php" ?>
 </body>
 <style>

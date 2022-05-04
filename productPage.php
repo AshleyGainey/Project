@@ -97,7 +97,7 @@ mysqli_close($conn)
         <div class="row">
             <div class="carousel">
                 <div class="row visible-md visible-lg">
-                    <div id="contenedor-slider" class="contenedor-slider">
+                    <div id="CarouselContainter" class="CarouselContainter">
                         <div id="slider">
                             <?php $i = 0;
                             foreach ($productImage as $product) {
@@ -399,7 +399,7 @@ mysqli_close($conn)
     }
 
 
-    .contenedor-slider {
+    .CarouselContainter {
         margin: auto;
         position: relative;
         overflow: hidden;

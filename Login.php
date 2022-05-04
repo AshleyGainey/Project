@@ -1,17 +1,16 @@
 <?php
-// print_r('session here: ' . isset($_SESSION));
-
+// If the session hasn't started. Start it (can then use session variables)
 if (!isset($_SESSION)) {
     @ob_start();
     @session_start();
 }
 
-// print_r('session: ' . $_SESSION['userID']);
-
+// If you try to come to this page (using the URL or by navigating to it) and you have already signed in, redirect to the Welcome page
 if (isset($_SESSION['userID'])) {
     header('Location: account_welcome.php');
 }
 
+// If you have come here due to the Checkout page, then make a flag variable to go back to the checkout page when successful at login/register
 if (isset($_SESSION['comeBackToCheckOut'])) {
     $comeBackToCheckOut = true;
 } else {
@@ -24,64 +23,82 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <!-- Put a viewport on this page -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Keywords of the site for search engine optimisation -->
     <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+        <!-- Author of the site -->
     <meta name="author" content="Ashley Gainey">
+        <!-- Description of the page -->
     <meta name="description" content="Login or Register for a Gadget Gainey account to get access to your order history!">
+        <!-- Shows what the title of the tab is-->
     <title>Login/Register - Gadget Gainey Store</title>
+        <!-- Link to the shared classes and ID style sheet -->
     <link rel="stylesheet" type="text/css" href="sharedStyles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
+    <!-- Add the header at the top before any other material -->
     <?php include "./header.php" ?>
-
     <div id="bodyOfPage">
-        <div class="buttons">
-            <div class="button location">
-                <div id="LoginButton" class="buttonContainer selected">
+        <!-- Div to hold both buttons -->
+        <div id="loginRegisterButtons">
+            <!-- Container for individual button, the Login button -->
+            <div id="LoginButton" class="IndividualButton selected">
                     <div class="writingOfButton">
+                        <!-- Writing of the Button -->
                         <a href="#Login" onclick="ShowSection(false)">Login</a>
                     </div>
                 </div>
-            </div>
-            <div class="button location">
-                <div id="RegisterButton" class="buttonContainer unselected">
+            <!-- Container for individual button -->
+            <div id="RegisterButton" class="IndividualButton unselected">
                     <div class="writingOfButton">
+                        <!-- Writing of the Button -->
                         <a href="#Register" onclick="ShowSection(true)">Register</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="allElementss" id="Login">
-            <div class="allElements">
-                <form id="LoginForm" action="" method="post" onsubmit="loginFormSubmit()">
-                    <div class="cardContainer">
-                        <p>Email</p>
-                        <input id="loginEmail" type="email" class="searchInput" placeholder="Email" minlength=4 maxlength=255 required>
+        <!-- Container to hold Login Form -->
+        <div class="divForForm" id="Login">
+            <!-- Login Form, and on submit, go to loginFormSubmit method and post the data after the client validation -->
+                <form id="loginForm" action="" method="post" onsubmit="loginFormSubmit()">
+                    <div class="fieldContainer">
+                    <!-- Description of field and required span -->
+                        <p>Email<span class="required">*</span></p>
+                        <!-- Create an text input element with the type of email and some client side validation (min and max, required) -->
+                        <input id="loginEmail" type="email" class="changeOrAddDetailsInput" placeholder="Email" minlength=4 maxlength=255 required>
                     </div>
-                    <div class="cardContainer">
-                        <p>Password</p>
-                        <input id="loginPassword" type="password" class="searchInput" placeholder="Password" minlength=12 maxlength=128 required>
+                    <div class="fieldContainer">
+                        <!-- Description of field and required span -->
+                        <p>Password<span class="required">*</span></p>
+                        <!-- Create an text input element with the type of password and some client side validation (min and max, required) -->
+                        <input id="loginPassword" type="password" class="changeOrAddDetailsInput" placeholder="Password" minlength=12 maxlength=128 required>
                     </div>
-                    <input type="submit" value="Login">
+                    <!-- Create a button of type submit which will send the data to the backend  -->
+                    <input type="submit" class="changeOrAddDetailsInput" value="Login">
                 </form>
-            </div>
         </div>
 
-        <div class="allElementss" id="Register">
-            <div class="allElements">
-                <h5>Account Details</h5>
-                <form action="" id="RegisterForm" method="post" onsubmit="registerFormSubmit()">
-                    <div class="cardContainer inline">
+        <!-- Container to hold Register Form -->
+        <div class="divForForm" id="Register">
+            <!-- Register Form, and on submit, go to registerFormSubmit method and post the data after the client validation -->
+                <form action="" id="registerForm" method="post" onsubmit="registerFormSubmit()">
+                    <h3>Account Details</h3>
+                    <div class="fieldContainer">
+                    <!-- Description of field and required span -->
                         <p>Email<span class="required">*</span></p>
-                        <input id="regEmail" type="email" class="searchInput" placeholder="Email" minlength=4 maxlength=128 required>
+                    <!-- Create an text input element with the type of email and some client side validation (min and max, required) -->
+                        <input id="regEmail" type="email" class="changeOrAddDetailsInput" placeholder="Email" minlength=4 maxlength=128 required>
                     </div>
-                    <div class="cardContainer inline">
+                    <div class="fieldContainer">
+                    <!-- Description of field and required span -->
                         <p>Password<span class="required">*</span></p>
-                        <input id="regPassword" type="password" class="searchInput" placeholder="Password" minlength=12 maxlength=128 onkeyup="keyUpRegPassword()" required>
+                    <!-- Create an text input element with the type of password and some client side validation (min and max, required) and check on Key up to check the password complexity -->
+                        <input id="regPassword" type="password" class="changeOrAddDetailsInput" placeholder="Password" minlength=12 maxlength=128 onkeyup="keyUpRegPassword()" required>
                     </div>
+                    <!-- Show validation to the user and whether it has been met -->
                     <div id="passwordValidationMessage">
                         <h2>Password must contain at least:</h2>
                         <p id="lowerCase" class="invalid">5 Letters</p>
@@ -91,16 +108,22 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                         <p id="minLength" class="invalid">A Minimum of 12 characters</p>
                         <p id="maxLength" class="valid">A Maximum of 128 characters</p>
                     </div>
-                    <div class="cardContainer floatRight">
+                    <div class="fieldContainer">
+                    <!-- Description of field and required span -->
                         <p>Confirm Password<span class="required">*</span></p>
-                        <input id="regConfirmPassword" type="password" class="searchInput" placeholder="Confirm Password" onfocusout="focusOutRegConfirmPassword()" onkeyup="keyUpRegConfirmPassword()" minlength=12 maxlength=128 required>
+                    <!-- Create an text input element with the type of password and some client side validation (min and max, required) and check on Out of focus to see if the passwords match up to check the password complexity -->
+                        <input id="regConfirmPassword" type="password" class="changeOrAddDetailsInput" placeholder="Confirm Password" onfocusout="focusOutRegConfirmPassword()" onkeyup="keyUpRegConfirmPassword()" minlength=12 maxlength=128 required>
                     </div>
+                    <!-- Display Validation Message if the Passwords (Password and Confirm Password) do not match -->
                     <div id="confirmPasswordValidationMessage">
                         <p id="passwordMatch" class="hide">Passwords do not match</p>
                     </div>
-                    <h5>Address Details</h5>
-                    <div class="cardContainer">
+                    <br>
+                    <h3>Address Details</h3>
+                    <div class="fieldContainer">
+                        <!-- Description of field and required span -->
                         <p>Title<span class="required">*</span></p>
+                            <!-- Dropdown of the title of the new user's Title - Either Mr, Master, Mrs, Miss, Ms or Dr -->
                         <select id="regTitle" name="title" id="title" required>
                             <option value="Mr">Mr</option>
                             <option value="Master">Master</option>
@@ -111,87 +134,68 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                         </select>
                     </div>
 
-                    <div class="cardContainer">
+                    <div class="fieldContainer">
+                            <!-- Description of field and required span -->
                         <p>First Name<span class="required">*</span></p>
-                        <input id="regFirstName" type="text" class="searchInput" placeholder="First Name" required pattern="^\D+$" minlength=2 maxlength=255 required>
+                            <!-- Create an text input for first name of the new user and some client side validation (min and max, required, regex pattern (not numbers)) -->
+                        <input id="regFirstName" type="text" class="changeOrAddDetailsInput" placeholder="First Name" required pattern="^\D+$" minlength=2 maxlength=255 required>
                     </div>
-                    <div class="cardContainer">
+                    <div class="fieldContainer">
+                            <!-- Description of field and required span -->
                         <p>Last Name<span class="required">*</span></p>
-                        <input id="regLastName" type="text" class="searchInput" placeholder="Last Name" required pattern="^\D+$" minlength=2 maxlength=255 required>
+                            <!-- Create an text input for last name of the new user and some client side validation (min and max, required, regex pattern (not numbers)) -->
+                        <input id="regLastName" type="text" class="changeOrAddDetailsInput" placeholder="Last Name" required pattern="^\D+$" minlength=2 maxlength=255 required>
                     </div>
-                    <div class="cardContainer">
+                    <div class="fieldContainer">
+                            <!-- Description of field and required span -->
                         <p>Address Line 1<span class="required">*</span></p>
-                        <input id="regAddressLine1" type="text" class="searchInput" placeholder="Address Line 1" minlength=2 maxlength=255 required>
+                            <!-- Create an text input for address line 1 of the new user and some client side validation (min and max, required) -->
+                        <input id="regAddressLine1" type="text" class="changeOrAddDetailsInput" placeholder="Address Line 1" minlength=2 maxlength=255 required>
                     </div>
-                    <div class="cardContainer">
+                    <div class="fieldContainer">
+                        <!-- Description of field and required span -->
                         <p>Address Line 2</p>
-                        <input id="regAddressLine2" type="text" class="searchInput" placeholder="Address Line 2" minlength=2 maxlength=255>
+                        <!-- Create an text input for address line 2 of the new user and some client side validation (min and max) -->
+                        <input id="regAddressLine2" type="text" class="changeOrAddDetailsInput" placeholder="Address Line 2" minlength=2 maxlength=255>
                     </div>
-                    <div class="cardContainer">
+                    <div class="fieldContainer">
+                            <!-- Description of field and required span and some client side validation (min and max, required)-->
                         <p>Town/City<span class="required">*</span></p>
-                        <input id="regTownCity" type="text" class="searchInput" placeholder="Town/City" minlength=2 maxlength=255 required>
+                            <!-- Create an text input for Town/City of the new user and some client side validation (min and max, required) -->
+                        <input id="regTownCity" type="text" class="changeOrAddDetailsInput" placeholder="Town/City" minlength=2 maxlength=255 required>
                     </div>
-                    <div class="cardContainer">
+                    <div class="fieldContainer">
+                            <!-- Description of field and required span -->
                         <p>County<span class="required">*</span></p>
-                        <input id="regCounty" type="text" class="searchInput" placeholder="County" minlength=2 maxlength=255 required>
+                        <!-- Create an text input for County of the new user and some client side validation (min and max, required) -->
+                        <input id="regCounty" type="text" class="changeOrAddDetailsInput" placeholder="County" minlength=2 maxlength=255 required>
                     </div>
-                    <div class="cardContainer">
+                    <div class="fieldContainer">
+                            <!-- Description of field and required span -->
                         <p>Post Code<span class="required">*</span></p>
-                        <input id="regPostCode" type="text" class="searchInput" placeholder="Post Code" minlength=5 maxlength=8 required>
+                            <!-- Create an text input for Post Code of the new user and some client side validation (min and max, required) -->
+                        <input id="regPostCode" type="text" class="changeOrAddDetailsInput" placeholder="Post Code" minlength=5 maxlength=8 required>
                     </div>
-                    <input type="submit" value="Register">
+                <!-- Create a button of type submit which will send the data to the backend  -->
+                    <input type="submit" class="changeOrAddDetailsInput" value="Register">
                 </form>
-            </div>
         </div>
-    </div>
+    <!-- Make text that will display any errors if there are any -->
     <p id="errorMessage"></p>
-    </div>
-    </div>
-    </div>
-    </div>
+    <!-- Add the footer at the bottom after any other material -->
     <?php include "./footer.php" ?>
 </body>
 
 </html>
 <style>
-    #bodyOfPage {
-        margin-top: 30px;
-        margin-left: 50px;
-        margin-right: 50px;
-
-        /* Was having an issue if I typed more than expected for the search, then it would destroy the padding 
-	so have added word-wrap, this should apply to the main_container, no matter whether it is a heading 
-	(h1, h2, h3 etc.), paragraph (p) or something other */
-        word-wrap: break-word;
-
-    }
-
-    .location {
-        margin: 50px;
-    }
-
-    .doAction {
-        margin-left: 20px;
-    }
-
-    .buttonContainer {
+     .IndividualButton {
+        margin: 30px;   
         box-shadow: 0 0 0 5px #FFFFFF;
         border-radius: 2%;
         height: 75px;
         width: 250px;
         overflow: hidden;
         position: relative;
-    }
-
-    input[type=submit] {
-        margin-left: 10px;
-        box-shadow: 0 0 0 5px #FFFFFF;
-        border-radius: 2%;
-        height: 75px;
-        width: 250px;
-        overflow: hidden;
-        position: relative;
-        background-color: #1a1862;
     }
 
     .firstRow {
@@ -210,28 +214,18 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         color: #FFFFFF
     }
 
-    .inline {
-        /* display: inline-block; */
-    }
-
-    .buttons {
-        margin-top: 50px;
+    #loginRegisterButtons {
+        margin: 50px;
         width: 100%;
-        /* float: left; */
         margin-left: auto;
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    .buttonContainer .writingOfButton a {
+    .IndividualButton .writingOfButton a {
         color: #FFFFFF
     }
-
-    /* 
-    .cardContainer {
-        display: inline-block;
-    } */
 
     .writingOfButton a {
         font-size: 25px;
@@ -295,14 +289,14 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 
     }
 
-    .allElementss {
+    .divForForm {
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
 
-    .cardContainer {
+    .fieldContainer {
         margin-top: 20px;
         margin-bottom: 20px;
         /* width: 20%; */
@@ -363,47 +357,6 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 </style>
 
 <script>
-    activeModes();
-    var passwordRequirementMet = 0;
-
-
-    //If user clicks on either buttons (Register/Login) then change the form and show which
-    // form is active by the colour of the button
-    function ShowSection(ShowRegister) {
-        var show = null;
-        var hide = null;
-
-        if (ShowRegister === true) {
-            show = "Register";
-            hide = "Login";
-
-        } else {
-            show = "Login";
-            hide = "Register";
-        }
-
-
-        var hideSection = document.getElementById(hide);
-        hideSection.style.display = 'none';
-
-
-        var showSection = document.getElementById(show);
-        showSection.style.display = 'flex';
-
-
-        var hideButton = document.getElementById(hide + "Button");
-        hideButton.classList.add("unselected");
-        hideButton.classList.remove("selected");
-
-
-        var show = document.getElementById(show + "Button");
-        show.classList.add("selected");
-        show.classList.remove("unselected");
-    }
-
-
-    //     Check URL to either show Login or Register
-    function activeModes() {
         //See if Login.php is set to Register or Login by the Login.php#Register or Login.php#Login
         var url = window.location.href;
         var afterURL = url.substring(url.indexOf("#") + 1);
@@ -421,11 +374,35 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
             // Show Login if nothing there
             ShowSection(false);
         }
+
+    var passwordRequirementMet = 0;
+
+    //If user clicks on either buttons (Register/Login) then change the forms around and show which
+    // form is active by the colour of the button
+    function ShowSection(ShowRegister) {
+        var show = null;
+        var hide = null;
+
+        if (ShowRegister === true) {
+            show = "Register";
+            hide = "Login";
+
+        } else {
+            show = "Login";
+            hide = "Register";
+        }
+
+        document.getElementById(hide).style.display = 'none';
+        document.getElementById(show).style.display = 'flex';
+
+        var hideButton = document.getElementById(hide + "Button");
+        hideButton.classList.add("unselected");
+        hideButton.classList.remove("selected");
+
+        var show = document.getElementById(show + "Button");
+        show.classList.add("selected");
+        show.classList.remove("unselected");
     }
-
-
-
-
 
     //If the password match is shown and the confirm password is the same as the password, then remove the error
     function keyUpRegConfirmPassword() {
@@ -455,6 +432,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         }
     }
 
+    // Client Side Validation for Password checking and update the class list of the validation messages if they have changed.
     function keyUpRegPassword() {
         var passwordText = document.getElementById("regPassword").value;
         var confirmPasswordText = document.getElementById("regConfirmPassword").value;
@@ -511,6 +489,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
             passwordRequirementMet--;
         }
 
+        // Check to see if Password is the same as Confirm Password
         if (confirmPasswordText != "") {
             if (passwordText !== confirmPasswordText) {
                 var passwordMatch = document.getElementById("passwordMatch");
@@ -524,16 +503,15 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         }
     }
 
-
+    // On Submitting the register form
     function registerFormSubmit() {
-
+        // Prevent the default action
         event.preventDefault();
+        // Get the personal information that was entered for the register form
         var emailAddress = document.getElementById("regEmail").value;
         var password = document.getElementById("regPassword").value;
         var confirmPassword = document.getElementById("regConfirmPassword").value;
-
-
-        //Personal Information values
+        //Address Part of the register form
         var title = document.getElementById("regTitle").value;
         var firstName = document.getElementById("regFirstName").value;
         var lastName = document.getElementById("regLastName").value;
@@ -545,8 +523,8 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         var title = document.getElementById("regTitle").value;
 
 
+        // Then send the data to the server side (LoginRegisterProcess.php) for server client validation and if passed, then add to the DB
         let xhr = new XMLHttpRequest();
-
         xhr.open('POST', "LoginRegisterProcess.php", true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.send("emailAddress=" + emailAddress +
@@ -562,12 +540,15 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
             "&postcode=" + postcode +
             "&Register=" + true);
 
-
-        // Create an event to receive the return.
+        // On return of the call
         xhr.onreadystatechange = function() {
+            //See if it is ready and the status is OK
             if (xhr.readyState == 4 && xhr.status == 200) {
+                // If passed and successful, don't display the error message field
                 document.getElementById("errorMessage").style.display = "none";
 
+                // If passed and successful, take the user back to the checkout if the php variable is set/if comeBackToCheckOut is true, 
+                //if it isn't, then go to Account Welcome page
                 var goTocheckout = "<?php
                                     if (isset($_SESSION['comeBackToCheckOut'])) {
                                         echo true;
@@ -585,35 +566,35 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                     window.location.href = "account_welcome.php#Register";
                 }
             } else {
-                var message = "An error occured while registering. Please see below :";
+            // If not, show the error message in the errorMessage element with what it got back from the PHP file
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText;
             }
         }
     }
 
-
-
-
-
+    // On Submitting the login form
     function loginFormSubmit() {
+                // Prevent the default action
         event.preventDefault();
         var emailAddress = document.getElementById("loginEmail").value;
         var password = document.getElementById("loginPassword").value;
 
-
+        // Then send the data to the server side (LoginRegisterProcess.php) for server client validation and if passed, then add to the DB
         let xhr = new XMLHttpRequest();
-
         xhr.open('POST', "LoginRegisterProcess.php", true)
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.send("emailAddress=" + emailAddress + "&password=" + password + "&Login=" + true);
 
-
-        // Create an event to receive the return.
+        // On return of the call
         xhr.onreadystatechange = function() {
+            //See if it is ready and the status is OK
             if (xhr.readyState == 4 && xhr.status == 200) {
+            // If passed and successful, don't display the error message field
                 document.getElementById("errorMessage").style.display = "none";
 
+                  // If passed and successful, take the user back to the checkout if the php variable is set/if comeBackToCheckOut is true, 
+                //if it isn't, then go to Account Welcome page
                 var goTocheckout = "<?php echo $comeBackToCheckOut ?>";
 
                 if (goTocheckout) {
@@ -626,6 +607,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                     window.location.href = "account_welcome.php#Login";
                 }
             } else {
+               // If not, show the error message in the errorMessage element with what it got back from the PHP file
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
             }

@@ -341,7 +341,6 @@ VALUES (?, ?, ?, ?)");
         header('Content-Type: application/json');
         print json_encode($result);
 
-        // header('Location: Error404.php');
         $_SESSION['userID'] = $user[0]["userID"];
         $_SESSION['userEmail'] = $user[0]["userEmail"];
         $_SESSION['userFirstName'] = $user[0]["firstName"];
