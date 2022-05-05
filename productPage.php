@@ -190,6 +190,7 @@ mysqli_close($conn)
             <?php echo '<pre class="productDescription">' . str_replace('\n', "\n", $productDescriptionCorrect) . '</pre>'; ?>
         </div>
     </div>
+    <!-- Add the footer at the bottom after any other material -->
     <?php include "./footer.php" ?>
 </body>
 
@@ -698,13 +699,11 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
 
     var slider = document.getElementById("slider");
 
-    // debugger;
     let content = document.getElementById('slider');
     let firstChild = content.firstElementChild;
     let lastChild = content.lastElementChild;
     firstChild.before(lastChild);
 
-    // // debugger;
     // console.log(firstChild);
 
 
@@ -727,7 +726,6 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         let content = document.getElementById('slider');
         let firstChild = content.firstElementChild;
         let lastChild = content.lastElementChild;
-        // debugger;
         lastChild.after(firstChild);
 
         document.getElementById("slider").style.marginLeft = "-100%";
@@ -746,7 +744,6 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         let content = document.getElementById('slider');
         let firstChild = content.firstElementChild;
         let lastChild = content.lastElementChild;
-        // debugger;
         firstChild.before(lastChild);
 
         document.getElementById("slider").style.marginLeft = "-100%";
@@ -794,14 +791,11 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
     }
 
     function changeIndictors() {
-        // debugger;
         var previousIndictor = document.getElementById("sliderIndicatorsButton" + prevSliderNum);
         // console.log(previousIndictor);
-        // debugger;
         previousIndictor.style.backgroundColor = "#1a1862";
 
         var sliderIndictors = document.getElementById("sliderIndicatorsButton" + sliderNum);
-        // debugger;
         // console.log(sliderIndictors);
         sliderIndictors.style.backgroundColor = "red";
     }
@@ -818,11 +812,9 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
             xhr.open('POST', "basket_process.php", true)
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.send("product_id=" + productID + "&quantity=" + 1);
-            debugger;
 
             // Create an event to receive the return.
             xhr.onreadystatechange = function() {
-                debugger;
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     document.getElementById("errorMessage").style.display = "block";
 
@@ -837,12 +829,9 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
 
                     var result = JSON.parse(xhr.responseText);
 
-                    debugger;
                     if (result == "NewItem") {
-                        debugger;
                         var basketcount = document.getElementById('basketCount').innerHTML;
                         basketcount++;
-                        debugger;
                         if (basketcount > 0) {
                             document.getElementById("basketCount").style.display = "inline";
                         } else {

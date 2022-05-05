@@ -185,7 +185,6 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
     <!-- Add the footer at the bottom after any other material -->
     <?php include "./footer.php" ?>
 </body>
-
 </html>
 <style>
      .IndividualButton {

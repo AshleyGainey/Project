@@ -344,14 +344,14 @@ if ($_POST['process'] == "Email") {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Address Line 1 length is too strong. It must be a maximum of 255 characters.'));
     }
-	// Server side validation to check when the address Line is not empty, if it is more than a character
+	// Server side validation to check when the address Line 2 is not empty, if it is more than a character
     if (!empty($addressLine2) && strlen($addressLine2) < 2) {
         header('cardContainer400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Address Line 2 length is too weak. It must be a minimum of 2 characters if not blank.'));
     }
 
-    // Server side validation to check when the address Line is not empty, if it is less than 256 characters
+    // Server side validation to check when the address Line 2 is not empty, if it is less than 256 characters
     if (!empty($addressLine2) && strlen($addressLine2) > 255) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');

@@ -54,7 +54,7 @@ if (!isset($_SESSION['userID'])) {
                 <div class="cardContainer rightPart">
                     <div class="card">
                         <div class="writingOfCard">
-                            <a href="order_details.php">Order History<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
+                            <a href="order_history.php">Order History<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
                         </div>
                     </div>
                 </div>

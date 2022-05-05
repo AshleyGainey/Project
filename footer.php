@@ -26,7 +26,7 @@
         <!-- With 2 sub categories -->
         <div class="SubCategory">
             <a href="account_welcome.php">My Account</a>
-            <a href="order_details.php">Order Details</a>
+            <a href="order_history.php">Order Details</a>
         </div>
     </div>
     <!-- This section is the getting in contact section -->

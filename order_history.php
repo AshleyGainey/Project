@@ -592,7 +592,6 @@ INNER JOIN product_image pi ON p.productID = pi.productID
 
 <script>
     function hideShowBillingDeliveryAddress(orderID) {
-        // debugger;
         var section = document.getElementById('billingDeliveryAddressInnerContainer' + orderID)
         if (section.style.display === 'none' ||
             section.style.display === '') {

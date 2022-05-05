@@ -1,13 +1,15 @@
-        <?php
-        if (!isset($_SESSION)) {
-                @ob_start();
-                session_start();
-        }
+<?php
+// If the session hasn't started. Start it (can then use session variables)
+if (!isset($_SESSION)) {
+  @ob_start();
+  session_start();
+}
 
-        unset($_SESSION['userID']);
-        unset($_SESSION['userEmail']);
-        unset($_SESSION['userFirstName']);
+// To log out, reset userID, userEmail and userFirstName
+unset($_SESSION['userID']);
+unset($_SESSION['userEmail']);
+unset($_SESSION['userFirstName']);
 
-        header('Location: index.php');
-
-        ?>
+// After doing so, go to the Home Page
+header('Location: index.php');
+?>
