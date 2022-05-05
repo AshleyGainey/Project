@@ -37,11 +37,13 @@ body::after {
     display: block;
     height: 191px;
 }
+
 /*End of footer*/
 
 .rotateArrow {
     transform: scaleY(-1);
 }
+
 /* Start of - Change Details Shared Styling */
 .firstRowOfCards {
     display: inline-block;
@@ -104,4 +106,5 @@ body::after {
     position: relative;
     background-color: #1a1862;
 }
+
 /* End of - Change Details Shared Styling */

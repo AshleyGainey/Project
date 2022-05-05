@@ -23,17 +23,17 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <!-- Put a viewport on this page -->
+    <!-- Put a viewport on this page -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Keywords of the site for search engine optimisation -->
+    <!-- Keywords of the site for search engine optimisation -->
     <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
-        <!-- Author of the site -->
+    <!-- Author of the site -->
     <meta name="author" content="Ashley Gainey">
-        <!-- Description of the page -->
+    <!-- Description of the page -->
     <meta name="description" content="Login or Register for a Gadget Gainey account to get access to your order history!">
-        <!-- Shows what the title of the tab is-->
+    <!-- Shows what the title of the tab is-->
     <title>Login/Register - Gadget Gainey Store</title>
-        <!-- Link to the shared classes and ID style sheet -->
+    <!-- Link to the shared classes and ID style sheet -->
     <link rel="stylesheet" type="text/css" href="sharedStyles.css">
 </head>
 
@@ -45,150 +45,151 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         <div id="loginRegisterButtons">
             <!-- Container for individual button, the Login button -->
             <div id="LoginButton" class="IndividualButton selected">
-                    <div class="writingOfButton">
-                        <!-- Writing of the Button -->
-                        <a href="#Login" onclick="ShowSection(false)">Login</a>
-                    </div>
+                <div class="writingOfButton">
+                    <!-- Writing of the Button -->
+                    <a href="#Login" onclick="ShowSection(false)">Login</a>
                 </div>
+            </div>
             <!-- Container for individual button -->
             <div id="RegisterButton" class="IndividualButton unselected">
-                    <div class="writingOfButton">
-                        <!-- Writing of the Button -->
-                        <a href="#Register" onclick="ShowSection(true)">Register</a>
-                    </div>
+                <div class="writingOfButton">
+                    <!-- Writing of the Button -->
+                    <a href="#Register" onclick="ShowSection(true)">Register</a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Container to hold Login Form -->
-        <div class="divForForm" id="Login">
-            <!-- Login Form, and on submit, go to loginFormSubmit method and post the data after the client validation -->
-                <form id="loginForm" action="" method="post" onsubmit="loginFormSubmit()">
-                    <div class="fieldContainer">
-                    <!-- Description of field and required span -->
-                        <p>Email<span class="required">*</span></p>
-                        <!-- Create an text input element with the type of email and some client side validation (min and max, required) -->
-                        <input id="loginEmail" type="email" class="changeOrAddDetailsInput" placeholder="Email" minlength=4 maxlength=255 required>
-                    </div>
-                    <div class="fieldContainer">
-                        <!-- Description of field and required span -->
-                        <p>Password<span class="required">*</span></p>
-                        <!-- Create an text input element with the type of password and some client side validation (min and max, required) -->
-                        <input id="loginPassword" type="password" class="changeOrAddDetailsInput" placeholder="Password" minlength=12 maxlength=128 required>
-                    </div>
-                    <!-- Create a button of type submit which will send the data to the backend  -->
-                    <input type="submit" class="changeOrAddDetailsInput" value="Login">
-                </form>
-        </div>
+    <!-- Container to hold Login Form -->
+    <div class="divForForm" id="Login">
+        <!-- Login Form, and on submit, go to loginFormSubmit method and post the data after the client validation -->
+        <form id="loginForm" action="" method="post" onsubmit="loginFormSubmit()">
+            <div class="fieldContainer">
+                <!-- Description of field and required span -->
+                <p>Email<span class="required">*</span></p>
+                <!-- Create an text input element with the type of email and some client side validation (min and max, required) -->
+                <input id="loginEmail" type="email" class="changeOrAddDetailsInput" placeholder="Email" minlength=4 maxlength=255 required>
+            </div>
+            <div class="fieldContainer">
+                <!-- Description of field and required span -->
+                <p>Password<span class="required">*</span></p>
+                <!-- Create an text input element with the type of password and some client side validation (min and max, required) -->
+                <input id="loginPassword" type="password" class="changeOrAddDetailsInput" placeholder="Password" minlength=12 maxlength=128 required>
+            </div>
+            <!-- Create a button of type submit which will send the data to the backend  -->
+            <input type="submit" class="changeOrAddDetailsInput" value="Login">
+        </form>
+    </div>
 
-        <!-- Container to hold Register Form -->
-        <div class="divForForm" id="Register">
-            <!-- Register Form, and on submit, go to registerFormSubmit method and post the data after the client validation -->
-                <form action="" id="registerForm" method="post" onsubmit="registerFormSubmit()">
-                    <h3>Account Details</h3>
-                    <div class="fieldContainer">
-                    <!-- Description of field and required span -->
-                        <p>Email<span class="required">*</span></p>
-                    <!-- Create an text input element with the type of email and some client side validation (min and max, required) -->
-                        <input id="regEmail" type="email" class="changeOrAddDetailsInput" placeholder="Email" minlength=4 maxlength=128 required>
-                    </div>
-                    <div class="fieldContainer">
-                    <!-- Description of field and required span -->
-                        <p>Password<span class="required">*</span></p>
-                    <!-- Create an text input element with the type of password and some client side validation (min and max, required) and check on Key up to check the password complexity -->
-                        <input id="regPassword" type="password" class="changeOrAddDetailsInput" placeholder="Password" minlength=12 maxlength=128 onkeyup="keyUpRegPassword()" required>
-                    </div>
-                    <!-- Show validation to the user and whether it has been met -->
-                    <div id="passwordValidationMessage">
-                        <h2>Password must contain at least:</h2>
-                        <p id="lowerCase" class="invalid">5 Letters</p>
-                        <p id="number" class="invalid">2 Numbers</p>
-                        <br>
-                        <h2>And Must Be:</h2>
-                        <p id="minLength" class="invalid">A Minimum of 12 characters</p>
-                        <p id="maxLength" class="valid">A Maximum of 128 characters</p>
-                    </div>
-                    <div class="fieldContainer">
-                    <!-- Description of field and required span -->
-                        <p>Confirm Password<span class="required">*</span></p>
-                    <!-- Create an text input element with the type of password and some client side validation (min and max, required) and check on Out of focus to see if the passwords match up to check the password complexity -->
-                        <input id="regConfirmPassword" type="password" class="changeOrAddDetailsInput" placeholder="Confirm Password" onfocusout="focusOutRegConfirmPassword()" onkeyup="keyUpRegConfirmPassword()" minlength=12 maxlength=128 required>
-                    </div>
-                    <!-- Display Validation Message if the Passwords (Password and Confirm Password) do not match -->
-                    <div id="confirmPasswordValidationMessage">
-                        <p id="passwordMatch" class="hide">Passwords do not match</p>
-                    </div>
-                    <br>
-                    <h3>Address Details</h3>
-                    <div class="fieldContainer">
-                        <!-- Description of field and required span -->
-                        <p>Title<span class="required">*</span></p>
-                            <!-- Dropdown of the title of the new user's Title - Either Mr, Master, Mrs, Miss, Ms or Dr -->
-                        <select id="regTitle" name="title" id="title" required>
-                            <option value="Mr">Mr</option>
-                            <option value="Master">Master</option>
-                            <option value="Mrs">Mrs</option>
-                            <option value="Miss">Miss</option>
-                            <option value="Ms">Ms</option>
-                            <option value="Dr">Dr</option>
-                        </select>
-                    </div>
+    <!-- Container to hold Register Form -->
+    <div class="divForForm" id="Register">
+        <!-- Register Form, and on submit, go to registerFormSubmit method and post the data after the client validation -->
+        <form action="" id="registerForm" method="post" onsubmit="registerFormSubmit()">
+            <h3>Account Details</h3>
+            <div class="fieldContainer">
+                <!-- Description of field and required span -->
+                <p>Email<span class="required">*</span></p>
+                <!-- Create an text input element with the type of email and some client side validation (min and max, required) -->
+                <input id="regEmail" type="email" class="changeOrAddDetailsInput" placeholder="Email" minlength=4 maxlength=128 required>
+            </div>
+            <div class="fieldContainer">
+                <!-- Description of field and required span -->
+                <p>Password<span class="required">*</span></p>
+                <!-- Create an text input element with the type of password and some client side validation (min and max, required) and check on Key up to check the password complexity -->
+                <input id="regPassword" type="password" class="changeOrAddDetailsInput" placeholder="Password" minlength=12 maxlength=128 onkeyup="keyUpRegPassword()" required>
+            </div>
+            <!-- Show validation to the user and whether it has been met -->
+            <div id="passwordValidationMessage">
+                <h2>Password must contain at least:</h2>
+                <p id="lowerCase" class="invalid">5 Letters</p>
+                <p id="number" class="invalid">2 Numbers</p>
+                <br>
+                <h2>And Must Be:</h2>
+                <p id="minLength" class="invalid">A Minimum of 12 characters</p>
+                <p id="maxLength" class="valid">A Maximum of 128 characters</p>
+            </div>
+            <div class="fieldContainer">
+                <!-- Description of field and required span -->
+                <p>Confirm Password<span class="required">*</span></p>
+                <!-- Create an text input element with the type of password and some client side validation (min and max, required) and check on Out of focus to see if the passwords match up to check the password complexity -->
+                <input id="regConfirmPassword" type="password" class="changeOrAddDetailsInput" placeholder="Confirm Password" onfocusout="focusOutRegConfirmPassword()" onkeyup="keyUpRegConfirmPassword()" minlength=12 maxlength=128 required>
+            </div>
+            <!-- Display Validation Message if the Passwords (Password and Confirm Password) do not match -->
+            <div id="confirmPasswordValidationMessage">
+                <p id="passwordMatch" class="hide">Passwords do not match</p>
+            </div>
+            <br>
+            <h3>Address Details</h3>
+            <div class="fieldContainer">
+                <!-- Description of field and required span -->
+                <p>Title<span class="required">*</span></p>
+                <!-- Dropdown of the title of the new user's Title - Either Mr, Master, Mrs, Miss, Ms or Dr -->
+                <select id="regTitle" name="title" id="title" required>
+                    <option value="Mr">Mr</option>
+                    <option value="Master">Master</option>
+                    <option value="Mrs">Mrs</option>
+                    <option value="Miss">Miss</option>
+                    <option value="Ms">Ms</option>
+                    <option value="Dr">Dr</option>
+                </select>
+            </div>
 
-                    <div class="fieldContainer">
-                            <!-- Description of field and required span -->
-                        <p>First Name<span class="required">*</span></p>
-                            <!-- Create an text input for first name of the new user and some client side validation (min and max, required, regex pattern (not numbers)) -->
-                        <input id="regFirstName" type="text" class="changeOrAddDetailsInput" placeholder="First Name" required pattern="^\D+$" minlength=2 maxlength=255 required>
-                    </div>
-                    <div class="fieldContainer">
-                            <!-- Description of field and required span -->
-                        <p>Last Name<span class="required">*</span></p>
-                            <!-- Create an text input for last name of the new user and some client side validation (min and max, required, regex pattern (not numbers)) -->
-                        <input id="regLastName" type="text" class="changeOrAddDetailsInput" placeholder="Last Name" required pattern="^\D+$" minlength=2 maxlength=255 required>
-                    </div>
-                    <div class="fieldContainer">
-                            <!-- Description of field and required span -->
-                        <p>Address Line 1<span class="required">*</span></p>
-                            <!-- Create an text input for address line 1 of the new user and some client side validation (min and max, required) -->
-                        <input id="regAddressLine1" type="text" class="changeOrAddDetailsInput" placeholder="Address Line 1" minlength=2 maxlength=255 required>
-                    </div>
-                    <div class="fieldContainer">
-                        <!-- Description of field and required span -->
-                        <p>Address Line 2</p>
-                        <!-- Create an text input for address line 2 of the new user and some client side validation (min and max) -->
-                        <input id="regAddressLine2" type="text" class="changeOrAddDetailsInput" placeholder="Address Line 2" minlength=2 maxlength=255>
-                    </div>
-                    <div class="fieldContainer">
-                            <!-- Description of field and required span and some client side validation (min and max, required)-->
-                        <p>Town/City<span class="required">*</span></p>
-                            <!-- Create an text input for Town/City of the new user and some client side validation (min and max, required) -->
-                        <input id="regTownCity" type="text" class="changeOrAddDetailsInput" placeholder="Town/City" minlength=2 maxlength=255 required>
-                    </div>
-                    <div class="fieldContainer">
-                            <!-- Description of field and required span -->
-                        <p>County<span class="required">*</span></p>
-                        <!-- Create an text input for County of the new user and some client side validation (min and max, required) -->
-                        <input id="regCounty" type="text" class="changeOrAddDetailsInput" placeholder="County" minlength=2 maxlength=255 required>
-                    </div>
-                    <div class="fieldContainer">
-                            <!-- Description of field and required span -->
-                        <p>Post Code<span class="required">*</span></p>
-                            <!-- Create an text input for Post Code of the new user and some client side validation (min and max, required) -->
-                        <input id="regPostCode" type="text" class="changeOrAddDetailsInput" placeholder="Post Code" minlength=5 maxlength=8 required>
-                    </div>
-                <!-- Create a button of type submit which will send the data to the backend  -->
-                    <input type="submit" class="changeOrAddDetailsInput" value="Register">
-                </form>
-        </div>
+            <div class="fieldContainer">
+                <!-- Description of field and required span -->
+                <p>First Name<span class="required">*</span></p>
+                <!-- Create an text input for first name of the new user and some client side validation (min and max, required, regex pattern (not numbers)) -->
+                <input id="regFirstName" type="text" class="changeOrAddDetailsInput" placeholder="First Name" required pattern="^\D+$" minlength=2 maxlength=255 required>
+            </div>
+            <div class="fieldContainer">
+                <!-- Description of field and required span -->
+                <p>Last Name<span class="required">*</span></p>
+                <!-- Create an text input for last name of the new user and some client side validation (min and max, required, regex pattern (not numbers)) -->
+                <input id="regLastName" type="text" class="changeOrAddDetailsInput" placeholder="Last Name" required pattern="^\D+$" minlength=2 maxlength=255 required>
+            </div>
+            <div class="fieldContainer">
+                <!-- Description of field and required span -->
+                <p>Address Line 1<span class="required">*</span></p>
+                <!-- Create an text input for address line 1 of the new user and some client side validation (min and max, required) -->
+                <input id="regAddressLine1" type="text" class="changeOrAddDetailsInput" placeholder="Address Line 1" minlength=2 maxlength=255 required>
+            </div>
+            <div class="fieldContainer">
+                <!-- Description of field and required span -->
+                <p>Address Line 2</p>
+                <!-- Create an text input for address line 2 of the new user and some client side validation (min and max) -->
+                <input id="regAddressLine2" type="text" class="changeOrAddDetailsInput" placeholder="Address Line 2" minlength=2 maxlength=255>
+            </div>
+            <div class="fieldContainer">
+                <!-- Description of field and required span and some client side validation (min and max, required)-->
+                <p>Town/City<span class="required">*</span></p>
+                <!-- Create an text input for Town/City of the new user and some client side validation (min and max, required) -->
+                <input id="regTownCity" type="text" class="changeOrAddDetailsInput" placeholder="Town/City" minlength=2 maxlength=255 required>
+            </div>
+            <div class="fieldContainer">
+                <!-- Description of field and required span -->
+                <p>County<span class="required">*</span></p>
+                <!-- Create an text input for County of the new user and some client side validation (min and max, required) -->
+                <input id="regCounty" type="text" class="changeOrAddDetailsInput" placeholder="County" minlength=2 maxlength=255 required>
+            </div>
+            <div class="fieldContainer">
+                <!-- Description of field and required span -->
+                <p>Post Code<span class="required">*</span></p>
+                <!-- Create an text input for Post Code of the new user and some client side validation (min and max, required) -->
+                <input id="regPostCode" type="text" class="changeOrAddDetailsInput" placeholder="Post Code" minlength=5 maxlength=8 required>
+            </div>
+            <!-- Create a button of type submit which will send the data to the backend  -->
+            <input type="submit" class="changeOrAddDetailsInput" value="Register">
+        </form>
+    </div>
     <!-- Make text that will display any errors if there are any -->
     <p id="errorMessage"></p>
     <!-- Add the footer at the bottom after any other material -->
     <?php include "./footer.php" ?>
 </body>
+
 </html>
 <style>
-     .IndividualButton {
-        margin: 30px;   
+    .IndividualButton {
+        margin: 30px;
         box-shadow: 0 0 0 5px #FFFFFF;
         border-radius: 2%;
         height: 75px;
@@ -356,23 +357,23 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 </style>
 
 <script>
-        //See if Login.php is set to Register or Login by the Login.php#Register or Login.php#Login
-        var url = window.location.href;
-        var afterURL = url.substring(url.indexOf("#") + 1);
+    //See if Login.php is set to Register or Login by the Login.php#Register or Login.php#Login
+    var url = window.location.href;
+    var afterURL = url.substring(url.indexOf("#") + 1);
 
-        if (afterURL.length != 0) {
-            //Show Register if #Register
-            if (afterURL == "Register") {
-                ShowSection(true);
+    if (afterURL.length != 0) {
+        //Show Register if #Register
+        if (afterURL == "Register") {
+            ShowSection(true);
 
-            } else {
-                //Show Login if anything other than Register
-                ShowSection(false);
-            }
         } else {
-            // Show Login if nothing there
+            //Show Login if anything other than Register
             ShowSection(false);
         }
+    } else {
+        // Show Login if nothing there
+        ShowSection(false);
+    }
 
     var passwordRequirementMet = 0;
 
@@ -565,7 +566,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                     window.location.href = "account_welcome.php#Register";
                 }
             } else {
-            // If not, show the error message in the errorMessage element with what it got back from the PHP file
+                // If not, show the error message in the errorMessage element with what it got back from the PHP file
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText;
             }
@@ -574,7 +575,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
 
     // On Submitting the login form
     function loginFormSubmit() {
-                // Prevent the default action
+        // Prevent the default action
         event.preventDefault();
         var emailAddress = document.getElementById("loginEmail").value;
         var password = document.getElementById("loginPassword").value;
@@ -589,10 +590,10 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
         xhr.onreadystatechange = function() {
             //See if it is ready and the status is OK
             if (xhr.readyState == 4 && xhr.status == 200) {
-            // If passed and successful, don't display the error message field
+                // If passed and successful, don't display the error message field
                 document.getElementById("errorMessage").style.display = "none";
 
-                  // If passed and successful, take the user back to the checkout if the php variable is set/if comeBackToCheckOut is true, 
+                // If passed and successful, take the user back to the checkout if the php variable is set/if comeBackToCheckOut is true, 
                 //if it isn't, then go to Account Welcome page
                 var goTocheckout = "<?php echo $comeBackToCheckOut ?>";
 
@@ -606,7 +607,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                     window.location.href = "account_welcome.php#Login";
                 }
             } else {
-               // If not, show the error message in the errorMessage element with what it got back from the PHP file
+                // If not, show the error message in the errorMessage element with what it got back from the PHP file
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
             }

@@ -18,12 +18,12 @@ include 'DatabaseLoginDetails.php';
 $conn = mysqli_connect($host, $user, $pass, $database);
 
 // Error with the connection of the database. So don't execute further
-    if (!$conn) {
-        header('HTTP/1.1 500 Internal Server Error');
-        header('Content-Type: application/json; charset=UTF-8');
-        die(json_encode('ERROR - Connection to the database has not been established'));
-        echo 'Connection error: ' . mysqli_connect_error();
-    }
+if (!$conn) {
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Content-Type: application/json; charset=UTF-8');
+    die(json_encode('ERROR - Connection to the database has not been established'));
+    echo 'Connection error: ' . mysqli_connect_error();
+}
 
 //Prepared Statement - query to get all order details tied to the user (latest first). 
 // For the page:
@@ -55,14 +55,14 @@ where po.UserID = ? ORDER BY po.DateAndTime DESC;"
 //Binding the User ID with the prepared statement
 $stmt->bind_param("i", $_SESSION['userID']);
 
-     //Execute the query
-    if (!$stmt->execute()) {
-        //Error trying to execute seeing if the user is already in the DB and send back a 500 Internal Server Error HTTP response.
-        $stmt->close();
-        header('HTTP/1.1 500 Internal Server Error');
-        header('Content-Type: application/json; charset=UTF-8');
-        die(json_encode('ERROR - Could not get your order history from the Database'));
-    }
+//Execute the query
+if (!$stmt->execute()) {
+    //Error trying to execute seeing if the user is already in the DB and send back a 500 Internal Server Error HTTP response.
+    $stmt->close();
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Content-Type: application/json; charset=UTF-8');
+    die(json_encode('ERROR - Could not get your order history from the Database'));
+}
 //Get results from the database and put them in a variable
 $res = $stmt->get_result();
 $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
@@ -104,7 +104,7 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
             <h1>No Order have been placed with this account</h1>
             </div>";
         } else {
-        // Else if there are orders, loop through each order
+            // Else if there are orders, loop through each order
             foreach ($allOrdersTiedToAccount as $order) {
                 //Get information about the order. Including the OrderID, 
                 // Total Price and the date of time that it was placed
@@ -134,7 +134,7 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
                 // Change the Date and Time into a Date object so we can manipulate it
                 $date = date_create($DateAndTime);
-                
+
                 // Create a Div holding the information of the order. And then an outer Of the Each Order that holds the order date and time (that has been formatted)
                 echo "<div class='eachOrder'>
             <div class='eachOrderOuter'>
@@ -172,7 +172,7 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
                         where pi.displayOrder = 1 and op.orderID = ?");
                 //Binding the current Order with the prepared statement
                 $stmt->bind_param("i", $orderID);
-                     //Execute the query
+                //Execute the query
                 if (!$stmt->execute()) {
                     //Error trying to execute find the products that are tied to the order and send back a 500 Internal Server Error HTTP response.
                     $stmt->close();
@@ -240,8 +240,8 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
                         <h2 class='left'>Billing & Delivery Address</h2>
                         <img class='right' src='images/Down Arrow - Big.png' alt='Billing and Delivery Address - Right Arrow' />
                     </div>";
-                    // Now make the billing container with all the billing information
-                    echo "<div class='billingDeliveryAddressOuterContainer'> 
+                // Now make the billing container with all the billing information
+                echo "<div class='billingDeliveryAddressOuterContainer'> 
                     <div id='billingDeliveryAddressInnerContainer" . $orderID .
                     "' class='billingDeliveryAddressInnerContainer'>
                         <div class='billingAddress'>
@@ -252,7 +252,7 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
                                 <h3 class='FirstNameBilling'>" . $billingLastName . "</h3>
                             </div>
                             <h3 class='addressLine1Billing'>" . $billingAddressLine1 . "</h3>";
-                            // (if address line 2 is blank, then don't output that line)
+                // (if address line 2 is blank, then don't output that line)
                 if (!empty($billingAddressLine2)) {
                     echo "<h3 class='addressLine2Billing'>" . $billingAddressLine2 . "</h3>";
                 }
@@ -261,8 +261,8 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
                             <h3 class='postCodeBilling'>" . $billingPostCode .
                     "</h3>
                         </div>";
-                        // Now make the delivery container with all the delivery information
-                        echo "<div class='deliveryAddress'>
+                // Now make the delivery container with all the delivery information
+                echo "<div class='deliveryAddress'>
                             <h2>Delivery Address</h2>
                             <div class='nameDelivery'>
                                  <h3 class='titleDelivery'>" . $deliveryTitle . "</h3>
@@ -270,8 +270,8 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
                                 <h3 class='FirstNameDelivery'>" . $deliveryLastName . "</h3>
                             </div>
                             <h3 class='addressLine1Delivery'>" . $deliveryAddressLine1 . "</h3>";
-                        // (if address line 2 is blank, then don't output that line) 
-                            if (!empty($deliveryAddressLine2)) {
+                // (if address line 2 is blank, then don't output that line) 
+                if (!empty($deliveryAddressLine2)) {
                     echo "<h3 class='addressLine2Delivery'>" . $deliveryAddressLine2 . "</h3>";
                 }
                 echo "<h3 class='townCityDelivery'>" . $deliveryTownCity . "</h3>
@@ -385,7 +385,7 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
         display: inline-block;
     }
 
-    
+
     .rightSection {
         float: right;
     }
@@ -502,6 +502,7 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
     .totalPriceOfQuantity {
         float: right;
     }
+
     .billingDeliveryAddressInnerContainer {
         display: none;
     }

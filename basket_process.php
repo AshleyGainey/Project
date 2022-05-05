@@ -50,7 +50,7 @@ if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['produc
             } else {
                 //Add the product to the basket, due to it not being in there already
                 $_SESSION['basket'][$basket_product_ID] = $basket_quantity;
-                
+
                 //Report back to say that the item has been added
                 header('HTTP/1.1 200 OK');
                 header('Content-Type: application/json; charset=UTF-8');
@@ -71,7 +71,6 @@ if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['produc
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR: Invalid request: Product does not exist'));
     }
-    
 }
 //Remove from basket by looking at the URL paramater of remove (which is the product id), check to see if it is in the basket and is numerical
 if (isset($_POST['remove']) && is_numeric($_POST['remove']) && isset($_SESSION['basket']) && isset($_SESSION['basket'][$_POST['remove']])) {

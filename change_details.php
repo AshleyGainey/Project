@@ -6,7 +6,7 @@ if (!isset($_SESSION)) {
 }
 // If the user is changing their Email address
 if ($_POST['process'] == "Email") {
-// Get the new email address and the password that they have entered
+    // Get the new email address and the password that they have entered
     $new_email = $_POST['emailAddress'];
     $password = $_POST['password'];
     //Server Side validation to see if any fields are empty
@@ -67,7 +67,7 @@ if ($_POST['process'] == "Email") {
         die(json_encode('ERROR - Password not correct'));
     }
 
-	//If email and password validation found no faults...
+    //If email and password validation found no faults...
     // Hash the password by using Bcyrpt
     $hash = password_hash($password, PASSWORD_BCRYPT, array('cost' => 11));
     // Get the user ID from the session
@@ -103,38 +103,37 @@ if ($_POST['process'] == "Email") {
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-            //Prepare the statement - query to update the user's email
-            $stmt = $conn->prepare("UPDATE user SET userEmail = ? where userID = ?");
-            // Bind the parameters of email and the user's ID to the query
-            $stmt->bind_param("si", $userEmail, $userID);
-            // Execute query
-           if ($stmt->execute()) {
-		   //The sessions email address is now the email address put in by the user
+        //Prepare the statement - query to update the user's email
+        $stmt = $conn->prepare("UPDATE user SET userEmail = ? where userID = ?");
+        // Bind the parameters of email and the user's ID to the query
+        $stmt->bind_param("si", $userEmail, $userID);
+        // Execute query
+        if ($stmt->execute()) {
+            //The sessions email address is now the email address put in by the user
             $_SESSION['userEmail'] = $new_email;
-			//Send back an ok message
+            //Send back an ok message
             header('HTTP/1.1 200 OK');
             header('Content-Type: application/json; charset=UTF-8');
             die(json_encode('Executed successfully'));
-            
-           } else {
-		   //Cannot execute the email query so therefore send back a 500 Internal Server Error with the message of ERROR - Cannot execute Update Query
-                echo "Error updating record: " . $conn->error;
+        } else {
+            //Cannot execute the email query so therefore send back a 500 Internal Server Error with the message of ERROR - Cannot execute Update Query
+            echo "Error updating record: " . $conn->error;
             header('HTTP/1.1 500 Internal Server Error');
-                header('Content-Type: application/json; charset=UTF-8');
-                die(json_encode('ERROR - Cannot execute Update Query'));
-           }
+            header('Content-Type: application/json; charset=UTF-8');
+            die(json_encode('ERROR - Cannot execute Update Query'));
+        }
     } else {
-	//If the hashed password coming back from the query is not the same as the hash password that was typed in via the user, then tell the user that the password was not correct
+        //If the hashed password coming back from the query is not the same as the hash password that was typed in via the user, then tell the user that the password was not correct
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password not correct'));
     }
-	//If the changing process is password instead
+    //If the changing process is password instead
 } else if (
     $_POST['process'] == "Password"
 ) {
     include 'DatabaseLoginDetails.php';
-	//Get values of oldPassword, newPassword and confirmPassword from the POST request
+    //Get values of oldPassword, newPassword and confirmPassword from the POST request
     $oldPassword = $_POST['oldPassword'];
     $newPassword = $_POST['newPassword'];
     $confirmPassword = $_POST['confirmPassword'];
@@ -156,7 +155,7 @@ if ($_POST['process'] == "Email") {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Confirm New Password is empty. Please fill it out.'));
     }
-	// Server Side validation to see if the new password has enough complexity. (At least 5 letters)
+    // Server Side validation to see if the new password has enough complexity. (At least 5 letters)
     if (!(preg_match('/[a-zA-Z]{5}/', $newPassword))) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -180,20 +179,20 @@ if ($_POST['process'] == "Email") {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password length is too strong. It must be within 128 characters.'));
     }
-// Server Side validation to see if the new password is correct to the confirm new password one.
+    // Server Side validation to see if the new password is correct to the confirm new password one.
     if ($newPassword != $confirmPassword) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Confirm New Password does not match New Password'));
     }
-	//Set userID to the session's UserID
+    //Set userID to the session's UserID
     $userID = $_SESSION['userID'];
 
-	//Connect to the database
+    //Connect to the database
     $conn = mysqli_connect($host, $user, $pass, $database);
-	//Prepare the statement - query to select the user's hashed password from the database
+    //Prepare the statement - query to select the user's hashed password from the database
     $stmt = $conn->prepare("SELECT userPassword From user where userID = ?");
-	//Bind the parameter of UserID to the prepared statement
+    //Bind the parameter of UserID to the prepared statement
     $stmt->bind_param("s", $userID);
     //Execute the query
     if (!$stmt->execute()) {
@@ -208,37 +207,37 @@ if ($_POST['process'] == "Email") {
     $res = $stmt->get_result();
     $userFromDB = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
-//Now check to see if the old password is equal to the one in the database
+    //Now check to see if the old password is equal to the one in the database
 
     if (password_verify($oldPassword, $userFromDB[0]['userPassword'])) {
-	// If it is, then hash the new password
+        // If it is, then hash the new password
         $hashNewPassword = password_hash($newPassword, PASSWORD_BCRYPT, array('cost' => 11));
-	// and then make a query to update the user's password that is stored in the database.
+        // and then make a query to update the user's password that is stored in the database.
         $stmt2 = $conn->prepare("UPDATE user SET userPassword = ? where userID = ?");
-	// bind the variables needed for the query (userID and the new password (hashed) to the prepared statement
+        // bind the variables needed for the query (userID and the new password (hashed) to the prepared statement
         $stmt2->bind_param("si", $hashNewPassword, $userID);
 
-       	//Execute the query
+        //Execute the query
         if ($stmt2->execute()) {
-		//Field updated successfully
+            //Field updated successfully
             header('HTTP/1.1 200 OK');
             header('Content-Type: application/json; charset=UTF-8');
             die(json_encode('Updated password successfully'));
         } else {
-		     //Couldn't execute query
+            //Couldn't execute query
             header('HTTP/1.1 500 Internal Server Error');
             header('Content-Type: application/json; charset=UTF-8');
             die(json_encode('ERROR - Could not execute the password change action to the Database'));
         }
     } else {
-	//If the hashed password coming back from the query is not the same as the hashed old password that was typed in via the user, then tell the user that the password was not correct
+        //If the hashed password coming back from the query is not the same as the hashed old password that was typed in via the user, then tell the user that the password was not correct
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Password not correct'));
     }
-//If the changing process is address instead
+    //If the changing process is address instead
 } else if ($_POST['process'] == "Address") {
-//Get all the fields that were posted through
+    //Get all the fields that were posted through
     $title = $_POST['title'];
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
@@ -248,7 +247,7 @@ if ($_POST['process'] == "Email") {
     $county = $_POST['county'];
     $postCode = $_POST['postcode'];
 
-//Server side validation to check if any of the fields (except address line 2) are empty
+    //Server side validation to check if any of the fields (except address line 2) are empty
     if (empty($title)) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -285,66 +284,68 @@ if ($_POST['process'] == "Email") {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Post Code is empty. Please fill it out.'));
     }
-	//Server side validation to check if the title is either Mr, Master, Miss, Mrs, Ms or Dr.
-    if (!$title === "Mr" || !$title == "Master" ||
-    !$title === "Miss" || !$title === "Mrs" || !$title === "Ms" ||
-    !$title === "Dr") {
+    //Server side validation to check if the title is either Mr, Master, Miss, Mrs, Ms or Dr.
+    if (
+        !$title === "Mr" || !$title == "Master" ||
+        !$title === "Miss" || !$title === "Mrs" || !$title === "Ms" ||
+        !$title === "Dr"
+    ) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Title from list is not selected - Please select from the list'));
     }
-	//Server side validation to check if the first name is more than a character
+    //Server side validation to check if the first name is more than a character
     if (strlen($firstName) < 2) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - First Name length is too weak. It must be a minimum of 2 characters.'));
     }
-//Server side validation to check if the first name is less than 256 characters
+    //Server side validation to check if the first name is less than 256 characters
     if (strlen($firstName) > 255) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - First Name length is too strong. It must be a maximum of 255 characters.'));
     }
-	//Server side validation to check if the first name doesn't contain any numbers in it
+    //Server side validation to check if the first name doesn't contain any numbers in it
     if (!(preg_match('/^\D+$/', $firstName))) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Incorrect Format for First Name. First Name should not contain numbers'));
     }
-	
-	//Server side validation to check if the last name is more than a character
+
+    //Server side validation to check if the last name is more than a character
     if (strlen($lastName) < 2) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Last Name length is too weak. It must be a minimum of 2 characters.'));
     }
-	//Server side validation to check if the last name is less than 256 characters
+    //Server side validation to check if the last name is less than 256 characters
     if (strlen($lastName) > 255) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Last Name length is too strong. It must be a maximum of 255 characters.'));
     }
-	
-	//Server side validation to check if the last name doesn't contain any numbers in it
+
+    //Server side validation to check if the last name doesn't contain any numbers in it
     if (!(preg_match('/^\D+$/', $lastName))) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Incorrect Format for Last Name. Last Name should not contain numbers'));
     }
-	
-	// Server side validation to check if the address line 1 is more than a character
+
+    // Server side validation to check if the address line 1 is more than a character
     if (strlen($addressLine1) < 2) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Address Line 1 length is too weak. It must be a minimum of 2 characters.'));
     }
-	// Server side validation to check if the address line 1 is less than 256 characters
+    // Server side validation to check if the address line 1 is less than 256 characters
     if (strlen($addressLine1) > 255) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Address Line 1 length is too strong. It must be a maximum of 255 characters.'));
     }
-	// Server side validation to check when the address Line 2 is not empty, if it is more than a character
+    // Server side validation to check when the address Line 2 is not empty, if it is more than a character
     if (!empty($addressLine2) && strlen($addressLine2) < 2) {
         header('cardContainer400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -357,13 +358,13 @@ if ($_POST['process'] == "Email") {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Address Line 2 length is too strong. It must be a maximum of 255 characters.'));
     }
-	// Server side validation to check if the county is more than a character
+    // Server side validation to check if the county is more than a character
     if (strlen($county) < 2) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - County length is too weak. It must be a minimum of 2 characters.'));
     }
-	// Server side validation to check if the county is less than 256 characters
+    // Server side validation to check if the county is less than 256 characters
     if (strlen($county) > 255) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -376,7 +377,7 @@ if ($_POST['process'] == "Email") {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Postcode length is too weak. It must be a minimum of 2 characters.'));
     }
-// Server side validation to check if the postCode is less than 9 characters e.g SW1A 2AA (8 characters)
+    // Server side validation to check if the postCode is less than 9 characters e.g SW1A 2AA (8 characters)
     if (strlen($postCode) > 8) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -387,12 +388,12 @@ if ($_POST['process'] == "Email") {
 
 
 
-//All validation has passed. Therefore, get the UserID from the current session.
-            $userID = $_SESSION['userID'];
+    //All validation has passed. Therefore, get the UserID from the current session.
+    $userID = $_SESSION['userID'];
     //Get the Database Details
     include 'DatabaseLoginDetails.php';
-	//Make a connect to the database
-            $conn = mysqli_connect($host, $user, $pass, $database);
+    //Make a connect to the database
+    $conn = mysqli_connect($host, $user, $pass, $database);
     //Prepared Statement - query to update the main address with the post data that was sent through
     $stmt = $conn->prepare("update address a INNER JOIN user u ON a.addressID = u.mainAddressID 
      set a.title = ?, a.firstName = ?, a.lastName = ?, a.addressLine1 = ?, a.addressLine2 = ?, a.townCity = ?, a.county = ?, a.postcode = ? 

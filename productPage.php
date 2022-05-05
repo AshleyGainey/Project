@@ -1,33 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php
+// If the session hasn't started. Start it (can then use session variables)
+if (!isset($_SESSION)) {
+    @ob_start();
+    @session_start();
+}
+
+//Include the Login Details to access the DB
 include 'DatabaseLoginDetails.php';
 
+//Connect to the database
 $conn = mysqli_connect($host, $user, $pass, $database);
 
+// Check connection and stop if there is an error
 if (!$conn) {
     echo 'Connection error: ' . mysqli_connect_error();
 }
 
+// Validation to prevent dirty data
+if (!is_numeric($_GET['productID'])) {
+    header('Location: Error404.php');
+}
 
-$query =
-    'SELECT p.productID, p.productTitle, 
+//Prepare the statement - query to select the product information (Product Title)
+$stmt = $conn->prepare("SELECT p.productID, p.productTitle, 
 p.productDescription, p.productPrice, p.productTotalQuantity, pi.productImageFilename, pi.productImageAltText, pi.displayOrder
         FROM product 
 AS p RIGHT JOIN product_image pi
- ON pi.productID = p.productID where p.productID = ' . $_GET['productID'];
+ ON pi.productID = p.productID where p.productID = ?");
 
-$result = mysqli_query($conn, $query);
+// Variable product ID is equal to the product ID variable being sent in via the GET method
+$productID = $_GET['productID'];
 
+// Bind the product ID to the prepared statement
+$stmt->bind_param("i", $productID);
+
+// Execute the query
+if (!$stmt->execute()) {
+    //Couldn't execute query so stop there
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Content-Type: application/json; charset=UTF-8');
+    die(json_encode('ERROR - Could not get the product details for the item'));
+}
+
+// Get the result back and put it in the productInfo variable
+$result = $stmt->get_result();
 $productInfo = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-// print_r($productInfo);
-
-$invalid = 0;
+// If there is no results for the product ID that has been sent by the get method, then redirect to the Error404 page
 if (empty($productInfo)) {
-    $invalid = 1;
     header('Location: Error404.php');
 } else {
+    // If there is a/multiple results then declare new variables to put the information in
     $productTitle;
     $productDescription;
     $productDescriptionCorrect;
@@ -38,9 +61,10 @@ if (empty($productInfo)) {
 
 
     $i = 0;
+    // For every result that has come back from the DB (can have multiple due to having multiple product images)
     foreach ($productInfo as $product) {
+        // If it is the first time coming into the for loop, then set the product title, description, quantity and price
         if ($i == 0) {
-            $productID = $product['productID'];
             $productTitle = $product['productTitle'];
             $productDescription = $product['productDescription'];
 
@@ -48,34 +72,34 @@ if (empty($productInfo)) {
             $productQuantity = $product['productTotalQuantity'];
             $productPrice = $product['productPrice'];
         }
-
+        // For every result in the database, then add the filename of the product image and the alternative text to an array
+        // This can be improved by using an object array instead but time pressures
         array_push($productImage, $product['productImageFilename']);
         array_push($productAltText, $product['productImageAltText']);
-
-        // array_push($productImage, (object)[
-        //     $product['displayOrder'] => $product['productImageFilename']
-        // ]);
-        // array_push($productAltText, (object)[
-        //     $product['displayOrder'] => $product['productImageAltText']
-        // ]);
+        // Increase the index
         $i++;
     }
 }
 
 //Free  memory and close the connection
 mysqli_free_result($result);
-mysqli_close($conn)
+mysqli_close($conn);
 ?>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
+    <!-- Put a viewport on this page -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="sharedStyles.css">
+    <!-- Make a dynamic title of the page - It will be the product Title and then what website it is -->
     <title><?php echo $productTitle; ?> - Gadget Gainey Store </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Keywords of the site for search engine optimisation -->
     <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+    <!-- Author of the site -->
     <meta name="author" content="Ashley Gainey">
-
+    <!-- Make a dynamic description of the page for SEO (Search Engine descriptions of the page), this dynamic description will be 100 words of the description of the product (with an ellipsis at the end)-->
     <meta name="description" <?php
                                 $productDescriptionForMeta = str_replace("\n", " ", $productDescription);
                                 $productDescriptionForMeta = str_replace('"', '', $productDescriptionForMeta);
@@ -84,66 +108,57 @@ mysqli_close($conn)
                                 $productDescriptionForMeta = $productDescriptionForMeta . "...";
 
                                 echo "content='" . $productTitle . " - " . $productDescriptionForMeta . "'" ?>>
-
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <!-- Link to the shared classes and IDs style sheet -->
+    <link rel="stylesheet" type="text/css" href="sharedStyles.css">
 </head>
 
 <body>
+    <!-- Add the header at the top before any other material -->
     <?php include "./header.php" ?>
-
     <div id="bodyOfPage">
-        <div class="row">
-            <div class="carousel">
-                <div class="row visible-md visible-lg">
-                    <div id="CarouselContainter" class="CarouselContainter">
-                        <div id="slider">
-                            <?php $i = 0;
-                            foreach ($productImage as $product) {
-                                $i++; ?>
-                                <?php
-                                $productImagePath = "images/products/" . $productID . "/" . $productImage[$i - 1];
-
-
-                                echo "<a id='slider" . $i . "' class='slider__section'><img alt='" . $productAltText[$i - 1] . "' src='" . $productImagePath . "' class='slider__img'></a>" ?>
-
-                            <?php } ?>
-                            </a>
-                        </div>
+        <div class="firstRow">
+            <div>
+                <div id="productImageSliderContainer" class="productImageSliderContainer">
+                    <div id="productImageSliderItems">
+                        <?php $i = 0;
+                        foreach ($productImage as $product) {
+                            $i++; ?>
                         <?php
-                        $arrLength = count($productImage);
-                        if ($arrLength > 1) {
-                            echo "<div class='sliderArrows'>
-                            <a id='left' id='left' onclick='left()'>
-                                <img src='images/Home/Right Arrow.svg' alt='Next Slide' />
+                            $productImagePath = "images/products/" . $productID . "/" . $productImage[$i - 1];
+                            echo "<a id='IndividualProductImageSliderItem" . $i . "' class='productImageSliderItem'><img alt='" . $productAltText[$i - 1] . "' src='" . $productImagePath . "' class='productSliderImage'></a>";
+                        } ?>
+                    </div>
+                    <?php
+                    $arrLength = count($productImage);
+                    if ($arrLength > 1) {
+                        echo "<div class='productImageSliderArrows'>
+                            <a id='leftArrow' onclick='moveToPreviousImage()'>
+                                <img src='images/Home/Right Arrow.svg' alt='Previous Image' />
                             </a>
-                            <a id='right' id='right' onclick='right()'>
-                                <img src='images/Home/Right Arrow.svg' alt='Previous Slide' />
+                            <a id='rightArrow' onclick='moveToNextImage()'>
+                                <img src='images/Home/Right Arrow.svg' alt='Next Image' />
                             </a>
                         </div>" ?>
-                        <?php } ?>
+                    <?php } ?>
 
-                        <div class="indicatorDiv">
-                            <div class="sliderIndicators">
-                                <?php $i = 0;
-                                if ($arrLength > 1) {
-                                ?>
+                    <div class="indicatorDiv">
+                        <div class="productImageSliderIndicators">
+                            <?php $i = 0;
+                            if ($arrLength > 1) {
+                            ?>
+                                <?php foreach ($productImage as $product) {
+                                    $i++;
+                                    echo "<a class='productImageSliderIndicatorsButton' id='productImageSliderIndicatorsButton" . $i . "' onclick='goToSlide($i)'></a>" ?>
+                            <?php }
+                            } ?>
 
-                                    <?php foreach ($productImage as $product) {
-                                        $i++;
-                                        echo "<a class='button' id='sliderIndicatorsButton" . $i . "' onclick='goToSlide($i)'></a>" ?>
-                                <?php }
-                                } ?>
-
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
 
-            <div class="card NunitoFont col-6">
+            <div class="card">
                 <div class="cardInformation">
                     <h1 class="productTitle"> <?php echo $productTitle ?></h1>
                     <h1 class="productPrice">£<?php echo $productPrice ?></h2>
@@ -323,13 +338,8 @@ mysqli_close($conn)
     }
 
 
-    .row {
+    .firstRow {
         display: flex;
-    }
-
-
-    .carousel {
-        display: inline;
     }
 
     /*
@@ -368,9 +378,8 @@ mysqli_close($conn)
 
 
     /* HDHJDJDJKDSKDBHI_DJOIWJHDSJAHBUDYH&UDYIWIAD */
-    .button {
+    .productImageSliderIndicatorsButton {
         background-color: #1a1862;
-        /* Green */
         border: 5px solid #FFFFFF;
         color: white;
         padding: 10px;
@@ -383,24 +392,13 @@ mysqli_close($conn)
         border-radius: 50%;
     }
 
-
-    .carousel {
-        /* margin-bottom: 50px; */
-
-    }
-
     .card {
         box-shadow: 0 0 0 5px #FFFFFF;
         border-radius: 2%;
-        /* height: 125px;
-        width: 250px;
-        overflow: hidden; */
-
-
     }
 
 
-    .CarouselContainter {
+    .productImageSliderContainer {
         margin: auto;
         position: relative;
         overflow: hidden;
@@ -411,17 +409,17 @@ mysqli_close($conn)
     }
 
 
-    #slider {
+    #productImageSliderItems {
         display: flex;
     }
 
-    .slider__section {
+    .productImageSliderItem {
         width: 100%;
     }
 
 
 
-    .slider__img {
+    .productSliderImage {
         display: block;
         width: 100%;
         display: block;
@@ -429,14 +427,14 @@ mysqli_close($conn)
         height: auto;
     }
 
-    .sliderArrows a {
+    .productImageSliderArrows a {
         position: absolute;
         top: 50%;
         cursor: pointer;
     }
 
-    .sliderArrows a:hover,
-    .sliderArrows a:hover {
+    .productImageSliderArrows a:hover,
+    .productImageSliderArrows a:hover {
         opacity: 50%;
 
     }
@@ -486,155 +484,44 @@ mysqli_close($conn)
         bottom: 10px;
     }
 
-    .sliderIndicators {
+    .productImageSliderIndicators {
         text-align: center;
     }
 
-    .sliderIndicators a {
+    .productImageSliderIndicators a {
         top: 50%;
         cursor: pointer;
     }
 
-    .sliderIndicators a:hover,
-    .sliderIndicators a:hover {
+    .productImageSliderIndicators a:hover,
+    .productImageSliderIndicators a:hover {
         opacity: 50%;
 
     }
 
-    #left {
+    #leftArrow {
         left: 5px;
         transform: rotate(180deg) translateY(50%);
     }
 
-    #right {
+    #rightArrow {
         right: 5px;
         transform: translateY(-50%);
     }
 
 
-    /* Add a margin to the main_container that is inside the main body, this is because we 
-want something up against the Nav (for instance the breadcrumb/the carousel)*/
-    #bodyOfPage {
-        margin-top: 30px;
-        margin-left: 50px;
-        margin-right: 50px;
-
-        /* Was having an issue if I typed more than expected for the search, then it would destroy the padding 
-	so have added word-wrap, this should apply to the main_container, no matter whether it is a heading 
-	(h1, h2, h3 etc.), paragraph (p) or something other */
-        word-wrap: break-word;
-
-    }
-
-    #sliderIndicators {
+    #productImageSliderIndicators {
         position: absolute;
         top: 50%;
         cursor: pointer;
 
     }
-
-
-    .button {
-        /* margin-left: 10px;
-        margin-right: 10px; */
-    }
-
-
-    #sliderIndicators .button {
-        position: absolute;
-        top: 50%;
-        cursor: pointer;
-        margin-right: 5px;
-    }
-
-    #sliderIndicators button:hover,
-    #sliderIndicators button:hover {
-        opacity: 50%;
-
-    }
-
-    #first {
-        left: 5px;
-        transform: rotate(180deg) translateY(50%);
-    }
-
-    #right {
-        right: 5px;
-        transform: translateY(-50%);
-    }
-
-
-    /* Old Traingle method
-
-        .triangle {
-            position: relative;
-            background-color: #1a1862;
-            text-align: left;
-        }
-
-        .triangle:before,
-        .triangle:after {
-            content: '';
-            position: absolute;
-            background-color: inherit;
-        }
-
-        .triangle,
-        .triangle:before,
-        .triangle:after {
-            width: 2em;
-            height: 2em;
-            border-top-right-radius: 50%;
-            border-right: 4px solid white;
-            border-top: 4px solid white;
-
-        }
-
-        .triangle {
-            transform: rotate(-90deg) skewX(-30deg) scale(1, .866);
-        }
-
-        .triangle:before {
-            transform: rotate(-135deg) skewX(-45deg) scale(1.414, .707) translate(0, -50%);
-        }
-
-        .triangle:after {
-            transform: rotate(135deg) skewY(-45deg) scale(.707, 1.414) translate(50%);
-        } */
-
-
-
 
     .cardInformation .productTitle,
     .cardInformation .productPrice,
     .cardInformation .productFreeDelivery {
         margin-top: 20px;
         margin-bottom: 20px;
-    }
-
-
-
-
-
-
-    #first {
-        background-color: #1a1862;
-        border-radius: 50%;
-        width: 500px;
-    }
-
-    #bodyOfPage {
-        margin: 50px;
-    }
-
-    .black:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(to bottom, transparent 0%, black 100%);
     }
 </style>
 
@@ -689,46 +576,37 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
     // console.log(picturesLength)
     // Resolves issue with only one image then get rid of the margin left -100 (no image will be shown after, so don't need a margin left)
     if (picturesLength == 1) {
-        document.getElementById("slider").style.marginLeft = 0;
+        document.getElementById("productImageSliderItems").style.marginLeft = 0;
     }
-    document.getElementById("slider").style.width = result
+    document.getElementById("productImageSliderItems").style.width = result
     // changeIndictors();
 
 
 
 
-    var slider = document.getElementById("slider");
 
-    let content = document.getElementById('slider');
+    let content = document.getElementById('productImageSliderItems');
     let firstChild = content.firstElementChild;
     let lastChild = content.lastElementChild;
     firstChild.before(lastChild);
 
     // console.log(firstChild);
 
+    document.getElementById("productImageSliderItems").style.marginLeft = "-100%";
 
 
 
 
-    // move the last image to the first place
-    // $('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
-    // display the first image with a margin of -100%
-    // slider.css('margin-left', '-' + 100 + '%');
-    document.getElementById("slider").style.marginLeft = "-100%";
-
-
-
-
-    function moveNext() {
+    function moveToNextImage() {
         prevSliderNum = sliderNum;
         sliderNum++;
 
-        let content = document.getElementById('slider');
+        let content = document.getElementById('productImageSliderItems');
         let firstChild = content.firstElementChild;
         let lastChild = content.lastElementChild;
         lastChild.after(firstChild);
 
-        document.getElementById("slider").style.marginLeft = "-100%";
+        document.getElementById("productImageSliderItems").style.marginLeft = "-100%";
 
         var picturePath = picturesLength + 1;
         if (sliderNum === picturePath) {
@@ -737,35 +615,22 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
         changeIndictors()
     }
 
-    function movePrev() {
+    function moveToPreviousImage() {
         prevSliderNum = sliderNum;
         sliderNum--;
 
-        let content = document.getElementById('slider');
+        let content = document.getElementById('productImageSliderItems');
         let firstChild = content.firstElementChild;
         let lastChild = content.lastElementChild;
         firstChild.before(lastChild);
 
-        document.getElementById("slider").style.marginLeft = "-100%";
+        document.getElementById("productImageSliderItems").style.marginLeft = "-100%";
 
         if (sliderNum === 0) {
             sliderNum = picturesLength;
         }
         changeIndictors()
     }
-
-    function left() {
-        movePrev();
-        // console.log("sliderNum" + sliderNum);
-    }
-
-    function right() {
-        moveNext();
-        // console.log("sliderNum" + sliderNum);
-    }
-
-
-
 
     function goToSlide(slide) {
         var currentSlide = sliderNum;
@@ -779,23 +644,23 @@ want something up against the Nav (for instance the breadcrumb/the carousel)*/
             console.log("slidesToGoNextTo" + slidesToGoNextTo);
 
             for (let i = 0; i < slidesToGoNextTo; i++) {
-                moveNext();
+                moveToNextImage();
             }
         } else if (currentSlide > wantToGoTo) {
             slidesToGoNextTo = currentSlide - wantToGoTo;
             console.log("slidesToGoNextTo" + slidesToGoNextTo);
             for (let i = 0; i < slidesToGoNextTo; i++) {
-                movePrev();
+                moveToPreviousImage();
             }
         }
     }
 
     function changeIndictors() {
-        var previousIndictor = document.getElementById("sliderIndicatorsButton" + prevSliderNum);
+        var previousIndictor = document.getElementById("productImageSliderIndicatorsButton" + prevSliderNum);
         // console.log(previousIndictor);
         previousIndictor.style.backgroundColor = "#1a1862";
 
-        var sliderIndictors = document.getElementById("sliderIndicatorsButton" + sliderNum);
+        var sliderIndictors = document.getElementById("productImageSliderIndicatorsButton" + sliderNum);
         // console.log(sliderIndictors);
         sliderIndictors.style.backgroundColor = "red";
     }

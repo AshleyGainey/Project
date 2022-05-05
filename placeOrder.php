@@ -9,7 +9,8 @@ $mainAddressID;
 $billingAddressID;
 $deliveryAddressID;
 
-function getMainAddressID() {
+function getMainAddressID()
+{
     //Get the Database Details
     include 'DatabaseLoginDetails.php';
 
@@ -23,7 +24,7 @@ function getMainAddressID() {
         die(json_encode('ERROR - Cannot connect to the database while executing the main address. Please contact us with this issue.'));
         echo 'Connection error: ' . mysqli_connect_error();
     }
-    
+
     //Prepared Statement - query to select the main address ID from the user
     $stmt = $conn->prepare("select mainAddressID from user where userID = ?");
     //Binding the User ID from the session to the prepared statement
@@ -62,7 +63,7 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
         // They Selected and entered the new address for billing
 
         //Check if already in DB (if it is a main address or just a normal address - and if so, use that ID)
-        if (isset($_POST['billingFirstName']) && isset($_POST['billingLastName']) && isset($_POST['billingAddressLine1']) && isset($_POST['billingTownCity']) && isset($_POST['billingCounty']) && isset($_POST['billingPostCode'])) {        
+        if (isset($_POST['billingFirstName']) && isset($_POST['billingLastName']) && isset($_POST['billingAddressLine1']) && isset($_POST['billingTownCity']) && isset($_POST['billingCounty']) && isset($_POST['billingPostCode'])) {
             // Get the billing values from the post request and trim whitespaces from them
             $billingTitle = $_POST['billingTitle'];
             $billingFirstName = trim($_POST['billingFirstName']);
@@ -112,15 +113,17 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
             }
 
             //Server side validation to check if the billing title is either Mr, Master, Miss, Mrs, Ms or Dr.
-            if ($billingTitle !== "Mr" || $billingTitle !== "Master" ||
+            if (
+                $billingTitle !== "Mr" || $billingTitle !== "Master" ||
                 $billingTitle !== "Miss" || $billingTitle !== "Mrs" || $billingTitle !== "Ms" ||
-                $billingTitle !== "Dr") {
+                $billingTitle !== "Dr"
+            ) {
                 header('HTTP/1.1 400 Bad Request Server');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Title from list is not selected - Please select from the list'));
             }
 
-          	//Server side validation to check if the billing first name is more than a character
+            //Server side validation to check if the billing first name is more than a character
             if (strlen($billingFirstName) < 2) {
                 header('HTTP/1.1 400 Bad Request Server');
                 header('Content-Type: application/json; charset=UTF-8');
@@ -152,7 +155,7 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - BillingLast Name length is too strong. It must be a maximum of 255 characters.'));
             }
-        	//Server side validation to check if the billing last name doesn't contain any numbers in it
+            //Server side validation to check if the billing last name doesn't contain any numbers in it
             if (!(preg_match('/^\D+$/', $billingLastName))) {
                 header('HTTP/1.1 400 Bad Request Server');
                 header('Content-Type: application/json; charset=UTF-8');
@@ -214,14 +217,14 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
                 die(json_encode('ERROR - Billing Postcode length is too strong. It must be a maximum of 255 characters.'));
             }
 
-            	// Server side validation to check if the billing county is more than a character
+            // Server side validation to check if the billing county is more than a character
             if (strlen($billingCounty) < 2) {
                 header('HTTP/1.1 400 Bad Request Server');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing County length is too weak. It must be a minimum of 2 characters.'));
             }
 
-            	// Server side validation to check if the billing county is less than 256 characters
+            // Server side validation to check if the billing county is less than 256 characters
             if (strlen($billingCounty) > 255) {
                 header('HTTP/1.1 400 Bad Request Server');
                 header('Content-Type: application/json; charset=UTF-8');
@@ -235,7 +238,7 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
             //Make a connect to the database
             $conn = mysqli_connect($host, $user, $pass, $database);
 
-             // Error with the connection of the database. So don't execute further
+            // Error with the connection of the database. So don't execute further
             if (!$conn) {
                 header('HTTP/1.1 500 Internal Server Error');
                 header('Content-Type: application/json; charset=UTF-8');
@@ -248,9 +251,9 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
             //Binding the address information we got from the front end and passing it through to our prepared statement
             $stmt->bind_param("ssssssss", $billingTitle, $billingFirstName, $billingLastName, $billingAddressLine1, $billingAddressLine2, $billingTownCity, $billingCounty, $billingPostCode);
 
-                //Execute the query
+            //Execute the query
             if (!$stmt->execute()) {
-            //Error trying to execute seeing if an address is already in the DB, send back a 500 Internal Server Error HTTP response.
+                //Error trying to execute seeing if an address is already in the DB, send back a 500 Internal Server Error HTTP response.
                 header('HTTP/1.1 500 Internal Server Error');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Could not process your order. Cannot execute query to find Address in the DB for billing'));
@@ -262,7 +265,7 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
             // If found an address in the DB, that the user has entered...
             if (mysqli_num_rows($res) > 0) {
                 //..then instead of adding a new row to the database, use that Address ID
-                    // To edit a global variable, you have to declare you want to before changing it.
+                // To edit a global variable, you have to declare you want to before changing it.
                 global $billingAddressID;
                 // Set the Billing Address ID to the one from the DB.
                 $billingAddressID = $addressFromDB[0]['addressID'];
@@ -270,7 +273,7 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
                 //If not already in DB, then send the details gathered to the DB by using a prepared statement
                 $stmt = $conn->prepare("INSERT INTO address (title, firstName, lastName, addressLine1, addressLine2, townCity, county, postcode)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            //Binding the billing title, billing first name, billing last name, billing address line 1, billing address line 2 (can be blank/null), billing town or city, billing county and billing postcode with the prepared statement
+                //Binding the billing title, billing first name, billing last name, billing address line 1, billing address line 2 (can be blank/null), billing town or city, billing county and billing postcode with the prepared statement
                 $stmt->bind_param("ssssssss", $billingTitle, $billingFirstName, $billingLastName, $billingAddressLine1, $billingAddressLine2, $billingTownCity, $billingCounty, $billingPostCode);
                 //Execute the query
                 if (!$stmt->execute()) {
@@ -314,8 +317,8 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
         $deliveryAddressID = $billingAddressID;
         // If delivery address is the delivery address
     } else if ($deliveryMethod == 2) {
-    // If the main address hasn't been used for the billing address, then go and set the main 
-    // address ID variable by going to getMainAddressID() method
+        // If the main address hasn't been used for the billing address, then go and set the main 
+        // address ID variable by going to getMainAddressID() method
         if (!isset($mainAddressID)) {
             getMainAddressID();
         }
@@ -324,10 +327,8 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
         $deliveryAddressID = $mainAddressID;
         // They Selected and entered the new address for billing
     } else if ($deliveryMethod == 3) {
-
         //Check if already in DB (if it is a main address or just a normal address - and if so, use that ID)
         if (isset($_POST['deliveryFirstName']) && isset($_POST['deliveryLastName']) && isset($_POST['deliveryAddressLine1']) && isset($_POST['deliveryTownCity']) && isset($_POST['deliveryCounty']) && isset($_POST['deliveryPostCode'])) {
-
 
             // Get the delivery values from the post request and trim whitespaces from them
             $deliveryTitle = $_POST['deliveryTitle'];
@@ -339,7 +340,6 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
             //Remove any space (for instance 'L1 34Q') from Postcode
             $deliveryPostCode = str_replace(' ', '', $_POST['deliveryPostCode']);
             $deliveryCounty = trim($_POST['deliveryCounty']);
-
 
             //Server Side checking to see if any (but address line 2) fields are empty and if so, don't execute further
             if (empty($deliveryTitle)) {
@@ -378,7 +378,7 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
                 die(json_encode('ERROR - Delivery Postcode is empty. Please fill it out.'));
             }
 
-	        //Server side validation to check if the delivery title is either Mr, Master, Miss, Mrs, Ms or Dr.
+            //Server side validation to check if the delivery title is either Mr, Master, Miss, Mrs, Ms or Dr.
             if (
                 $deliveryTitle !== "Mr" || $deliveryTitle !== "Master" ||
                 $deliveryTitle !== "Miss" || $deliveryTitle !== "Mrs" || $deliveryTitle !== "Ms" ||
@@ -389,7 +389,7 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
                 die(json_encode('ERROR - Delivery Title from list is not selected - Please select from the list'));
             }
 
-	        //Server side validation to check if the delivery first name is more than a character
+            //Server side validation to check if the delivery first name is more than a character
             if (strlen($deliveryFirstName) < 2) {
                 header('HTTP/1.1 400 Bad Request Server');
                 header('Content-Type: application/json; charset=UTF-8');
@@ -407,7 +407,7 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Incorrect Format for Delivery First Name. First Name should not contain numbers'));
             }
-            
+
             //Server side validation to check if the delivery last name is more than a character
             if (strlen($deliveryLastName) < 2) {
                 header('HTTP/1.1 400 Bad Request Server');
@@ -421,28 +421,28 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Last Name length is too strong. It must be a maximum of 255 characters.'));
             }
-        	
+
             //Server side validation to check if the delivery last name doesn't contain any numbers in it
             if (!(preg_match('/^\D+$/', $deliveryLastName))) {
                 header('HTTP/1.1 400 Bad Request Server');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Incorrect Format for Delivery Last Name. Last Name should not contain numbers'));
             }
-            
+
             // Server side validation to check if the delivery address line 1 is more than a character
             if (strlen($deliveryAddressLine1) < 2) {
                 header('HTTP/1.1 400 Bad Request Server');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Address Line 1 length is too weak. It must be a minimum of 2 characters.'));
             }
-            
+
             // Server side validation to check if the delivery address line 1 is less than 256 characters
             if (strlen($deliveryAddressLine1) > 255) {
                 header('HTTP/1.1 400 Bad Request Server');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Address Line 1 length is too strong. It must be a maximum of 255 characters.'));
             }
-            
+
             // Server side validation to check when the delivery address Line 2 is not empty, if it is less than 256 characters
             if (!empty($deliveryAddressLine2) && strlen($deliveryAddressLine2) < 2) {
                 header('HTTP/1.1 400 Bad Request Server');
@@ -487,7 +487,7 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
                 header('HTTP/1.1 400 Bad Request Server');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Postcode length is too weak. It must be a minimum of 2 characters.'));
-            }            
+            }
             // Server side validation to check if the delivery postCode is less than 9 characters e.g SW1A 2AA (8 characters)
             if (strlen($deliveryPostCode) > 255) {
                 header('HTTP/1.1 400 Bad Request Server');
@@ -528,8 +528,8 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
 
             // If found an address in the DB, that the user has entered...
             if (mysqli_num_rows($res) > 0) {
-            //..then instead of adding a new row to the database, use that Address ID
-            // To edit a global variable, you have to declare you want to before changing it.                global $deliveryAddressID;
+                //..then instead of adding a new row to the database, use that Address ID
+                // To edit a global variable, you have to declare you want to before changing it.                global $deliveryAddressID;
                 global $deliveryAddressID;
                 // Set the delivery Address ID to the one from the DB.
                 $deliveryAddressID = $addressFromDB[0]['addressID'];
@@ -538,8 +538,9 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
                 $stmt = $conn->prepare("INSERT INTO address (title, firstName, lastName, addressLine1, addressLine2, townCity, county, postcode)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
-            //Binding the delivery title, delivery first name, delivery last name, delivery address line 1, delivery address line 2 (can be blank/null), delivery town or city, delivery county and delivery postcode with the prepared statement
-                $stmt->bind_param("ssssssss",
+                //Binding the delivery title, delivery first name, delivery last name, delivery address line 1, delivery address line 2 (can be blank/null), delivery town or city, delivery county and delivery postcode with the prepared statement
+                $stmt->bind_param(
+                    "ssssssss",
                     $deliveryTitle,
                     $deliveryFirstName,
                     $deliveryLastName,
@@ -556,7 +557,7 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
                     header('Content-Type: application/json; charset=UTF-8');
                     die(json_encode('ERROR - Could not process your order. Cannot execute query to insert address in the DB - Delivery'));
                 }
-            // Successfully added to the Database and therefore edit the delivery address ID to change it to the address ID found in the DB
+                // Successfully added to the Database and therefore edit the delivery address ID to change it to the address ID found in the DB
                 global $deliveryAddressID;
                 $deliveryAddressID = mysqli_insert_id($conn);
             }
@@ -600,7 +601,7 @@ foreach ($_SESSION['basket'] as $productID => $productQuantity) {
         die(json_encode('ERROR - Cannot proceed your order due to the quantity of an item in your basket exceeds the customer limit of 10'));
         return false;
     }
-     //Get the Database Details
+    //Get the Database Details
     include 'DatabaseLoginDetails.php';
     //Make a connect to the database
     $conn = mysqli_connect($host, $user, $pass, $database);
@@ -642,10 +643,6 @@ foreach ($_SESSION['basket'] as $productID => $productQuantity) {
     array_push($product_Quantity, $quantityOfProductDB);
 }
 
-
-
-
-
 // For Each order, calulate the total of this order
 $totalOfOrder = 0.00;
 // echo count($orderProduct_ProductPrice);
@@ -684,7 +681,7 @@ for ($x = 0; $x < count($orderProduct_ProductPrice); $x++) {
     // Getting the current Product information needed for the insert into the order Product
     $productID = $orderProduct_ProductID[$x];
     $productBought = $orderProduct_ProductQuantity[$x];
-    
+
     // Prepare a statement that will insert into Order Product
     $stmt = $conn->prepare("INSERT INTO order_product (orderID, productID, productPriceAtTime, productQuantity)
     VALUES (?, ?, ?, ?)");
@@ -706,7 +703,7 @@ for ($x = 0; $x < count($orderProduct_ProductPrice); $x++) {
         die(json_encode('ERROR - Could not process your order. Error occured trying to tie the products into the order'));
     }
 
-     // Get the Total Inventory of the current product and calculate the new Inventory value (after the order has been placed)
+    // Get the Total Inventory of the current product and calculate the new Inventory value (after the order has been placed)
     $productInventoryFromDB = $product_Quantity[$x];
     $productInventoryLeft = $productInventoryFromDB - $productBought;
 
@@ -729,6 +726,7 @@ for ($x = 0; $x < count($orderProduct_ProductPrice); $x++) {
 //If got to this stage, everything went well, therefore set the Order ID variable, stored in the session, to the orderID variable 
 $_SESSION['orderID'] = $orderID;
 // and send a 200 OK HTTP Response to the frontend
-    header('HTTP/1.1 200 OK');
-    header('Content-Type: application/json; charset=UTF-8');
-    die(json_encode('Order Placed successfully'));
+header('HTTP/1.1 200 OK');
+header('Content-Type: application/json; charset=UTF-8');
+die(json_encode('Order Placed successfully'));
+?>

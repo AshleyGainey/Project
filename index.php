@@ -123,7 +123,7 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
     <div id="bodyOfPage">
         <!-- Carousel Div -->
         <div id="carouselContainter" onmouseenter="carouselMouseEnter()" onmouseleave="carouselMouseLeave()">
-        <!-- Div to hold the images-->
+            <!-- Div to hold the images-->
             <div id="carouselItems">
                 <?php
                 // For every item in Picture URL Carousel (should be 6)
@@ -133,7 +133,7 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
                     // Individual Image, ID will be IndividualCarouselItem[ID], clicking the image will link to the product (by the productID), 
                     //it will get the image from the carousel Images folder and then the filename that is stored in the database and put in the array 
                     //and the alternative text of the image is from the database/array
-                    echo "<a id='IndividualCarouselItem" . ($item + 1) . "' class='IndividualCarouselItem' href='productPage.php?productID=" . $productID . "'><img src='Images/Home/carouselImages/" . $picturesURLCarousel[$item] . "' alt='" . $picturesAltCarousel[$item] . "' class='carouselImage '>
+                    echo "<a id='IndividualCarouselItem" . ($item + 1) . "' class='IndividualCarouselItem' href='productPage.php?productID=" . $productID . "'><img src='Images/Home/carouselImages/" . $picturesURLCarousel[$item] . "' alt='" . $picturesAltCarousel[$item] . "' class='carouselImage'>
                         </a>";
                 }
                 ?>
@@ -142,10 +142,10 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
             <!-- Navigating Buttons, left and right -->
             <div class="carouselArrows">
                 <a id="leftArrow" onclick="moveToPreviousImage()">
-                    <img src="images/Home/Right Arrow.svg" alt="Next Slide" />
+                    <img src="images/Home/Right Arrow.svg" alt="Previous Image" />
                 </a>
                 <a id="rightArrow" onclick="moveToNextImage()">
-                    <img src="images/Home/Right Arrow.svg" alt="Previous Slide" />
+                    <img src="images/Home/Right Arrow.svg" alt="Next Slide" />
                 </a>
             </div>
 
@@ -186,7 +186,7 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
             <div class="fieldContainer rightSection">
                 <!-- Individual Card Image Div  -->
                 <div class="card">
-                        <!-- Image for Card -->
+                    <!-- Image for Card -->
                     <a href="#"><img src="Images\Home\Contact Us (without logo).png" class="cardImage">
                     </a>
                 </div>

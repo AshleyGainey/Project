@@ -4,8 +4,8 @@ if (!isset($_SESSION)) {
     @ob_start();
     session_start();
 }
-    //If you try to come to this page (using the URL or by navigating to it) and you haven't signed in yet, redirect to the Login page to sign in
-    if (!isset($_SESSION['userID'])) {
+//If you try to come to this page (using the URL or by navigating to it) and you haven't signed in yet, redirect to the Login page to sign in
+if (!isset($_SESSION['userID'])) {
     header('Location: Login.php');
 }
 ?>

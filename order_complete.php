@@ -28,7 +28,7 @@ unset($_SESSION['basket']);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Keywords of the site for search engine optimisation -->
     <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
-     <!-- Author of the site -->
+    <!-- Author of the site -->
     <meta name="author" content="Ashley Gainey">
     <!-- Description of the page -->
     <meta name="description" content="Order Complete!">
@@ -50,21 +50,21 @@ unset($_SESSION['basket']);
         <div id="orderComplete">
             <!-- Image to represent that the order has been successful -->
             <img src="Images\OrderComplete\confetti-svgrepo-com.svg" id="confettiIcon">
-             <!-- Header as confirmation for the order has been successful -->
+            <!-- Header as confirmation for the order has been successful -->
             <h1> Your Order is Complete!</h1>
             <!-- Show the Order Number (and pad it out to 5 digits) e.g 00001 -->
             <h2> Order Number:
-                    <?php
-                    echo sprintf('%05d', $orderID);
-                    ?>
-                </h2>
+                <?php
+                echo sprintf('%05d', $orderID);
+                ?>
+            </h2>
 
-                <!-- Show a button (with the arrow) for the user to click to see their Order Details -->
+            <!-- Show a button (with the arrow) for the user to click to see their Order Details -->
             <div class="cardArea">
                 <div class="cardContainer">
                     <div class="card">
                         <div class="writingOfCard">
-                            <a href="order_history.php">Order Details<img src="images/Home/Right Arrow.svg" alt="Order Details"/></a>
+                            <a href="order_history.php">Order Details<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
                         </div>
                     </div>
 

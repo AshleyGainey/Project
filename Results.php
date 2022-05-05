@@ -1,5 +1,5 @@
             <?php
-                                include 'DatabaseLoginDetails.php';
+            include 'DatabaseLoginDetails.php';
 
             $conn = mysqli_connect($host, $user, $pass, $database);
 
@@ -123,7 +123,7 @@ AS p RIGHT JOIN product_image pi
                         </div>
                     </div>
                 </div>
-                        <?php include "./footer.php" ?>
+                <?php include "./footer.php" ?>
             </body>
 
             </html>
