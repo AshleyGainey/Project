@@ -188,20 +188,20 @@ if (isset($_POST['Register'])) {
     }
 
     // Server side validation to check when the address Line 2 is not empty, if it is less than 256 characters
-    if (strlen($addressLine2) > 255) {
+    if (!empty($addressLine2) && strlen($addressLine2) > 255) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Address Line 2 length is too strong. It must be a maximum of 255 characters.'));
     }
 
-	// Server side validation to check if the county is more than a character
+	// Server side validation to check if the Town/City is more than a character
     if (strlen($townCity) < 2) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Town/City length is too weak. It must be a minimum of 2 characters.'));
     }
 
-    // Server side validation to check if the county is less than 256 characters
+    // Server side validation to check if the Town/City is less than 256 characters
     if (strlen($townCity) > 255) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
@@ -219,7 +219,6 @@ if (isset($_POST['Register'])) {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Postcode length is too strong. It must be a maximum of 8 characters.'));
     }
-
     
 	// Server side validation to check if the county is more than a character
     if (strlen($county) < 2) {
@@ -234,13 +233,13 @@ if (isset($_POST['Register'])) {
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - County length is too strong. It must be a maximum of 255 characters.'));
     }
-
-    if (strlen($postcode) < 2) {
+    // Server side validation to check if the postCode is more than 4 characters
+    if (strlen($postcode) < 5) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Postcode length is too weak. It must be a minimum of 2 characters.'));
     }
-
+    // Server side validation to check if the postCode is less than 9 characters e.g SW1A 2AA (8 characters)
     if (strlen($postcode) > 8) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
