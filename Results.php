@@ -1,262 +1,272 @@
-            <?php
-            include 'DatabaseLoginDetails.php';
+<?php
+// If the session hasn't started. Start it (can then use session variables)
+if (!isset($_SESSION)) {
+    @ob_start();
+    session_start();
+}
+//Get the Database login details
+include 'DatabaseLoginDetails.php';
 
-            $conn = mysqli_connect($host, $user, $pass, $database);
+//Connect to the database
+$conn = mysqli_connect($host, $user, $pass, $database);
 
-            if (trim($_GET['search'])) {
-            }
+// Trim the whitespace from the search on the server side
+$searchTerm = trim($_GET['search']);
 
+// Check connection and stop if there is an error
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-            if (!$conn) {
-                echo 'Connection error: ' . mysqli_connect_error();
-            }
-            $firstPartOfBind = "";
-            $SecondPartOfBind = [];
-            //Prepare statement cannot work with dynamic statements - Therefore, we need a different way to prevent SQL Injection
-            $query =
-                'SELECT p.productID, p.productTitle, 
+// Variables for the dynamic query.
+$firstPartOfBind = "";
+$SecondPartOfBind = [];
+
+// Make the first part of the query, selecting the product information. 
+// And set up the second part of the query - getting products that have the words that the search term has in it
+$query =
+    'SELECT p.productID, p.productTitle, 
 p.productDescription, p.productPrice, pi.productImageFilename, pi.productImageAltText
         FROM product 
 AS p RIGHT JOIN product_image pi
- ON pi.productID = p.productID WHERE pi.displayOrder = 1';
+ ON pi.productID = p.productID WHERE pi.displayOrder = 1 AND (p.productTitle LIKE ';
 
-            $query = $query . " AND (p.productTitle LIKE ";
-            // $query = $_GET['search'];
-            $search_exploded = explode(" ", $_GET['search']);
+// Split all the words in the search Term and put them in an array
+$searchExploded = explode(" ", $searchTerm);
 
-            for ($i = 0; $i < sizeof($search_exploded); $i++) {
-                $firstPartOfBind = $firstPartOfBind . "s";
+// For the amount of words in the search Term, do a loop...
+for ($i = 0; $i < sizeof($searchExploded); $i++) {
+    // ...adding "LIKE %'SEARCH_TERM'%" to the query.
+    array_push($SecondPartOfBind, "%" . $searchExploded[$i] . "%");
 
-                $item = "%" . $search_exploded[$i] . "%";
+    // And adding an s (for string) to the bind query to represent what type of data we are putting into the query
+    $firstPartOfBind = $firstPartOfBind . "s";
 
-                array_push($SecondPartOfBind, $item);
+    //Add a question mark to the query to show that we have added a paramater to the query
+    $query = $query . "?";
 
-                $query = $query . "?";
+    // If it is not the last search term
+    if ($i !== sizeof($searchExploded) - 1) {
+        // Then add to the query that there will be another search term so do "AND p.productTitle LIKE"
+        $query = $query . " AND p.productTitle LIKE ";
+    } else {
+        // If it is the last search term, then end the query by closing the bracket
+        $query = $query . ")";
+    }
+}
 
-                if ($i !== sizeof($search_exploded) - 1) {
-                    $query = $query . " AND p.productTitle LIKE ";
+// after making the query, prepare it
+$stmt = $conn->prepare($query);
+// Put what type of data in the first parameter and what the data is in the second parameter
+$stmt->bind_param($firstPartOfBind, ...$SecondPartOfBind);
+
+// Execute the query
+if (!$stmt->execute()) {
+    //Couldn't execute query so stop there
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Content-Type: application/json; charset=UTF-8');
+    die(json_encode('ERROR - Could not get results from the search'));
+}
+
+// Get the results back from the database
+$result = $stmt->get_result();
+$products = $result->fetch_all(MYSQLI_ASSOC);
+// Store how many products have come back from the query
+$rows = sizeOf($products);
+
+//Free  memory and close the connection
+mysqli_free_result($result);
+mysqli_close($conn);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Put a viewport on this page -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Make a dynamic title of the page - It will hold the search term and then what website it is -->
+    <title>Results for "<?php echo $searchTerm; ?>" - Gadget Gainey Store</title>
+    <!-- Keywords of the site for search engine optimisation -->
+    <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+    <!-- Author of the site -->
+    <meta name="author" content="Ashley Gainey">
+    <!-- Description of the page -->
+    <meta name="description" content="Find products for the result search of '<?php echo $searchTerm; ?>'">
+    <!-- Don't let any search engine index this page -->
+    <meta name="robots" content="noindex" />
+    <!-- Link to the shared classes and IDs style sheet -->
+    <link rel="stylesheet" type="text/css" href="sharedStyles.css">
+</head>
+
+<body>
+    <!-- Add the header at the top before any other material -->
+    <?php include "./header.php" ?>
+    <div id="bodyOfPage">
+        <div id="resultsFor">
+            <!-- Show the Trimmed Search Term -->
+            <h1>
+                <?php
+                echo $searchTerm;
+                ?>
+            </h1>
+            <h4>
+                <!-- Show how many products where found -->
+                <?php
+                // If no products where found, then show No Products Found
+                if ($rows == 0) {
+                    echo "NO PRODUCTS FOUND";
+                    // If one product was found, output the singular of products (product)
+                } else if ($rows == 1) {
+                    echo "(" . $rows . " product found)";
+                    // If more than one products were found, output the plural of product (products)
                 } else {
-                    $query = $query . ")";
-                }
-            }
+                    echo "(" . $rows . " products found)";
+                } ?>
+            </h4>
+        </div>
+        <!-- Horizental line after the Search Term and how many products were found to seperate the content -->
+        <hr>
+        <!-- Div to hold all the results -->
+        <div id="AllResults">
+            <div class="row">
+                <!-- For every product -->
+                <?php foreach ($products as $product) { ?>
+                    <div class="card">
+                        <!-- Wrap the card around an anchor tag which links to the current product we are looping through -->
+                        <?php echo "<a href='productPage.php?productID=" . $product['productID'] . "'>" ?>
+                        <!-- Holds all the details of each product -->
+                        <div class="cardContent">
+                            <!-- Holds the Image -->
+                            <div class="ImageHolder">
 
-            // echo $query;
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param($firstPartOfBind, ...$SecondPartOfBind);
-
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $products = $result->fetch_all(MYSQLI_ASSOC);
-            // $rows = mysqli_num_rows($result);
-            $rows = sizeOf($products);
-
-            //Free  memory and close the connection
-            mysqli_free_result($result);
-            mysqli_close($conn);
-
-
-
-
-
-            ?>
-
-            <!DOCTYPE html>
-            <html lang="en">
-
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-                <title>Results for "<?php echo $_GET['search']; ?>" - Gadget Gainey Store</title>
-                <link rel="stylesheet" type="text/css" href="sharedStyles.css">
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-            </head>
-
-            <body>
-                <?php include "./header.php" ?>
-
-                <div id="bodyOfPage">
-                    <div id="resultsFor">
-                        <h1>
-                            <?php
-                            echo $_GET['search'];
-                            ?>
-                        </h1>
-                        <h4><?php
-                            if ($rows == 0) {
-                                echo "NO PRODUCTS FOUND";
-                            } else if ($rows == 1) {
-                                echo "(" . $rows . " product found)";
-                            } else {
-                                echo "(" . $rows . " products found)";
-                            } ?></h4>
-                    </div>
-                    <hr>
-                    <div id="AllResults">
-                        <div class="row">
-                            <?php foreach ($products as $product) { ?>
-                                <div class="card NunitoFont col-2">
-                                    <?php echo "<a href='productPage.php?productID=" . $product['productID'] . "'>" ?>
-                                    <div class="cardContent">
-                                        <div class="ImageHolder ImageMarginAndPadding">
-                                            <?php
-                                            $productImagePath = "images/products/" . $product["productID"] . "/" . $product["productImageFilename"];
-                                            echo "<img src= '" . $productImagePath . "'alt='" . $product["productImageAltText"] . "'>"
-                                            ?> </div>
-                                        <div class="AllOtherInfo">
-                                            <div class="IndividualInfo TitleDiv">
-                                                <h3 class="productTitle"> <?php echo  $product['productTitle'] ?></h6>
-                                                    <h4 class="productPrice"> <?php echo  "£" . $product['productPrice'] ?></h6>
-                                            </div>
-                                            <div class="SeeMoreDiv">
-                                                <h4 class="SeeMoreTitle">See More</h6>
-                                                    <?php
-                                                    echo "<img onclick=productPage.php?productID=" . $product['productID'] . " class='seeMoreImage' src='images/Home/Right Arrow.svg' alt='See More of this product'/>"
-                                                    ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <?php echo "</a>" ?>
+                                <?php
+                                // Individual Product Image, ID will be the ProductID of the current product result
+                                // It will get the image from the product images folder and then the current Product ID, concat with / and the filename that is stored in the database (now in the products result variable)
+                                //and the alternative text of the image is in the database (now in the products result variable)
+                                $productImagePath = "images/products/" . $product["productID"] . "/" . $product["productImageFilename"];
+                                echo "<img src= '" . $productImagePath . "'alt='" . $product["productImageAltText"] . "'>"
+                                ?> </div>
+                            <!-- Container to hold all of other product information (title, price) -->
+                            <div class="AllOtherInfo">
+                                <div class="IndividualInfo TitleDiv">
+                                    <h3 class="productTitle"> <?php echo  $product['productTitle'] ?></h6>
+                                        <h4 class="productPrice"> <?php echo  "£" . $product['productPrice'] ?></h6>
                                 </div>
-                            <?php } ?>
+                                <!-- Container to hold the See More Section -->
+                                <div class="SeeMoreDiv">
+                                    <!-- Title for See More -->
+                                    <h4 class="SeeMoreTitle">See More</h6>
+                                        <!-- Right Arrow to show that the user will navigate to the product page -->
+                                        <img class='seeMoreImage' src='images/Home/Right Arrow.svg' alt='See More of this product - Right Arrow' />
+                                </div>
+                            </div>
                         </div>
+                        </a>
                     </div>
-                </div>
-                <?php include "./footer.php" ?>
-            </body>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+    <!-- Add the footer at the bottom after any other material -->
+    <?php include "./footer.php" ?>
+</body>
 
-            </html>
-            <style>
-                .productImage {
-                    width: 48px;
-                    height: 48px;
-                }
+</html>
+<style>
+    .SeeMoreDiv {
+        display: inline;
+    }
 
-                .SeeMoreDiv {
-                    display: inline;
-                }
+    .seeMoreImage {
+        width: 30px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        display: inline;
+    }
 
-                .seeMoreImage {
-                    width: 30px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto;
-                    display: inline;
-                }
+    .IndividualInfo {
+        margin-bottom: 10px;
+    }
 
-                .IndividualInfo {
-                    margin-bottom: 10px;
-                }
+    .IndividualInfo h3 {
+        font-size: 20px;
+    }
 
-                .IndividualInfo h3 {
-                    font-size: 20px;
-                }
+    .cardContent {
+        padding-top: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 
-                .ImageMarginAndPadding {
-                    padding-right: 10px;
-                    margin-right: 15px;
-                }
+    .ImageHolder {
+        float: left;
+        margin-right: 15px;
 
-                .cardContent {
-                    padding-top: 10px;
-                    padding-left: 10px;
-                    padding-right: 10px;
-                }
+        display: inline-block;
 
-                .ImageHolder {
-                    float: left;
-                    margin-right: 15px;
+        width: 100%;
+        height: 20vh;
+    }
 
-                    display: inline-block;
-
-                    width: 100%;
-                    height: 20vh;
-                }
-
-                .BookTitle {
-                    text-align: center;
-                    margin-right: 20px;
-                }
-
-                .row {
-                    text-align: center;
-                }
+    .row {
+        text-align: center;
+    }
 
 
-                .ImageHolder img {
-                    object-fit: cover;
+    .ImageHolder img {
+        object-fit: cover;
 
-                    width: 100%;
-                    height: 20vh;
-                }
+        width: 100%;
+        height: 20vh;
+    }
 
-                .card {
-                    border-radius: 12.5px;
-                    background-color: #FFFFFF;
-                    color: #000000;
-                    /*margin-top: 10px;*/
-                    word-break: break-all;
-                    display: inline-block;
-                    margin: 5px;
-                    padding: 5px;
+    .card {
+        border-radius: 12.5px;
+        background-color: #FFFFFF;
+        color: #000000;
+        word-break: break-all;
+        display: inline-block;
+        margin: 5px;
+        padding: 5px;
 
-                    width: 300px;
-                    text-align: left;
-                    min-height: 200px;
+        width: 300px;
+        text-align: left;
+        min-height: 200px;
 
-                    word-break: keep-all;
-                }
+        word-break: keep-all;
+    }
 
-                .SeeMoreTitle {
-                    display: inline;
+    .SeeMoreTitle {
+        display: inline;
+    }
 
-                }
+    hr {
+        width: 40%;
+        border-top: 5px solid #1a1862;
+        border-radius: 50px;
+        opacity: 0.5;
+        margin-bottom: 20px;
 
-                hr {
-                    width: 40%;
-                    border-top: 5px solid #1a1862;
-                    border-radius: 50px;
-                    opacity: 0.5;
-                    margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 
-                    margin-left: auto;
-                    margin-right: auto;
-                }
+    a {
+        text-decoration: none;
+        color: black;
+    }
 
-                a {
-                    text-decoration: none;
-                    color: black;
-                }
-
-                .ShowMoreResults {
-                    border-radius: 12.5px;
-                    background-color: #c30003;
-                    color: #FFFFFF;
-                    margin-top: 20px;
-                    margin-bottom: 20px;
-                    display: inline-block;
-                    padding: 15px;
-                    cursor: pointer;
-                }
-
-                /* 
-                .card {
-                    box-shadow: 0 0 0 5px #FFFFFF;
-                    border-radius: 2%;
-                    height: 75px;
-                    overflow: hidden;
-                    position: relative;
-                    padding: 10px;
-                } */
-
-                #resultsFor {
-                    text-align: center;
-                }
-            </style>
-            <script>
-                var search = "<?php echo $_GET['search'] ?>";
-                if (search) {
-                    document.getElementById('searchInput').value = search;
-                }
-            </script>
+    #resultsFor {
+        text-align: center;
+    }
+</style>
+<script>
+    // Get the search term and put it in the Search bar
+    var search = "<?php echo $searchTerm ?>";
+    if (search) {
+        document.getElementById('searchInput').value = search;
+    }
+</script>

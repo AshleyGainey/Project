@@ -94,7 +94,6 @@ mysqli_close($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Make a dynamic title of the page - It will be the product Title and then what website it is -->
     <title><?php echo $productTitle; ?> - Gadget Gainey Store </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Keywords of the site for search engine optimisation -->
     <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
     <!-- Author of the site -->

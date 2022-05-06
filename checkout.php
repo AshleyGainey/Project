@@ -238,8 +238,6 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                     <!-- Line to seperate billing address from delivery address -->
                     <hr>
                     <!-- Delivery Address section -->
-
-
                     <h1 class="addressHeading">Delivery Address</h1>
                     <!-- Options to select what the user wants (Same as Billing Address: D1 | Main Address: D2 | New Address: D3 )  -->
                     <div class="radioGroup">
