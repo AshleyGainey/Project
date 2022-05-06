@@ -197,10 +197,10 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
                 die(json_encode('ERROR - Billing Town/City length is too weak. It must be a minimum of 2 characters.'));
             }
             // Server side validation to check if the billing Town/City is less than 256 characters
-            if (strlen($billingTownCity) > 255) {
+            if (strlen($billingTownCity) > 58) {
                 header('HTTP/1.1 400 Bad Request Server');
                 header('Content-Type: application/json; charset=UTF-8');
-                die(json_encode('ERROR - Billing Town/City length is too strong. It must be a maximum of 255 characters.'));
+                die(json_encode('ERROR - Billing Town/City length is too strong. It must be a maximum of 58 characters.'));
             }
 
             // Server side validation to check if the billing postCode is more than 4 characters
@@ -464,10 +464,10 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
                 die(json_encode('ERROR - Delivery Town/City length is too weak. It must be a minimum of 2 characters.'));
             }
             // Server side validation to check if the delivery Town/City is less than 256 characters
-            if (strlen($deliveryTownCity) > 255) {
+            if (strlen($deliveryTownCity) > 58) {
                 header('HTTP/1.1 400 Bad Request Server');
                 header('Content-Type: application/json; charset=UTF-8');
-                die(json_encode('ERROR - Delivery Town/City length is too strong. It must be a maximum of 255 characters.'));
+                die(json_encode('ERROR - Delivery Town/City length is too strong. It must be a maximum of 58 characters.'));
             }
             // Server side validation to check if the delivery county is more than a character
             if (strlen($deliveryCounty) < 2) {

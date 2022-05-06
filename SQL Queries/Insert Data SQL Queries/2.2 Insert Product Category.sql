@@ -1,0 +1,15 @@
+INSERT INTO product_category (categoryName, levelOfCategory, categoryIDOfFirstCategory)
+VALUES ("Kids", 1, null),
+("Kids Outdoor", 2, 1),
+("Trampoline", 3, 2),
+("Slides", 3, 2),
+("Technology", 1, null),
+("Televisions", 2, 5),
+("Samsung Televisions", 3, 6),
+("Bush Televisions", 3, 6),
+("LG Televisions", 3, 6),
+("Kids Scooters", 3, 2),
+("PC Monitors", 2, 5),
+("Appliances", 1, null),
+("Coffee Machines", 2, 12),
+("Printers", 2, 5);

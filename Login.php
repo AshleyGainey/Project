@@ -162,7 +162,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                 <!-- Description of field and required span and some client side validation (min and max, required)-->
                 <p>Town/City<span class="required">*</span></p>
                 <!-- Create an text input for Town/City of the new user and some client side validation (min and max, required) -->
-                <input id="regTownCity" type="text" class="changeOrAddDetailsInput" placeholder="Town/City" minlength=2 maxlength=255 required>
+                <input id="regTownCity" type="text" class="changeOrAddDetailsInput" placeholder="Town/City" minlength=2 maxlength=58 required>
             </div>
             <div class="fieldContainer">
                 <!-- Description of field and required span -->

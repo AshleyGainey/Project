@@ -218,7 +218,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                                     <!-- Description of field and required span -->
                                     <p>Town/City<span class="required">*</span></p>
                                     <!-- Create an text input for billing Town or city -->
-                                    <input id='billingTownCity' type='text' class='changeOrAddDetailsInput' placeholder='Town/City' minlength=2 maxlength=255>
+                                    <input id='billingTownCity' type='text' class='changeOrAddDetailsInput' placeholder='Town/City' minlength=2 maxlength=58>
                                 </div>
                                 <div class="fieldContainer">
                                     <!-- Description of field and required span -->
@@ -305,7 +305,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                                     <!-- Description of field and required span -->
                                     <p>Town/City<span class="required">*</span></p>
                                     <!-- Create an text input for delivery Town or city -->
-                                    <input id='deliveryTownCity' type='text' class='changeOrAddDetailsInput' placeholder='Town/City' minlength=2 maxlength=255>
+                                    <input id='deliveryTownCity' type='text' class='changeOrAddDetailsInput' placeholder='Town/City' minlength=2 maxlength=58>
                                 </div>
                                 <div class="fieldContainer">
                                     <!-- Description of field and required span -->

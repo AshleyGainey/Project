@@ -202,10 +202,10 @@ if (isset($_POST['Register'])) {
     }
 
     // Server side validation to check if the Town/City is less than 256 characters
-    if (strlen($townCity) > 255) {
+    if (strlen($townCity) > 58) {
         header('HTTP/1.1 400 Bad Request Server');
         header('Content-Type: application/json; charset=UTF-8');
-        die(json_encode('ERROR - Town/City length is too strong. It must be a maximum of 255 characters.'));
+        die(json_encode('ERROR - Town/City length is too strong. It must be a maximum of 58 characters.'));
     }
         // Server side validation to check if the postCode is more than 4 characters
     if (strlen($postcode) < 5) {

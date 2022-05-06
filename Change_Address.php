@@ -153,7 +153,7 @@ $userPostCode = $mainaddressDB[0]['postcode'];
                     <p>Town/City<span class="required">*</span></p>
                     <!-- Create an text input element with the value being the Town/City that is in the DB -->
                     <?php
-                    echo "<input id='townCity' type='text' class='changeOrAddDetailsInput' value='" . $userTownCity . "' placeholder='Town/City' minlength=2 maxlength=255 required>";
+                    echo "<input id='townCity' type='text' class='changeOrAddDetailsInput' value='" . $userTownCity . "' placeholder='Town/City' minlength=2 maxlength=58 required>";
                     ?>
                 </div>
                 <div class="fieldContainer">

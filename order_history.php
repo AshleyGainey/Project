@@ -238,7 +238,7 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
                 // Div for the button to show/hide the billing and delivery address details
                 echo  "<div class='BillingDeliveryAddressButton' onclick='hideShowBillingDeliveryAddress(" . $orderID . ")'>
                         <h2 class='left'>Billing & Delivery Address</h2>
-                        <img class='right' src='images/Down Arrow - Big.png' alt='Billing and Delivery Address - Right Arrow' />
+                        <img class='right' src='images/OrderHistory/Down Arrow - Big.png' alt='Billing and Delivery Address - Right Arrow' />
                     </div>";
                 // Now make the billing container with all the billing information
                 echo "<div class='billingDeliveryAddressOuterContainer'> 
@@ -509,41 +509,47 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
 </style>
 
 <script>
+    // Show or Hide the Billing and Delivery Address Section
     function hideShowBillingDeliveryAddress(orderID) {
+        // Get the element and see if it is hidden or not
         var section = document.getElementById('billingDeliveryAddressInnerContainer' + orderID)
+        // If hidden
         if (section.style.display === 'none' ||
             section.style.display === '') {
-            // console.log("Not visible");
+            // Fade in
             fade(section, true)
         } else {
-            // console.log("visible");
+            // If showing, fade Out
             fade(section, false)
         }
     }
 
 
+    // Fade in and out, depending on the parameters
     function fade(element, fadeIn) {
+        // Fade In the element
         if (fadeIn) {
-            var op = 0.1;
+            var opacity = 0.1;
             element.style.display = 'flex';
             var timer = setInterval(function() {
-                if (op >= 1) {
+                if (opacity >= 1) {
                     clearInterval(timer);
                 }
-                element.style.opacity = op;
-                element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-                op += op * 0.1;
+                element.style.opacity = opacity;
+                element.style.filter = 'alpha(opacity=' + opacity * 100 + ")";
+                opacity += opacity * 0.1;
             }, 10);
         } else {
-            var op = 1;
+            // Fade Out the element
+            var opacity = 1;
             var timer = setInterval(function() {
-                if (op <= 0.1) {
+                if (opacity <= 0.1) {
                     clearInterval(timer);
                     element.style.display = 'none';
                 }
-                element.style.opacity = op;
-                element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-                op -= op * 0.1;
+                element.style.opacity = opacity;
+                element.style.filter = 'alpha(opacity=' + opacity * 100 + ")";
+                opacity -= opacity * 0.1;
             }, 10);
         }
     }
