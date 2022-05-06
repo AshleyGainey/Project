@@ -118,19 +118,26 @@ mysqli_close($conn);
     <div id="bodyOfPage">
         <div class="firstRow">
             <div>
+                <!-- Product Image Slider Div -->
                 <div id="productImageSliderContainer" class="productImageSliderContainer">
+                    <!-- Div to hold the images-->
                     <div id="productImageSliderItems">
                         <?php $i = 0;
+                        // For every item in Picture Image array (number is dynamic)
                         foreach ($productImage as $product) {
-                            $i++; ?>
-                        <?php
+                            $i++;
+                            // Individual Image, ID will be the current index of the for loop.
+                            // It will get the image from the product images folder and then the current Product ID, concat with / and the filename that is stored in the array
+                            //and the alternative text of the image is from the database/array too
                             $productImagePath = "images/products/" . $productID . "/" . $productImage[$i - 1];
                             echo "<a id='IndividualProductImageSliderItem" . $i . "' class='productImageSliderItem'><img alt='" . $productAltText[$i - 1] . "' src='" . $productImagePath . "' class='productSliderImage'></a>";
                         } ?>
                     </div>
                     <?php
+                    // If there is more than one image then make the navigation buttons
                     $arrLength = count($productImage);
                     if ($arrLength > 1) {
+                        // Navigating Buttons, left and right
                         echo "<div class='productImageSliderArrows'>
                             <a id='leftArrow' onclick='moveToPreviousImage()'>
                                 <img src='images/Home/Right Arrow.svg' alt='Previous Image' />
@@ -141,32 +148,36 @@ mysqli_close($conn);
                         </div>" ?>
                     <?php } ?>
 
+                    <!-- Navigating Buttons, selecting which product image they want to go to, on click they go to the JS method called goToProductImageSlider and pass in the current product image number -->
                     <div class="indicatorDiv">
                         <div class="productImageSliderIndicators">
                             <?php $i = 0;
+                            // If there is more than one image then make the indicators
                             if ($arrLength > 1) {
-                            ?>
-                                <?php foreach ($productImage as $product) {
+                                foreach ($productImage as $product) {
                                     $i++;
-                                    echo "<a class='productImageSliderIndicatorsButton' id='productImageSliderIndicatorsButton" . $i . "' onclick='goToSlide($i)'></a>" ?>
-                            <?php }
+                                    echo "<a class='productImageSliderIndicatorsButton' id='productImageSliderIndicatorsButton" . $i . "' onclick='goToProductImageSlider($i)'></a>";
+                                }
                             } ?>
-
                         </div>
                     </div>
                 </div>
             </div>
 
 
+            <!-- Container to hold the Title, Price, the Free Delivery and the Add to Basket button -->
             <div class="card">
+                <!-- Container that holds the title, price and free delivery -->
                 <div class="cardInformation">
                     <h1 class="productTitle"> <?php echo $productTitle ?></h1>
                     <h1 class="productPrice">£<?php echo $productPrice ?></h2>
                         <h3 class="productFreeDelivery">Free Delivery & Returns</h3>
                 </div>
-                <form id="addToProductForm" action="/account_welcome.php" method="post" onclick="addToBasket()">
-                    <div id="AddtoBasketButtonDiv">
+                <!-- Then a form to pass a request to the back end when the user clicks on the Add to Basket button -->
+                <form id="addToProductForm" action="" method="post" onclick="addToBasket()">
+                    <div id="addToBasketButtonDiv">
                         <?php
+                        // Check to see if this product is in the basket and add the quantity to a variable
                         $basketItem = 0;
                         if (isset($_SESSION['basket'])) {
                             if (count($_SESSION['basket']) > 0) {
@@ -175,24 +186,29 @@ mysqli_close($conn);
                             }
                         }
 
-
+                        // The total inventory (theorically - hasn't been ordered yet) is the inventory now take away the current quantity of the product in the basket
                         $totalQuantity = $productQuantity - $basketItem;
+
+                        // And from there, we can use that logic to make the 'Add to basket' button
+                        // If the total inventory after factoring in the existing basket quantity is 0...
                         if ($totalQuantity == 0) {
-                            // echo "OutOfStock";
-                            echo "<button id='AddToBasketButton' type='submit' class='btn btn-success disabled'>
+                            // ...then it means it is out of stock and therefore, disable the button and that is show out of stock
+                            echo "<button id='AddToBasketButton' type='submit' class='disabled'>
                             <i class='fa fa-shopping-basket'></i><h5 id='basketText'>Out Of Stock</h5></button>";
+                            // If the quantity of the product in the basket is 10...
                         } else if ($basketItem > 9) {
-                            // echo "QuantityLimit";
-                            echo "<button id='AddToBasketButton' type='submit' class='btn btn-success disabled'>
+                            //...then the user has reached the limit that they can buy of this item and therefore disable the button 
+                            // and that they have reached their limit
+                            echo "<button id='AddToBasketButton' type='submit' class='disabled'>
                             <i class='fa fa-shopping-basket'></i><h5 id='basketText'>Quantity Limit hit</h5></button>";
                         } else {
-                            // echo "NormalBasket";
-                            echo "<button id='AddToBasketButton' type='submit' class='btn btn-success'>
+                            // If anything else, it is in stock and can show the normal, Add to Basket button
+                            echo "<button id='AddToBasketButton' type='submit' class='enabled'>
                             <i class='fa fa-shopping-basket'></i><h5 id='basketText'>Add to Basket</h5></button>";
                         }
                         ?>
-
                     </div>
+                    <!-- Make text that will display any errors/success message if there are any -->
                     <p id="errorMessage"></p>
                 </form>
             </div>
@@ -200,8 +216,11 @@ mysqli_close($conn);
 
 
 
+        <!-- Div Container that holds the description -->
         <div class="descriptionBox">
+            <!-- Title for the Description -->
             <h3 class="productDescriptionTitle">Description of Product</h3>
+            <!-- Preformatted tag that converts the non formatted description (like a new line) to formatted text -->
             <?php echo '<pre class="productDescription">' . str_replace('\n', "\n", $productDescriptionCorrect) . '</pre>'; ?>
         </div>
     </div>
@@ -223,6 +242,10 @@ mysqli_close($conn);
         font-family: Century-Gothic, sans-serif;
         word-break: keep-all;
         white-space: pre-wrap;
+
+        margin-left: 20px;
+        margin-right: 20px;
+        font-size: 25px;
     }
 
     #errorMessage {
@@ -230,10 +253,7 @@ mysqli_close($conn);
         margin-top: 20px;
     }
 
-
-
     .card {
-        border-radius: 12.5px;
         background-color: #FFFFFF;
         color: #000000;
         /*margin-top: 10px;*/
@@ -255,8 +275,10 @@ mysqli_close($conn);
         text-align: left;
         min-height: 200px;
         word-break: keep-all;
-    }
 
+        box-shadow: 0 0 0 5px #FFFFFF;
+        border-radius: 2%;
+    }
 
     .descriptionBox {
         border-radius: 12.5px;
@@ -291,12 +313,6 @@ mysqli_close($conn);
         font-size: 35px;
     }
 
-    .productDescription {
-        margin-left: 20px;
-        margin-right: 20px;
-        font-size: 25px;
-    }
-
     #AddToBasketButton {
         padding: 10px;
         width: 200px;
@@ -310,7 +326,7 @@ mysqli_close($conn);
         margin: 0 auto;
     }
 
-    .btn-success {
+    .enabled {
         cursor: pointer;
         background-color: #1a1862;
     }
@@ -327,7 +343,7 @@ mysqli_close($conn);
         display: block;
     }
 
-    #AddtoBasketButtonDiv {
+    #addToBasketButtonDiv {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -342,42 +358,7 @@ mysqli_close($conn);
         display: flex;
     }
 
-    /*
 
-    .card {
-        display: inline;
-    } */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /* HDHJDJDJKDSKDBHI_DJOIWJHDSJAHBUDYH&UDYIWIAD */
     .productImageSliderIndicatorsButton {
         background-color: #1a1862;
         border: 5px solid #FFFFFF;
@@ -390,11 +371,6 @@ mysqli_close($conn);
         margin: 4px 2px;
         cursor: pointer;
         border-radius: 50%;
-    }
-
-    .card {
-        box-shadow: 0 0 0 5px #FFFFFF;
-        border-radius: 2%;
     }
 
 
@@ -417,8 +393,6 @@ mysqli_close($conn);
         width: 100%;
     }
 
-
-
     .productSliderImage {
         display: block;
         width: 100%;
@@ -436,55 +410,19 @@ mysqli_close($conn);
     .productImageSliderArrows a:hover,
     .productImageSliderArrows a:hover {
         opacity: 50%;
-
-    }
-
-    .cardArea {
-        display: inline-block;
-        width: 100%;
-    }
-
-    .cardContainer {
-        display: inline-block;
-        width: 250px;
-    }
-
-    .writingOfCard a {
-        font-size: 25px;
-        ;
-        text-decoration: none;
-        color: #000000;
-        position: relative;
-    }
-
-    .writingOfCard img {
-        float: right;
-        width: 20px;
-    }
-
-    .writingOfCard {
-        margin-top: 10px;
-        text-align: center;
     }
 
 
-    .leftPart {
-        float: left;
-    }
-
-    .rightPart {
-        float: right;
-    }
-
-
-    .indicatorDiv,
-    .black {
+    .indicatorDiv {
         position: absolute;
         width: 100%;
         bottom: 10px;
     }
 
     .productImageSliderIndicators {
+        position: absolute;
+        top: 50%;
+        cursor: pointer;
         text-align: center;
     }
 
@@ -509,14 +447,6 @@ mysqli_close($conn);
         transform: translateY(-50%);
     }
 
-
-    #productImageSliderIndicators {
-        position: absolute;
-        top: 50%;
-        cursor: pointer;
-
-    }
-
     .cardInformation .productTitle,
     .cardInformation .productPrice,
     .cardInformation .productFreeDelivery {
@@ -526,223 +456,241 @@ mysqli_close($conn);
 </style>
 
 <script>
-    var oldArea;
-    var timer;
-    var sliderNum = 1;
-    var prevSliderNum = 1;
-    var picturesLength;
-    changeIndictors();
-    var timer;
+    // Declare variables to see where the product image slider is at and where it was previously
+    var currentProductImageNum = 1;
+    var prevcurrentProductImageNum = 1;
 
-    var productQuantityTimes = 0;
+    // Variable to store the amount of images that are tied to the product
+    var picturesLength = <?php echo $arrLength ?>;;
+
+    // Get the inventory from the database and put it in a variable
+    // There needs to be a better way of doing this (what about security??? The users can see how many are in the DB)
+    var productFromDB = <?php echo $productQuantity ?>;
+
+
+    // If there is more than one image, change the indicator colours on the product image slider
+    if (picturesLength > 1) {
+        changeIndicators()
+    }
+
+    // Variable to track how many items have been bought while on this page
     var productQuantityAfterLoad = 0;
-    var productQuantityBeforeLoad = <?php
-                                    if (isset($_SESSION['basket'])) {
-                                        if (count($_SESSION['basket']) > 0) {
-                                            if (!empty($_SESSION['basket'][$_GET['productID']])) {
-                                                echo $_SESSION['basket'][$_GET['productID']];
-                                            } else {
-                                                echo 0;
-                                            }
-                                        } else {
-                                            echo 0;
-                                        }
-                                    } else {
-                                        echo 0;
-                                    }
-                                    ?>;
+    // Get the current quantity (on first load of this page) of the product that the user has bought (from the basket)
+    var productQuantityBeforeLoad =
+        <?php
+        // If the basket has been initalised
+        if (isset($_SESSION['basket'])) {
+            // If there are any items in the basket
+            if (count($_SESSION['basket']) > 0) {
+                // If the product is found in the basket variable in the session...
+                if (!empty($_SESSION['basket'][$_GET['productID']])) {
+                    //...then return the product quantity the user has currently in their basket
+                    echo $_SESSION['basket'][$_GET['productID']];
+                } else {
+                    // If the item is not in the basket, then return 0
+                    echo 0;
+                }
+            } else {
+                // If there are no items in the basket, then return 0
+                echo 0;
+            }
+        } else {
+            // If the basket is not set, then return 0
+            echo 0;
+        }
+        ?>;
 
-
-
+    // If the Add to Basket button has a class of disabled on it, on first load, then disable the button
     var element = document.getElementById("AddToBasketButton");
     if (element.classList.contains("disabled")) {
-        document.getElementById("AddToBasketButton").disabled = true;
+        element.disabled = true;
     }
 
-
-    // $('#MainContent').css('padding-bottom', $('footer').height() - 50);
-    prevSliderNum = 1;
-    picturesLength = <?php echo $arrLength ?>;
-
-    if (picturesLength > 1) {
-        changeIndictors()
-    }
-
-
-    let lengthOfSlider = picturesLength * 100;
-
-    let result = lengthOfSlider + "%";
-
-    // console.log(picturesLength)
-    // Resolves issue with only one image then get rid of the margin left -100 (no image will be shown after, so don't need a margin left)
-    if (picturesLength == 1) {
-        document.getElementById("productImageSliderItems").style.marginLeft = 0;
-    }
-    document.getElementById("productImageSliderItems").style.width = result
-    // changeIndictors();
-
-
-
-
-
+    // Move the last image to the first place
     let content = document.getElementById('productImageSliderItems');
     let firstChild = content.firstElementChild;
     let lastChild = content.lastElementChild;
     firstChild.before(lastChild);
 
-    // console.log(firstChild);
+    // Dynamically calculate the width that the product image slider should be, by getting the length and multiplying it by 100 and putting a percentage on the end
+    let widthOfProductImageSlider = (picturesLength * 100) + "%";
+    content.style.width = widthOfProductImageSlider;
 
-    document.getElementById("productImageSliderItems").style.marginLeft = "-100%";
+    // If there is only 1 image...
+    if (picturesLength == 1) {
+        //..Then we don't want to have an offset of -100%... instead margin left is just 0
+        content.style.marginLeft = 0;
+    } else {
+        // if there is more than one image, have an offset of -100 to show the "first", actually second, element
+        content.style.marginLeft = "-100%";
+    }
 
-
-
-
+    // Move to the next product image
     function moveToNextImage() {
-        prevSliderNum = sliderNum;
-        sliderNum++;
+        // Change the last product image number to the current product image number (before moving it)
+        prevcurrentProductImageNum = currentProductImageNum;
+        // Increment the current product image number (telling it that we are now on the current image)
+        currentProductImageNum++;
+        // The total count of how many product images there are is the length of the pictures plus 1
+        productImageCount = picturesLength + 1;
 
+        // Move the first image to the last place
         let content = document.getElementById('productImageSliderItems');
         let firstChild = content.firstElementChild;
         let lastChild = content.lastElementChild;
         lastChild.after(firstChild);
 
-        document.getElementById("productImageSliderItems").style.marginLeft = "-100%";
+        // And have an offset of -100 to show the "first", actually second, element
+        content.style.marginLeft = "-100%";
 
-        var picturePath = picturesLength + 1;
-        if (sliderNum === picturePath) {
-            sliderNum = 1;
+        // If the current product image number is equal to the amount of pictures that the product has then loop back around to 1 (first picture item in array)
+        if (currentProductImageNum === productImageCount) {
+            currentProductImageNum = 1;
         }
-        changeIndictors()
+        // Change the Product Image indicator Buttons 
+        changeIndicators()
     }
 
+    // Move to the previous product image
     function moveToPreviousImage() {
-        prevSliderNum = sliderNum;
-        sliderNum--;
+        // Change the last product image number to the current product image number (before moving it)
+        prevcurrentProductImageNum = currentProductImageNum;
+        // Decrement the current product image number (telling it that we are now on the previous image)
+        currentProductImageNum--;
 
+        // move the last image to the first place
         let content = document.getElementById('productImageSliderItems');
         let firstChild = content.firstElementChild;
         let lastChild = content.lastElementChild;
         firstChild.before(lastChild);
 
-        document.getElementById("productImageSliderItems").style.marginLeft = "-100%";
+        // And have an offset of -100 to show the "first", actually second, element
+        content.style.marginLeft = "-100%";
 
-        if (sliderNum === 0) {
-            sliderNum = picturesLength;
+        // If the current product Image Number variable is 0, then loop back around to the amount of pictures there are for the product
+        if (currentProductImageNum === 0) {
+            currentProductImageNum = picturesLength;
         }
-        changeIndictors()
+        // Change the Product Image indicator Buttons
+        changeIndicators()
     }
 
-    function goToSlide(slide) {
-        var currentSlide = sliderNum;
+    // Specifically say which product image you want to go to (it will loop the moveToNextImage method)
+    function goToProductImageSlider(slide) {
+        var currentSlide = currentProductImageNum;
 
         var wantToGoTo = slide
-        var slidesToGoNextTo;
+        var slideToGoNextTo;
 
-
+        // Determined which way to use, either going previous or going next depending on which one is nearer to the target
         if (wantToGoTo > currentSlide) {
-            slidesToGoNextTo = wantToGoTo - currentSlide;
-            console.log("slidesToGoNextTo" + slidesToGoNextTo);
-
-            for (let i = 0; i < slidesToGoNextTo; i++) {
+            slideToGoNextTo = wantToGoTo - currentSlide;
+            for (let i = 0; i < slideToGoNextTo; i++) {
                 moveToNextImage();
             }
         } else if (currentSlide > wantToGoTo) {
-            slidesToGoNextTo = currentSlide - wantToGoTo;
-            console.log("slidesToGoNextTo" + slidesToGoNextTo);
-            for (let i = 0; i < slidesToGoNextTo; i++) {
+            slideToGoNextTo = currentSlide - wantToGoTo;
+            for (let i = 0; i < slideToGoNextTo; i++) {
                 moveToPreviousImage();
             }
         }
     }
 
-    function changeIndictors() {
-        var previousIndictor = document.getElementById("productImageSliderIndicatorsButton" + prevSliderNum);
-        // console.log(previousIndictor);
-        previousIndictor.style.backgroundColor = "#1a1862";
+    // Change the indicator colour
+    function changeIndicators() {
+        // Change the previous indicator back to normal blue colour
+        var previousIndicator = document.getElementById("productImageSliderIndicatorsButton" + prevcurrentProductImageNum);
+        previousIndicator.style.backgroundColor = "#1a1862";
 
-        var sliderIndictors = document.getElementById("productImageSliderIndicatorsButton" + sliderNum);
-        // console.log(sliderIndictors);
-        sliderIndictors.style.backgroundColor = "red";
+        // Change the current indicator to red colour
+        var nextIndicator = document.getElementById("productImageSliderIndicatorsButton" + currentProductImageNum);
+        nextIndicator.style.backgroundColor = "red";
     }
-    var productFromDB = <?php echo $productQuantity ?>;
+
 
     function addToBasket() {
+        // Prevent the form from being submitted by the default action
         event.preventDefault();
 
+        // If the Add to Basket button is disabled then don't do this
         if (document.getElementById('AddToBasketButton').disabled == false) {
+            // Get the product ID of the current product
             var productID = "<?php echo $productID ?>";
-            console.log(productID);
-            let xhr = new XMLHttpRequest();
 
+            //Then make a request to the basket_process.php and send in the Product ID and the quantity of 1 (they are buying 1 product quantity at a time)
+            let xhr = new XMLHttpRequest();
             xhr.open('POST', "basket_process.php", true)
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.send("product_id=" + productID + "&quantity=" + 1);
 
-            // Create an event to receive the return.
+            // On return of the call
             xhr.onreadystatechange = function() {
+                //See if it is ready and the status is OK
                 if (xhr.readyState == 4 && xhr.status == 200) {
+                    //If it is, then show the errorMessage to actually display a success message, that it has been added to Basket
                     document.getElementById("errorMessage").style.display = "block";
-
                     document.getElementById('errorMessage').innerHTML = "Added to basket"
-
                     document.getElementById('errorMessage').style.opacity = "1";
-                    // document.getElementById('errorMessage').style.removeProperty("opacity");
                     document.getElementById('errorMessage').style.filter = "alpha(opacity='1')";
+                    // Then fade the message out after 2 seconds
                     setTimeout(function() {
-                        fade(document.getElementById('errorMessage'));
+                        fadeOut(document.getElementById('errorMessage'));
                     }, 2000);
 
+                    // If the message coming back from the php file says that it is a New Item that has been added to the basket (and not just updating the quantity of a product)
                     var result = JSON.parse(xhr.responseText);
-
                     if (result == "NewItem") {
-                        var basketcount = document.getElementById('basketCount').innerHTML;
+                        // then we want to increase the basket count from x to x+1.
+                        var basketCountItem = document.getElementById('basketCount');
+                        var basketcount = basketCountItem.innerHTML;
                         basketcount++;
-                        if (basketcount > 0) {
-                            document.getElementById("basketCount").style.display = "inline";
-                        } else {
-                            document.getElementById("basketCount").style.display = "none";
-                        }
-                        document.getElementById("basketCount").innerHTML = basketcount;
+                        // Add show the Basket Count Item (it won't be show if the previous value was 0)
+                        basketCountItem.style.display = "inline";
+                        // Set the increased basket count back to the item.
+                        basketCountItem.innerHTML = basketcount;
                     }
 
+                    // The Product's quantity in the basket (after this page has loaded) has been increased, so increase the variable
                     productQuantityAfterLoad++;
 
+                    // Work out the total quantity that is going to be bought (/that is in the basket) by adding the before and after load variables together
                     var productQuantityTotal = productQuantityBeforeLoad + productQuantityAfterLoad;
 
 
+                    // If that value is the maximum that the user can buy (they can only buy a max of 10 of the same product)
                     if (productQuantityTotal === 10) {
-                        console.log("limit");
+                        // Then change the Add to basket button to disable it and change the Basket Text to provide feedback to the user that they have reached the quantity limit of this product
                         var element = document.getElementById("AddToBasketButton");
                         element.classList.add("disabled");
+                        element.classList.remove("enabled");
+                        element.disabled = true;
                         document.getElementById('basketText').innerHTML = "Quantity Limit hit";
-                        document.getElementById("AddToBasketButton").disabled = true;
-
+                        // If the total quantity the user has bought is equal to how many are in the database
                     } else if (productFromDB === productQuantityTotal) {
-                        console.log("NowOutOfStock");
+                        // Then change the Add to basket button to disable it and change the Basket Text to provide feedback to the user that after buying that product to that quantity, there is no more in stock.
                         var element = document.getElementById("AddToBasketButton");
                         element.classList.add("disabled");
+                        element.classList.remove("enabled");
+                        element.disabled = true;
                         document.getElementById('basketText').innerHTML = "Out Of Stock";
-                        document.getElementById("AddToBasketButton").disabled = true;
-
-                    } else {
-                        console.log("Fine");
                     }
+                    // If anything else, then it is fine and the basket button can remain the same
                 }
             }
         }
     }
 
-
-    function fade(element) {
-        var op = 1; // initial opacity
+    // Fades out the error message element
+    function fadeOut(element) {
+        var opacity = 1;
         var timer = setInterval(function() {
-            if (op <= 0.1) {
+            if (opacity <= 0.1) {
                 clearInterval(timer);
                 element.style.display = 'none';
             }
-            element.style.opacity = op;
-            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-            op -= op * 0.1;
+            element.style.opacity = opacity;
+            element.style.filter = 'alpha(opacity=' + opacity * 100 + ")";
+            opacity -= opacity * 0.1;
         }, 10);
     }
 </script>

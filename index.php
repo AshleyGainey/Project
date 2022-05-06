@@ -375,6 +375,7 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
             clearInterval(interval);
         }
 
+        // Move to the next carousel image
         function moveToNextImage() {
             // Change the last carousel image number to the current carousel image number (before moving it)
             previousCarouselImageNum = currentCarouselImageNum;
@@ -417,20 +418,18 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
             var currentSlide = currentCarouselImageNum;
 
             var wantToGoTo = slide
-            var slidesToGoNextTo;
+            var slideToGoNextTo;
 
             // Determined which way to use, either going previous or going next depending on which one is nearer to the target
             if (wantToGoTo > currentSlide) {
-                slidesToGoNextTo = wantToGoTo - currentSlide;
-                console.log("slidesToGoNextTo" + slidesToGoNextTo);
+                slideToGoNextTo = wantToGoTo - currentSlide;
 
-                for (let i = 0; i < slidesToGoNextTo; i++) {
+                for (let i = 0; i < slideToGoNextTo; i++) {
                     moveToNextImage();
                 }
             } else if (currentSlide > wantToGoTo) {
-                slidesToGoNextTo = currentSlide - wantToGoTo;
-                console.log("slidesToGoNextTo" + slidesToGoNextTo);
-                for (let i = 0; i < slidesToGoNextTo; i++) {
+                slideToGoNextTo = currentSlide - wantToGoTo;
+                for (let i = 0; i < slideToGoNextTo; i++) {
                     moveToPreviousImage();
                 }
             }

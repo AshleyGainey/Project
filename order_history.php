@@ -524,7 +524,7 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
     function fade(element, fadeIn) {
         if (fadeIn) {
-            var op = 0.1; // initial opacity
+            var op = 0.1;
             element.style.display = 'flex';
             var timer = setInterval(function() {
                 if (op >= 1) {
@@ -535,7 +535,7 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
                 op += op * 0.1;
             }, 10);
         } else {
-            var op = 1; // initial opacity
+            var op = 1;
             var timer = setInterval(function() {
                 if (op <= 0.1) {
                     clearInterval(timer);
