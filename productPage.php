@@ -419,9 +419,6 @@ mysqli_close($conn);
     }
 
     .productImageSliderIndicators {
-        position: absolute;
-        top: 50%;
-        cursor: pointer;
         text-align: center;
     }
 
