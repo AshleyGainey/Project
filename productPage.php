@@ -21,12 +21,12 @@ if (!is_numeric($_GET['productID'])) {
     header('Location: Error404.php');
 }
 
-//Prepare the statement - query to select the product information (Product Title)
+//Prepare the statement - query to select the product information (Product Title) and order it by what order the product images want to be displayed
 $stmt = $conn->prepare("SELECT p.productID, p.productTitle, 
 p.productDescription, p.productPrice, p.productTotalQuantity, pi.productImageFilename, pi.productImageAltText, pi.displayOrder
         FROM product 
 AS p RIGHT JOIN product_image pi
- ON pi.productID = p.productID where p.productID = ?");
+ ON pi.productID = p.productID where p.productID = ? Order By pi.DisplayOrder ASC ");
 
 // Variable product ID is equal to the product ID variable being sent in via the GET method
 $productID = $_GET['productID'];
