@@ -42,7 +42,7 @@ if (!isset($_SESSION['userID'])) {
             <!-- Title of Page -->
             <h2>Change Your Password</h2>
         </div>
-        <form id="PasswordForm" action="" method="post" onsubmit="ChangePassword()">
+        <form id="PasswordForm" action="" method="post" onsubmit="changePassword()">
             <!-- Form to submit updated values -->
             <div class="cardArea">
                 <div class="firstRowOfCards">
@@ -94,7 +94,7 @@ if (!isset($_SESSION['userID'])) {
 
 <script>
     // Some client side validation
-    function ChangePassword() {
+    function changePassword() {
         //Prevent the form action that was going to happen
         event.preventDefault();
         //Get the old password, the new password and confirm new password values from the textfields
@@ -117,6 +117,13 @@ if (!isset($_SESSION['userID'])) {
         //Get the confirm password value and check if it empty, if it is, display error
         if (!confirmPassword) {
             outputMessage = "Confirm New Password cannot be blank, please fill out that field.";
+            showHideMessage(true, outputMessage);
+            return false;
+        }
+
+        // Get the password value and the confirm password value and see if they are the same, if not, don't send the request and display error
+        if (newPassword !== confirmPassword) {
+            outputMessage = "New Password and Confirm New Password do not match.";
             showHideMessage(true, outputMessage);
             return false;
         }

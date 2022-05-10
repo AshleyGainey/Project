@@ -57,7 +57,6 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
     if ($billingMethod == 1) {
         // They Selected the main address for billing;
         getMainAddressID();
-        global $billingAddressID;
         $billingAddressID = $mainAddressID;
     } else if ($billingMethod == 2) {
         // They Selected and entered the new address for billing
@@ -77,37 +76,37 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
 
             //Server Side checking to see if any (but address line 2) fields are empty and if so, don't execute further
             if (empty($billingTitle)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Title is empty. Please fill it out.'));
             }
             if (empty($billingFirstName)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing First Name is empty. Please fill it out.'));
             }
             if (empty($billingLastName)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Last Name is empty. Please fill it out.'));
             }
             if (empty($billingAddressLine1)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Address Line 1 is empty. Please fill it out.'));
             }
             if (empty($billingTownCity)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Town/City is empty. Please fill it out.'));
             }
             if (empty($billingPostCode)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing County is empty. Please fill it out.'));
             }
             if (empty($billingCounty)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Postcode is empty. Please fill it out.'));
             }
@@ -118,115 +117,115 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
                 $billingTitle !== "Miss" || $billingTitle !== "Mrs" || $billingTitle !== "Ms" ||
                 $billingTitle !== "Dr"
             ) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Title from list is not selected - Please select from the list'));
             }
 
             //Server side validation to check if the billing first name is more than a character
             if (strlen($billingFirstName) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing First Name length is too weak. It must be a minimum of 2 characters.'));
             }
             //Server side validation to check if the billing first name is less than 256 characters
             if (strlen($billingFirstName) > 255) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing First Name length is too strong. It must be a maximum of 255 characters.'));
             }
             //Server side validation to check if the billing first name doesn't contain any numbers in it
             if (!(preg_match('/^\D+$/', $billingFirstName))) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Incorrect Format for Billing First Name. First Name should not contain numbers'));
             }
 
             //Server side validation to check if the billing last name is more than a character
             if (strlen($billingLastName) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Last Name length is too weak. It must be a minimum of 2 characters.'));
             }
 
             //Server side validation to check if the billing last name is less than 256 characters
             if (strlen($billingLastName) > 255) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - BillingLast Name length is too strong. It must be a maximum of 255 characters.'));
             }
             //Server side validation to check if the billing last name doesn't contain any numbers in it
             if (!(preg_match('/^\D+$/', $billingLastName))) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Incorrect Format for Billing Last Name. Last Name should not contain numbers'));
             }
 
             // Server side validation to check if the billing address line 1 is more than a character
             if (strlen($billingAddressLine1) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Address Line 1 length is too weak. It must be a minimum of 2 characters.'));
             }
 
             // Server side validation to check if the billing address line 1 is less than 256 characters
             if (strlen($billingAddressLine1) > 255) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Address Line 1 length is too strong. It must be a maximum of 255 characters.'));
             }
 
             // Server side validation to check when the billing address Line 2 is not empty, if it is more than a character
             if (!empty($billingAddressLine2) && strlen($billingAddressLine2) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Address Line 2 length is too weak. It must be a minimum of 2 characters if not blank.'));
             }
 
             // Server side validation to check when the billing address Line 2 is not empty, if it is less than 256 characters
             if (!empty($addressLine2) && strlen($addressLine2) > 255) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Address Line 2 length is too strong. It must be a maximum of 255 characters.'));
             }
 
             // Server side validation to check if the billing Town/City is more than a character
             if (strlen($billingTownCity) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Town/City length is too weak. It must be a minimum of 2 characters.'));
             }
             // Server side validation to check if the billing Town/City is less than 256 characters
             if (strlen($billingTownCity) > 58) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Town/City length is too strong. It must be a maximum of 58 characters.'));
             }
 
             // Server side validation to check if the billing postCode is more than 4 characters
             if (strlen($billingPostCode) < 5) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Postcode length is too weak. It must be a minimum of 2 characters.'));
             }
 
             // Server side validation to check if the billing postCode is less than 9 characters e.g SW1A 2AA (8 characters)
             if (strlen($billingPostCode) > 8) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing Postcode length is too strong. It must be a maximum of 255 characters.'));
             }
 
             // Server side validation to check if the billing county is more than a character
             if (strlen($billingCounty) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing County length is too weak. It must be a minimum of 2 characters.'));
             }
 
             // Server side validation to check if the billing county is less than 256 characters
             if (strlen($billingCounty) > 255) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Billing County length is too strong. It must be a maximum of 255 characters.'));
             }
@@ -265,8 +264,6 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
             // If found an address in the DB, that the user has entered...
             if (mysqli_num_rows($res) > 0) {
                 //..then instead of adding a new row to the database, use that Address ID
-                // To edit a global variable, you have to declare you want to before changing it.
-                global $billingAddressID;
                 // Set the Billing Address ID to the one from the DB.
                 $billingAddressID = $addressFromDB[0]['addressID'];
             } else {
@@ -282,19 +279,18 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
                     die(json_encode('ERROR - Could not process your order. Cannot execute query to insert address in the DB - Billing'));
                 }
                 // Successfully added to the Database and therefore edit the billing address ID to change it to the address ID found in the DB
-                global $billingAddressID;
                 $billingAddressID = mysqli_insert_id($conn);
             }
         } else {
             //Not all required fields are set, don't send request to DB.
-            header('HTTP/1.1 400 Bad Request Server');
+            header('HTTP/1.1 400 Bad Request');
             header('Content-Type: application/json; charset=UTF-8');
             die(json_encode('ERROR - Not all required fields are filled out for the Billing address, please fill them out.'));
             return false;
         }
     } else {
         //If not billing address method 1 or 2 (should never get to this state)
-        header('HTTP/1.1 400 Bad Request Server');
+        header('HTTP/1.1 400 Bad Request');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Invalid data for the Billing Address. Please contact support if problem persists'));
         return false;
@@ -312,18 +308,16 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
     $deliveryMethod = $_POST['deliveryMethod'];
     // If delivery address is the same as billing address (and is not main address)
     if ($deliveryMethod == 1) {
-        // Edit the global variable of delivery address ID and equal it to the billing address
-        global $deliveryAddressID;
+        // Edit the variable of delivery address ID and equal it to the billing address
         $deliveryAddressID = $billingAddressID;
-        // If delivery address is the delivery address
+        // If delivery address is the main address
     } else if ($deliveryMethod == 2) {
         // If the main address hasn't been used for the billing address, then go and set the main 
         // address ID variable by going to getMainAddressID() method
         if (!isset($mainAddressID)) {
             getMainAddressID();
         }
-        // Then set the global variable of deliveryAddressID to the ID in mainAddressID
-        global $deliveryAddressID;
+        // Then set the variable of deliveryAddressID to the ID in mainAddressID
         $deliveryAddressID = $mainAddressID;
         // They Selected and entered the new address for billing
     } else if ($deliveryMethod == 3) {
@@ -343,37 +337,37 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
 
             //Server Side checking to see if any (but address line 2) fields are empty and if so, don't execute further
             if (empty($deliveryTitle)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Title is empty. Please fill it out.'));
             }
             if (empty($deliveryFirstName)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery First Name is empty. Please fill it out.'));
             }
             if (empty($deliveryLastName)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Last Name is empty. Please fill it out.'));
             }
             if (empty($deliveryAddressLine1)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Address Line 1 is empty. Please fill it out.'));
             }
             if (empty($deliveryTownCity)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Town/City is empty. Please fill it out.'));
             }
             if (empty($deliveryCounty)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery County is empty. Please fill it out.'));
             }
             if (empty($deliveryPostCode)) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Postcode is empty. Please fill it out.'));
             }
@@ -384,113 +378,113 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
                 $deliveryTitle !== "Miss" || $deliveryTitle !== "Mrs" || $deliveryTitle !== "Ms" ||
                 $deliveryTitle !== "Dr"
             ) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Title from list is not selected - Please select from the list'));
             }
 
             //Server side validation to check if the delivery first name is more than a character
             if (strlen($deliveryFirstName) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery First Name length is too weak. It must be a minimum of 2 characters.'));
             }
             //Server side validation to check if the delivery first name is less than 256 characters
             if (strlen($deliveryFirstName) > 255) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery First Name length is too strong. It must be a maximum of 255 characters.'));
             }
             //Server side validation to check if the delivery first name doesn't contain any numbers in it
             if (!(preg_match('/^\D+$/', $deliveryFirstName))) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Incorrect Format for Delivery First Name. First Name should not contain numbers'));
             }
 
             //Server side validation to check if the delivery last name is more than a character
             if (strlen($deliveryLastName) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Last Name length is too weak. It must be a minimum of 2 characters.'));
             }
 
             //Server side validation to check if the delivery last name is less than 256 characters
             if (strlen($deliveryLastName) > 255) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Last Name length is too strong. It must be a maximum of 255 characters.'));
             }
 
             //Server side validation to check if the delivery last name doesn't contain any numbers in it
             if (!(preg_match('/^\D+$/', $deliveryLastName))) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Incorrect Format for Delivery Last Name. Last Name should not contain numbers'));
             }
 
             // Server side validation to check if the delivery address line 1 is more than a character
             if (strlen($deliveryAddressLine1) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Address Line 1 length is too weak. It must be a minimum of 2 characters.'));
             }
 
             // Server side validation to check if the delivery address line 1 is less than 256 characters
             if (strlen($deliveryAddressLine1) > 255) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Address Line 1 length is too strong. It must be a maximum of 255 characters.'));
             }
 
             // Server side validation to check when the delivery address Line 2 is not empty, if it is less than 256 characters
             if (!empty($deliveryAddressLine2) && strlen($deliveryAddressLine2) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Address Line 2 length is too weak. It must be a minimum of 2 characters if not blank.'));
             }
 
             // Server side validation to check when the delivery address Line 2 is not empty, if it is less than 256 characters
             if (!empty($deliveryAddressLine2) && strlen($deliveryAddressLine2) > 255) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Address Line 2 length is too strong. It must be a maximum of 255 characters.'));
             }
 
             // Server side validation to check if the delivery Town/City is more than a character
             if (strlen($deliveryTownCity) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Town/City length is too weak. It must be a minimum of 2 characters.'));
             }
             // Server side validation to check if the delivery Town/City is less than 256 characters
             if (strlen($deliveryTownCity) > 58) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Town/City length is too strong. It must be a maximum of 58 characters.'));
             }
             // Server side validation to check if the delivery county is more than a character
             if (strlen($deliveryCounty) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery County length is too weak. It must be a minimum of 2 characters.'));
             }
 
             // Server side validation to check if the delivery county is less than 256 characters
             if (strlen($deliveryCounty) > 255) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery County length is too strong. It must be a maximum of 255 characters.'));
             }
             // Server side validation to check if the delivery postCode is more than 4 characters
             if (strlen($deliveryPostCode) < 2) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Postcode length is too weak. It must be a minimum of 2 characters.'));
             }
             // Server side validation to check if the delivery postCode is less than 9 characters e.g SW1A 2AA (8 characters)
             if (strlen($deliveryPostCode) > 255) {
-                header('HTTP/1.1 400 Bad Request Server');
+                header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
                 die(json_encode('ERROR - Delivery Postcode length is too strong. It must be a maximum of 255 characters.'));
             }
@@ -529,8 +523,6 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
             // If found an address in the DB, that the user has entered...
             if (mysqli_num_rows($res) > 0) {
                 //..then instead of adding a new row to the database, use that Address ID
-                // To edit a global variable, you have to declare you want to before changing it.                global $deliveryAddressID;
-                global $deliveryAddressID;
                 // Set the delivery Address ID to the one from the DB.
                 $deliveryAddressID = $addressFromDB[0]['addressID'];
             } else {
@@ -558,18 +550,17 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
                     die(json_encode('ERROR - Could not process your order. Cannot execute query to insert address in the DB - Delivery'));
                 }
                 // Successfully added to the Database and therefore edit the delivery address ID to change it to the address ID found in the DB
-                global $deliveryAddressID;
                 $deliveryAddressID = mysqli_insert_id($conn);
             }
         } else {
             //Not all required fields are set, don't send request to DB.
-            header('HTTP/1.1 400 Bad Request Server');
+            header('HTTP/1.1 400 Bad Request');
             header('Content-Type: application/json; charset=UTF-8');
             die(json_encode('ERROR - Not all required fields are filled out for the Delivery address, please fill them out.'));
         }
     } else {
         //If not delivery address method 1, 2 or 3 (should never get to this state)
-        header('HTTP/1.1 400 Bad Request Server');
+        header('HTTP/1.1 400 Bad Request');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Invalid data for the Delivery Address. Please contact support if problem persists.'));
         return false;
@@ -596,7 +587,7 @@ foreach ($_SESSION['basket'] as $productID => $productQuantity) {
     // Validation to see if the Quantity in the basket is over 10 - (validation has been done before this point but just double check)
     if ($productQuantity > 10) {
         // send an error back to the front end if quantity of current product is more than 10
-        header('HTTP/1.1 400 Bad Request Server');
+        header('HTTP/1.1 400 Bad Request');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Cannot proceed your order due to the quantity of an item in your basket exceeds the customer limit of 10'));
         return false;
@@ -630,7 +621,7 @@ foreach ($_SESSION['basket'] as $productID => $productQuantity) {
     // If the quantity of what they ordered is more of what is in the database then error 
     // (validation has been done before this point (Product Page) but just double check)
     if ($productQuantity > $quantityOfProductDB) {
-        header('HTTP/1.1 400 Bad Request Server');
+        header('HTTP/1.1 400 Bad Request');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Cannot proceed your order due to the quantity of an item in your basket exceeds what we have in stock'));
         return false;

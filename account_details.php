@@ -64,7 +64,7 @@ if (!isset($_SESSION['userID'])) {
             <div id="secondRowOfCards">
                 <div class="cardContainer">
                     <div class="card">
-                        <!-- On a seperate row, show Change Your Main Address as a card with text and an image of the right arrow -->
+                        <!-- On a separate  row, show Change Your Main Address as a card with text and an image of the right arrow -->
                         <div class="writingOfCard">
                             <a href="Change_Address.php">Change Your Main Address<img src="images/Home/Right Arrow.svg" alt="Change Main Address - Right Arrow" /></a>
                         </div>

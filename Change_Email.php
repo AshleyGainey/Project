@@ -40,7 +40,7 @@ if (!isset($_SESSION['userID'])) {
             <h2>Change Your Email</h2>
         </div>
         <!-- Form to submit updated values -->
-        <form id="EmailForm" action="" method="post" onsubmit="ChangeEmail()">
+        <form id="EmailForm" action="" method="post" onsubmit="changeEmail()">
             <div class="firstRowOfCards">
                 <!-- Description of field with the item adding a class of disabled to show it in black text-->
                 <div class="fieldContainer leftPart disabled">
@@ -54,7 +54,7 @@ if (!isset($_SESSION['userID'])) {
                     <!-- Description of field and required span -->
                     <p>New Email<span class="required">*</span></p>
                     <!-- Create an text input element - it will be used to get the requested new email. -->
-                    <input type="email" id="newEmail" class="changeOrAddDetailsInput" placeholder="New Email" required minlength=4 maxlength=255>
+                    <input type="email" id="newEmail" class="changeOrAddDetailsInput" placeholder="New Email" minlength=4 maxlength=254 required>
                 </div>
             </div>
             <div class="secondRowOfCards">
@@ -62,7 +62,7 @@ if (!isset($_SESSION['userID'])) {
                     <!-- Description of field and required span -->
                     <p>Your Password<span class="required">*</span></p>
                     <!-- For this change, they will need to enter their password, therefore, create a new text input and have it as the password textfield -->
-                    <input type="password" id="password" class="changeOrAddDetailsInput" placeholder="Your Password" required minlength=12 maxlength=128>
+                    <input type="password" id="password" class="changeOrAddDetailsInput" placeholder="Your Password" minlength=12 maxlength=128 required>
                 </div>
             </div>
 
@@ -76,7 +76,6 @@ if (!isset($_SESSION['userID'])) {
     </div>
     <!-- Make text that will display any errors if there are any. -->
     <p id="errorMessage"></p>
-    </div>
     <!-- Add the footer at the bottom after any other material -->
     <?php include "./footer.php" ?>
 </body>
@@ -96,7 +95,7 @@ if (!isset($_SESSION['userID'])) {
 
 <script>
     // Some client side validation
-    function ChangeEmail() {
+    function changeEmail() {
         //Prevent the form action that was going to happen
         event.preventDefault();
         //Get the new email address and password value
@@ -135,8 +134,8 @@ if (!isset($_SESSION['userID'])) {
                 window.location.href = "account_welcome.php";
             } else if (xhr.readyState == 4 && (xhr.status == 400 || xhr.status == 500)) {
                 // If not, show the error message in the errorMessage element with what it got back from the PHP file
-                document.getElementById("errorMessage").style.display = "block";
-                document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+                message = xhr.status + " " + JSON.parse(xhr.responseText);
+                showHideMessage(true, message)
             }
         }
     }

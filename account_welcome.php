@@ -46,7 +46,7 @@ if (!isset($_SESSION['userID'])) {
                 <div class="cardContainer leftPart">
                     <div class="card">
                         <div class="writingOfCard">
-                            <a href="account_details.php">Account Details<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
+                            <a href="account_details.php">Account Details<img src="images/Home/Right Arrow.svg" alt="Account Details - Right Arrow" /></a>
                         </div>
                     </div>
                 </div>
@@ -54,16 +54,16 @@ if (!isset($_SESSION['userID'])) {
                 <div class="cardContainer rightPart">
                     <div class="card">
                         <div class="writingOfCard">
-                            <a href="order_history.php">Order History<img src="images/Home/Right Arrow.svg" alt="Order Details" /></a>
+                            <a href="order_history.php">Order History<img src="images/Home/Right Arrow.svg" alt="Order History - Right Arrow" /></a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="secondRowOfCards">
-                <!-- On a seperate row, show Log Out text around a container -->
+                <!-- On a separate row, show Log Out text around a container -->
                 <div class="card cardContainer" id="logOut">
                     <div class="writingOfCard">
-                        <a>Log Out</a>
+                        <a href="logout.php">Log Out</a>
                     </div>
                 </div>
             </div>
@@ -152,16 +152,15 @@ if (!isset($_SESSION['userID'])) {
         //Show Register if #Register
         if (afterURL == "Register") {
             document.getElementById("welcome").innerHTML = "Welcome" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
-
-        } else {
-            //Show Login if anything other than Register
+        } else if (afterURL == "Login") {
+            //Show Login if Login
             document.getElementById("welcome").innerHTML = "Welcome back" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
+        } else {
+            // Show 'Welcome' if the value after the URL is not Register or Login
+            document.getElementById("welcome").innerHTML = "Welcome" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
         }
     } else {
+        // Show 'Welcome' if there is nothing after the URL
         document.getElementById("welcome").innerHTML = "Welcome" + "<?php echo ", " . $_SESSION["userFirstName"] . "!" ?>"
     }
-
-    document.getElementById("logOut").onclick = function() {
-        document.location = 'logout.php';
-    };
 </script>

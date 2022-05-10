@@ -5,10 +5,16 @@ if (!isset($_SESSION)) {
     @session_start();
 }
 
-// If the basket variable in the session hasn't been set (and if you try to come to this page - using the URL), and you haven't signed in yet, redirect to the Login page to sign in.
+// If the basket variable in the session hasn't been set (and if you try to come to this page - using the URL), redirect to the Basket page to say that there are no items in the basket
 if (!isset($_SESSION['basket'])) {
     header('Location: basket.php');
 }
+
+// If the basket variable in the session is empty (no items in it) (and if you try to come to this page - using the URL), redirect to the Basket page to say that there are no items in the basket
+if (empty($_SESSION['basket'])) {
+    header('Location: basket.php');
+}
+
 
 // Users will need to be logged in to use this section, so if they are not logged in then redirect them to the Login page, 
 //setting a flag where it brings them back to this page after they have logged in to true
@@ -103,7 +109,6 @@ if (empty($mainAddressUserAddressLine2)) {
 }
 // Part them parts together with a comma between and after them and then at the end, put their postcode
 $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddressUserPostCode;
-// echo $mainAddressDisplay;
 ?>
 
 <!DOCTYPE html>
@@ -152,10 +157,9 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         <div class="centreElements">
             <div class="allElements">
                 <!-- Form to send the data off correctly  -->
-                <form action="placeOrder.php" id="OrderForm" method="post" onsubmit="payment()">
+                <form action="" id="OrderForm" method="post" onsubmit="payment()">
                     <!-- Billing Address section -->
                     <h1 class="addressHeading">Billing Address</h1>
-
                     <!-- Options to select what the user wants (Main Address: B1 | New Address: B2)  -->
                     <div class="radioGroup">
                         <!-- For B1, Output the main Address in the display variable we made earlier -->
@@ -170,7 +174,6 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                             <input type="radio" id="B2" name="billingAddress" value="BillingNewAddress" onchange="getRadioSelected(this)">
                             <span class="tick"></span>
                     </div>
-
                     <div class="centreElements">
                         <div class="allElements">
                             <!-- If selected, use a new address for billing, then show the Billing Address form with the fields for adding a new address -->
@@ -212,7 +215,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                                     <!-- Description of field -->
                                     <p>Address Line 2</p>
                                     <!-- Create an text input for billing address line 2 -->
-                                    <input id='billingAddressLine2' type='text' class='changeOrAddDetailsInput' placeholder='Address Line 2' minlength=2 maxlength=255>
+                                    <input id='billingAddressLine2' type='text' class='changeOrAddDetailsInput' placeholder='Address Line 2' maxlength=255>
                                 </div>
                                 <div class="fieldContainer">
                                     <!-- Description of field and required span -->
@@ -235,7 +238,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                             </div>
                         </div>
                     </div>
-                    <!-- Line to seperate billing address from delivery address -->
+                    <!-- Line to separate billing address from delivery address -->
                     <hr>
                     <!-- Delivery Address section -->
                     <h1 class="addressHeading">Delivery Address</h1>
@@ -258,7 +261,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                             <input type="radio" id="D3" name="deliveryAddress" value="DeliveryNewAddress" onchange="getRadioSelected(this)">
                             <span class="tick"></span>
                     </div>
-                    <div class="centreElements" id="AddressChange">
+                    <div class="centreElements">
                         <div class="allElements">
                             <!-- If selected, use a new address for delivery, then show the Delivery Address form with the fields for adding a new address -->
                             <div id="deliveryAddressForm">
@@ -322,7 +325,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                             </div>
                         </div>
                     </div>
-                    <!-- Seperate the Delivery Address from the Payment -->
+                    <!-- Separate the Delivery Address from the Payment -->
                     <hr>
                     <h1 class="deliveryAddress">Payment</h1>
                     <!-- Show a button for PayPal Payment -->
@@ -668,7 +671,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
             if (billingTitle != "Master" && billingTitle != "Mr" &&
                 billingTitle != "Mrs" && billingTitle != "Ms" && billingTitle != "Miss" &&
                 billingTitle != "Dr") {
-                outputMessage = "Billing Address: Not a value Name Title. Please fill the section in correctly";
+                outputMessage = "Billing Address: Not a valuid Name Title. Please fill the section in correctly";
                 showHideMessage(true, outputMessage);
                 return false;
             }
@@ -768,7 +771,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
             if (deliveryTitle != "Master" && deliveryTitle != "Mr" &&
                 deliveryTitle != "Mrs" && deliveryTitle != "Ms" && deliveryTitle != "Miss" &&
                 deliveryTitle != "Dr") {
-                outputMessage = "Delivery Address: Not a value Name Title. Please fill the section in correctly";
+                outputMessage = "Delivery Address: Not a valid Name Title. Please fill the section in correctly";
                 showHideMessage(true, outputMessage);
                 return false;
             }
@@ -861,7 +864,7 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
             } else if (xhr.readyState == 4 && (xhr.status == 400 || xhr.status == 500)) {
                 // If not, show the error message in the errorMessage element with what it got back from the PHP file
                 document.getElementById("errorMessage").style.display = "block";
-                document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+                document.getElementById('errorMessage').innerHTML = xhr.status + " " + JSON.parse(xhr.responseText);
             }
         }
     }

@@ -60,7 +60,7 @@ for ($sliderProducts = 0; $sliderProducts < 6; $sliderProducts = $sliderProducts
 }
 
 // Store the Carousel Image filename and Alternative text in their own arrays
-$picturesURLCarousel = array();
+$picturesFileNameCarousel = array();
 $picturesAltCarousel = array();
 
 // Loop through the productIDCarousel
@@ -85,7 +85,7 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
         $productAlt = str_replace("'", '"', $productAlt);
 
         // Push them values into the Carousel arrays
-        array_push($picturesURLCarousel, $productFileName);
+        array_push($picturesFileNameCarousel, $productFileName);
         array_push($picturesAltCarousel, $productAlt);
     } else {
         // If not successful, then show an error
@@ -127,13 +127,14 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
             <div id="carouselItems">
                 <?php
                 // For every item in Picture URL Carousel (should be 6)
-                for ($item = 0; $item < count($picturesURLCarousel); $item++) {
+                for ($item = 0; $item < count($picturesFileNameCarousel); $item++) {
                     // Get the Product ID from the carousel array
                     $productID = $productIDCarousel[$item];
                     // Individual Image, ID will be IndividualCarouselItem[ID], clicking the image will link to the product (by the productID), 
                     //it will get the image from the carousel Images folder and then the filename that is stored in the database and put in the array 
                     //and the alternative text of the image is from the database/array
-                    echo "<a id='IndividualCarouselItem" . ($item + 1) . "' class='IndividualCarouselItem' href='productPage.php?productID=" . $productID . "'><img src='Images/Home/carouselImages/" . $picturesURLCarousel[$item] . "' alt='" . $picturesAltCarousel[$item] . "' class='carouselImage'>
+                    echo "<a id='IndividualCarouselItem" . ($item + 1) . "' class='IndividualCarouselItem' href='productPage.php?productID=" . $productID .
+                        "'><img src='Images/Home/carouselImages/" . $picturesFileNameCarousel[$item] . "' alt='" . $picturesAltCarousel[$item] . "' class='carouselImage'>
                         </a>";
                 }
                 ?>
@@ -174,12 +175,12 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
                 <!-- Individual Card Image Div  -->
                 <div class="card">
                     <!-- Image for Card -->
-                    <a href="#"><img src="Images\Home\About Gadget Gainey.png" class="cardImage">
+                    <a href="Error404.php"><img src="Images\Home\About Gadget Gainey.png" class="cardImage">
                     </a>
                 </div>
                 <!-- Writing for card -->
                 <div class="writingOfCard">
-                    <a href="#">About Us<img src="images/Home/Right Arrow.svg" alt="About Us" /></a>
+                    <a href="Error404.php"">About Us<img src=" images/Home/Right Arrow.svg" alt="About Us" /></a>
                 </div>
             </div>
             <!-- Individual Card container (including image and writing) -->
@@ -187,12 +188,12 @@ for ($carouselProduct = 0; $carouselProduct < count($productIDCarousel); $carous
                 <!-- Individual Card Image Div  -->
                 <div class="card">
                     <!-- Image for Card -->
-                    <a href="#"><img src="Images\Home\Contact Us (without logo).png" class="cardImage">
+                    <a href="Error404.php""><img src=" Images\Home\Contact Us (without logo).png" class="cardImage">
                     </a>
                 </div>
                 <!-- Writing for card -->
                 <div class="writingOfCard">
-                    <a href="#">Contact Us<img src="images/Home/Right Arrow.svg" alt="Contact Us" /></a>
+                    <a href="Error404.php"">Contact Us<img src=" images/Home/Right Arrow.svg" alt="Contact Us" /></a>
                 </div>
             </div>
         </div>

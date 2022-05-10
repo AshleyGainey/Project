@@ -5,28 +5,28 @@ if (!isset($_SESSION)) {
     @session_start();
 }
 
-//Include the Login Details to access the DB
-include 'DatabaseLoginDetails.php';
-
-//Connect to the database
-$conn = mysqli_connect($host, $user, $pass, $database);
-
-// Check connection and stop if there is an error
-if (!$conn) {
-    echo 'Connection error: ' . mysqli_connect_error();
-}
-
 // Validation to prevent dirty data
 if (!is_numeric($_GET['productID'])) {
     header('Location: Error404.php');
 }
 
+//Include the Login Details to access the DB
+include 'DatabaseLoginDetails.php';
+
+ //Connect to the database
+$conn = mysqli_connect($host, $user, $pass, $database);
+
+// Check connection and stop if there is an error
+if (!$conn) {
+echo 'Connection error: ' . mysqli_connect_error();
+}
+
 //Prepare the statement - query to select the product information (Product Title) and order it by what order the product images want to be displayed
-$stmt = $conn->prepare("SELECT p.productID, p.productTitle, 
-p.productDescription, p.productPrice, p.productTotalQuantity, pi.productImageFilename, pi.productImageAltText, pi.displayOrder
+$stmt = $conn->prepare("SELECT p.productTitle, 
+p.productDescription, p.productPrice, p.productTotalQuantity, pi.productImageFilename, pi.productImageAltText
         FROM product 
 AS p RIGHT JOIN product_image pi
- ON pi.productID = p.productID where p.productID = ? Order By pi.DisplayOrder ASC ");
+ ON pi.productID = p.productID where p.productID = ? Order By pi.DisplayOrder ASC");
 
 // Variable product ID is equal to the product ID variable being sent in via the GET method
 $productID = $_GET['productID'];
@@ -46,10 +46,10 @@ if (!$stmt->execute()) {
 $result = $stmt->get_result();
 $productInfo = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-// If there is no results for the product ID that has been sent by the get method, then redirect to the Error404 page
+// If there are no results for the product ID that has been sent by the get method, then redirect to the Error404 page
 if (empty($productInfo)) {
     header('Location: Error404.php');
-} else {
+} 
     // If there is a/multiple results then declare new variables to put the information in
     $productTitle;
     $productDescription;
@@ -58,7 +58,6 @@ if (empty($productInfo)) {
     $productQuantity = 0;
     $productImage = [];
     $productAltText = [];
-
 
     $i = 0;
     // For every result that has come back from the DB (can have multiple due to having multiple product images)
@@ -79,7 +78,6 @@ if (empty($productInfo)) {
         // Increase the index
         $i++;
     }
-}
 
 //Free  memory and close the connection
 mysqli_free_result($result);
@@ -101,7 +99,7 @@ mysqli_close($conn);
     <!-- Make a dynamic description of the page for SEO (Search Engine descriptions of the page), this dynamic description will be 100 words of the description of the product (with an ellipsis at the end)-->
     <meta name="description" <?php
                                 $productDescriptionForMeta = str_replace("\n", " ", $productDescription);
-                                $productDescriptionForMeta = str_replace('"', '', $productDescriptionForMeta);
+                                $productDescriptionForMeta = str_replace('"', "'", $productDescriptionForMeta);
 
                                 $productDescriptionForMeta = implode(' ', array_slice(explode(' ', $productDescriptionForMeta), 0, 100));
                                 $productDescriptionForMeta = $productDescriptionForMeta . "...";
@@ -185,7 +183,7 @@ mysqli_close($conn);
                             }
                         }
 
-                        // The total inventory (theorically - hasn't been ordered yet) is the inventory now take away the current quantity of the product in the basket
+                        // The total inventory (theoretically - hasn't been ordered yet) is the inventory now take away the current quantity of the product in the basket
                         $totalQuantity = $productQuantity - $basketItem;
 
                         // And from there, we can use that logic to make the 'Add to basket' button

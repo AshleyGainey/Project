@@ -32,6 +32,7 @@ $totalPriceOfEachProduct = array();
 </head>
 
 <body>
+    <!-- Add the header at the top before any other material -->
     <?php include "./header.php" ?>
     <div id="bodyOfPage">
         <div class="title">
@@ -184,7 +185,6 @@ if ($invalidBasket == 0) {
         <div class="total">
             <h1 class="totalHeader">Total:<h1>
                     <?php
-                    // echo "<h1 class='totalAmount'>£" . number_format($_SESSION["total"], 2) . "<h1>";
                     echo "<h1 id='totalAmount'> £" . number_format($total, 2)  . "<h1>";
                     ?>
 
@@ -504,7 +504,7 @@ if ($invalidBasket == 0) {
                 //Then getting the price of the relevant product, times that by the updated quantity
                 var totalValueOfProduct = passedPriceArray[id] * quantity;
                 //Logic to show/hide the quantity per product if over/under the quantity of 1
-                if (x > 1) {
+                if (quantity > 1) {
                     var element = document.getElementById("quantityPerPrice" + id);
                     element.classList.remove("hiddenQuantity");
                 } else {
@@ -551,11 +551,8 @@ if ($invalidBasket == 0) {
                 var basketcount = document.getElementById('basketCount').innerHTML;
                 basketcount--;
 
-                //If more than 0, keep it displaying, 
-
-                if (basketcount > 0) {
-                    document.getElementById("basketCount").style.display = "inline";
-                } else {
+                //If no more products in the basket
+                if (basketcount < 1) {
                     // if basket count is no longer more than 0, then hide it from the view of the user 
                     document.getElementById("basketCount").style.display = "none";
 
@@ -573,15 +570,16 @@ if ($invalidBasket == 0) {
                 //Removed value so therefore update the price of that product to 0.
                 totalPriceOfEachProduct[id] = 0;
 
-                //Now calculate the new total overall price by looping through the totalPriceOfEachProduct array
-                var total = 0;
-                for (const [key, value] of Object.entries(totalPriceOfEachProduct)) {
-                    console.log(key, value);
-                    total = total + value
+                if (basketcount > 0) {
+                    //Now calculate the new total overall price by looping through the totalPriceOfEachProduct array
+                    var total = 0;
+                    for (const [key, value] of Object.entries(totalPriceOfEachProduct)) {
+                        console.log(key, value);
+                        total = total + value
+                    }
+                    // Display the total back to the page
+                    document.getElementById("totalAmount").innerHTML = "£" + total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }
-                // Display the total back to the page
-                document.getElementById("totalAmount").innerHTML = "£" + total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
                 var data = xhr.responseText;
                 console.log(data);
             } else {

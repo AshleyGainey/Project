@@ -68,7 +68,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                 <!-- Description of field and required span -->
                 <p>Email<span class="required">*</span></p>
                 <!-- Create an text input element with the type of email and some client side validation (min and max, required) -->
-                <input id="loginEmail" type="email" class="changeOrAddDetailsInput" placeholder="Email" minlength=4 maxlength=255 required>
+                <input id="loginEmail" type="email" class="changeOrAddDetailsInput" placeholder="Email" minlength=4 maxlength=254 required>
             </div>
             <div class="fieldContainer">
                 <!-- Description of field and required span -->
@@ -90,7 +90,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                 <!-- Description of field and required span -->
                 <p>Email<span class="required">*</span></p>
                 <!-- Create an text input element with the type of email and some client side validation (min and max, required) -->
-                <input id="regEmail" type="email" class="changeOrAddDetailsInput" placeholder="Email" minlength=4 maxlength=128 required>
+                <input id="regEmail" type="email" class="changeOrAddDetailsInput" placeholder="Email" minlength=4 maxlength=254 required>
             </div>
             <div class="fieldContainer">
                 <!-- Description of field and required span -->
@@ -416,7 +416,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
     }
 
     // Show/Hide the password doesn't match error based on what the password and the confirm password text is.
-    function focusOutRegConfirmPassword() {
+    function hideShowPassword() {
         var passwordText = document.getElementById("regPassword").value;
         var confirmPasswordText = document.getElementById("regConfirmPassword").value;
 
@@ -565,7 +565,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                 } else {
                     window.location.href = "account_welcome.php#Register";
                 }
-            } else {
+            } else if (xhr.readyState == 4 && (xhr.status == 400 || xhr.status == 500)) {
                 // If not, show the error message in the errorMessage element with what it got back from the PHP file
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText;
@@ -606,10 +606,10 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                 } else {
                     window.location.href = "account_welcome.php#Login";
                 }
-            } else {
+            } else if (xhr.readyState == 4 && (xhr.status == 400 || xhr.status == 500)) {
                 // If not, show the error message in the errorMessage element with what it got back from the PHP file
                 document.getElementById("errorMessage").style.display = "block";
-                document.getElementById('errorMessage').innerHTML = xhr.status + " " + xhr.responseText.replaceAll('"', '');
+                document.getElementById('errorMessage').innerHTML = xhr.status + " " + JSON.parse(xhr.responseText);
             }
         }
     }

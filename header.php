@@ -7,8 +7,7 @@ if (!isset($_SESSION)) {
 ?>
 
 <head>
-    <!-- Get the header stylesheet as well as import version 4.7 (all free version) icon pack style sheet from Front Awesome -->
-    <link rel="stylesheet" type="text/css" href="header.css">
+    <!-- Get the stylesheet of version 4.7 icon pack style sheet from Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
@@ -73,6 +72,153 @@ if (!isset($_SESSION)) {
         </a>
     </div>
 </header>
+<style>
+    @font-face {
+        font-family: Century-Gothic;
+        src: url('fonts/Century Gothic.ttf') format("truetype");
+    }
+
+    header {
+        background-color: #1a1862;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        display: flex;
+    }
+
+    .searchInput {
+        margin: 0;
+        padding: 0;
+        height: 30px;
+        width: 80%;
+        font-size: 1.5em;
+        border-radius: 25px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        padding-right: 20px;
+        padding-left: 30px;
+        background: none;
+        font-family: Century-Gothic, sans-serif;
+        color: #FFFFFF;
+        border: 3px solid #FFFFFF;
+        outline: none;
+    }
+
+    #searchButton {
+        width: 60px;
+        height: 60px;
+        margin-left: -40px;
+        display: inline-block;
+        cursor: pointer;
+        background-color: blue;
+        border: 3px solid #FFFFFF;
+        background: #1a1862;
+        color: #fff;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 2em;
+    }
+
+    #AboutGGCategory {
+        width: 32%;
+    }
+
+    #AccountCategory {
+        width: 32%;
+    }
+
+    #ContactUsCategory {
+        width: 32%;
+    }
+
+    ::placeholder {
+        color: #FFFFFF
+    }
+
+    .headerSideButtons i {
+        font-size: 5em;
+        padding-bottom: 10px;
+        color: #FFFFFF
+    }
+
+    #LeftSide img {
+        max-width: 75%;
+        height: auto;
+    }
+
+    #basketCount {
+        font-size: 25px;
+        background: #ff0000;
+        color: #fff;
+        padding: 0 5px;
+        vertical-align: top;
+        z-index: 99;
+    }
+
+    #searchBarDiv {
+        width: 100%;
+        text-align: center;
+    }
+
+    #logoSection {
+        width: 20%;
+        float: left;
+    }
+
+    #searchSection {
+        width: 60%;
+        float: left;
+        margin-left: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #buttonsSection {
+        float: right;
+        width: 20%;
+        text-align: center;
+    }
+
+    #buttonsSection a {
+        float: right;
+    }
+
+    .category {
+        width: 33%;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .SubCategory a {
+        padding-left: 20px;
+    }
+
+    #basketCount {
+        font-weight: 900;
+        position: absolute;
+        border-radius: 60%;
+        margin-left: -30px;
+    }
+
+    .headerSideButtons {
+        text-align: center;
+        cursor: pointer;
+        margin: auto;
+        padding-right: 10px;
+        padding-top: 20px;
+        width: 100px;
+        display: inline-block;
+    }
+
+    .headerSideButtons h2 {
+        color: #FFFFFF;
+        display: inline;
+    }
+
+    #accountText {
+        overflow-wrap: anywhere;
+    }
+</style>
 <script>
     // Some Client Side Validation
     function searchValidation() {
@@ -82,7 +228,6 @@ if (!isset($_SESSION)) {
         var search = document.getElementById("searchInput").value.trim();
         document.getElementById("searchInput").value = search;
         // If the string length of what is in the searchbar (after trim) is more than 0, then submit the form
-        // TODO Ashley: Do Server Side Validation on this
         if (search && search.length > 0) {
             document.getElementById("searchForm").submit()
         }

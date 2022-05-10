@@ -27,18 +27,18 @@ if (!$stmt->execute()) {
 
 $res = $stmt->get_result();
 //Get the result(s) from the query
-$mainaddressDB = mysqli_fetch_all($res, MYSQLI_ASSOC);
+$mainAddressDB = mysqli_fetch_all($res, MYSQLI_ASSOC);
 //Save the first result (should only be one anyway) to the respected variables
-$userTitle = $mainaddressDB[0]['title'];
-$userFirstName = $mainaddressDB[0]['firstName'];
-$userLastName = $mainaddressDB[0]['lastName'];
-$userAddressID = $mainaddressDB[0]['addressID'];
+$userTitle = $mainAddressDB[0]['title'];
+$userFirstName = $mainAddressDB[0]['firstName'];
+$userLastName = $mainAddressDB[0]['lastName'];
+$userAddressID = $mainAddressDB[0]['addressID'];
 
-$userAddressLine1 = $mainaddressDB[0]['addressLine1'];
-$userAddressLine2 = $mainaddressDB[0]['addressLine2'];
-$userTownCity = $mainaddressDB[0]['townCity'];
-$userCounty = $mainaddressDB[0]['county'];
-$userPostCode = $mainaddressDB[0]['postcode'];
+$userAddressLine1 = $mainAddressDB[0]['addressLine1'];
+$userAddressLine2 = $mainAddressDB[0]['addressLine2'];
+$userTownCity = $mainAddressDB[0]['townCity'];
+$userCounty = $mainAddressDB[0]['county'];
+$userPostCode = $mainAddressDB[0]['postcode'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -146,7 +146,7 @@ $userPostCode = $mainaddressDB[0]['postcode'];
                     <p>Address Line 2</p>
                     <!-- Create an text input element with the value being the address line 2 (if filled out) that is in the DB -->
                     <?php
-                    echo "<input id='addressLine2' type='text' class='changeOrAddDetailsInput' value='" . $userAddressLine2 . "' placeholder='Address Line 2' minlength=2 maxlength=255>";
+                    echo "<input id='addressLine2' type='text' class='changeOrAddDetailsInput' value='" . $userAddressLine2 . "' placeholder='Address Line 2'>";
                     ?>
                 </div>
                 <div class="fieldContainer">
@@ -172,10 +172,11 @@ $userPostCode = $mainaddressDB[0]['postcode'];
                 </div>
                 <!-- Create a button of type submit which will send the data to the backend  -->
                 <input type="submit" class="changeOrAddDetailsInput" value=" Save">
+
             </form>
-            <!-- Make text that will display any errors if there are any. -->
-            <p id="errorMessage"></p>
         </div>
+        <!-- Make text that will display any errors if there are any. -->
+        <p id="errorMessage"></p>
     </div>
     <!-- Add the footer at the bottom after any other material -->
     <?php include "./footer.php" ?>
@@ -232,7 +233,7 @@ $userPostCode = $mainaddressDB[0]['postcode'];
         if (title != "Master" && title != "Mr" &&
             title != "Mrs" && title != "Ms" && title != "Miss" &&
             title != "Dr") {
-            outputMessage = "Not a value Name Title. Please fill the section in correctly";
+            outputMessage = "Not a valid Name Title. Please fill the section in correctly";
             showHideMessage(true, outputMessage);
             return false;
         }

@@ -4,18 +4,14 @@ if (!isset($_SESSION)) {
     @ob_start();
     session_start();
 }
-//Get the Database login details
-include 'DatabaseLoginDetails.php';
-
-//Connect to the database
-$conn = mysqli_connect($host, $user, $pass, $database);
-
 // Trim the whitespace from the search on the server side
 $searchTerm = trim($_GET['search']);
 
-// Check connection and stop if there is an error
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (!(strlen($searchTerm) > 0)) {
+    //Couldn't execute query so stop there
+    header('HTTP/1.1 400 Bad Request');
+    header('Content-Type: application/json; charset=UTF-8');
+    die(json_encode('ERROR - Search Term cannot be blank.'));
 }
 
 // Variables for the dynamic query.
@@ -55,6 +51,18 @@ for ($i = 0; $i < sizeof($searchExploded); $i++) {
     }
 }
 
+//Get the Database login details
+include 'DatabaseLoginDetails.php';
+
+//Connect to the database
+$conn = mysqli_connect($host, $user, $pass, $database);
+
+// Check connection and stop if there is an error
+if ($conn->connect_error) {
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Content-Type: application/json; charset=UTF-8');
+    die("Connection failed: " . $conn->connect_error);
+}
 // after making the query, prepare it
 $stmt = $conn->prepare($query);
 // Put what type of data in the first parameter and what the data is in the second parameter
@@ -117,16 +125,17 @@ mysqli_close($conn);
                 // If no products where found, then show No Products Found
                 if ($rows == 0) {
                     echo "NO PRODUCTS FOUND";
-                    // If one product was found, output the singular of products (product)
+                    // If one product was found, then take the user to that product
                 } else if ($rows == 1) {
-                    echo "(" . $rows . " product found)";
+                    $item = $products[0]["productID"];
+                    header('Location: productPage.php?productID=' . $item);
                     // If more than one products were found, output the plural of product (products)
                 } else {
                     echo "(" . $rows . " products found)";
                 } ?>
             </h4>
         </div>
-        <!-- Horizental line after the Search Term and how many products were found to seperate the content -->
+        <!-- Horizontal line after the Search Term and how many products were found to separate  the content -->
         <hr>
         <!-- Div to hold all the results -->
         <div id="AllResults">

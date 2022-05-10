@@ -400,11 +400,12 @@ $allOrdersTiedToAccount = mysqli_fetch_all($res, MYSQLI_ASSOC);
         margin-top: 50px;
     }
 
-    .nameBilling {
+    .nameBilling,
+    .nameDelivery {
         display: block;
     }
 
-    .nameBilling h3 {
+    .nameBilling h3, .nameDelivery h3 {
         display: inline;
     }
 
