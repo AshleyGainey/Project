@@ -112,7 +112,7 @@ if (isset($_SESSION['comeBackToCheckOut'])) {
                 <!-- Description of field and required span -->
                 <p>Confirm Password<span class="required">*</span></p>
                 <!-- Create an text input element with the type of password and some client side validation (min and max, required) and check on Out of focus to see if the passwords match up to check the password complexity -->
-                <input id="regConfirmPassword" type="password" class="changeOrAddDetailsInput" placeholder="Confirm Password" onfocusout="focusOutRegConfirmPassword()" onkeyup="keyUpRegConfirmPassword()" minlength=12 maxlength=128 required>
+                <input id="regConfirmPassword" type="password" class="changeOrAddDetailsInput" placeholder="Confirm Password" onfocusout="hideShowPassword()" onkeyup="keyUpRegConfirmPassword()" minlength=12 maxlength=128 required>
             </div>
             <!-- Display Validation Message if the Passwords (Password and Confirm Password) do not match -->
             <div id="confirmPasswordValidationMessage">

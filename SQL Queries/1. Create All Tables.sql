@@ -20,8 +20,8 @@ DROP TABLE IF EXISTS address;
 CREATE TABLE address (
     addressID int NOT NULL AUTO_INCREMENT,
 	title VARCHAR(35) NOT NULL,
-	firstName VARCHAR(35) NOT NULL,
-	lastName VARCHAR(35) NOT NULL,
+	firstName VARCHAR(255) NOT NULL,
+	lastName VARCHAR(255) NOT NULL,
     addressLine1 VARCHAR(255) NOT NULL,
     addressLine2 VARCHAR(255),
 	townCity VARCHAR(255) NOT NULL,
@@ -40,8 +40,6 @@ CREATE TABLE user (
 	userPassword BINARY(60) NOT NULL,
     mainAddressID INT,
 	typeOfUser VARCHAR(25) NOT NULL,
-	
-
 
 CONSTRAINT pk_user PRIMARY KEY (userID),
 CONSTRAINT fk_user_AddressID FOREIGN KEY (mainAddressID) REFERENCES address(addressID)
@@ -55,10 +53,8 @@ CREATE TABLE purchase_order (
     billingAddressID INT NOT NULL,
 	deliveryAddressID INT NOT NULL,
 	
-	
 	CONSTRAINT pk_purchaseOrder PRIMARY KEY (orderID),
-    
-	
+
 CONSTRAINT fk_purchaseOrder_orderUserID FOREIGN KEY (userID) REFERENCES user(userID),
 	CONSTRAINT fk_purchaseOrder_billingAddressID FOREIGN KEY (billingAddressID) REFERENCES address(addressID),
 CONSTRAINT fk_purchaseOrder_deliveryAddressID FOREIGN KEY (deliveryAddressID) REFERENCES address(addressID)
@@ -84,9 +80,9 @@ CREATE TABLE product (
 	productPrice DECIMAL(8 , 2) NOT NULL,
 	productTotalQuantity SMALLINT NOT NULL,
 
-	productCategoryID INT,
-	productCarouselImageFilename VARCHAR(255),
-	productCarouselImageAltText VARCHAR(255),
+	productCategoryID INT NOT NULL,
+	productCarouselImageFilename VARCHAR(255) NOT NULL,
+	productCarouselImageAltText VARCHAR(255) NOT NULL,
    
 CONSTRAINT pk_product PRIMARY KEY (productID), 
 
@@ -97,8 +93,8 @@ CREATE TABLE product_image (
 	productImageID INT NOT NULL AUTO_INCREMENT,
 	productID INT NOT NULL,
     displayOrder INT NOT NULL,
-	productImageFilename VARCHAR(255),
-	productImageAltText VARCHAR(1000),
+	productImageFilename VARCHAR(255) NOT NULL,
+	productImageAltText VARCHAR(1000) NOT NULL,
    
 CONSTRAINT pk_productImage PRIMARY KEY (productImageID),
 

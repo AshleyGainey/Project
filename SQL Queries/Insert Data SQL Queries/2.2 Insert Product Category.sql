@@ -1,7 +1,7 @@
 INSERT INTO product_category (categoryName, levelOfCategory, categoryIDOfFirstCategory)
 VALUES ("Kids", 1, null),
 ("Kids Outdoor", 2, 1),
-("Trampoline", 3, 2),
+("Trampoline", 3, 1),
 ("Slides", 3, 2),
 ("Technology", 1, null),
 ("Televisions", 2, 5),

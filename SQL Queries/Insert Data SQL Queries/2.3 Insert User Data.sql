@@ -9,5 +9,5 @@ VALUES ("joe.him@gmail.com", "$2a$10$7xeCpWo6H3qiTYnTDMKSo.KcVnSG7jCZhLVjdQq8SAg
 ("l.leather@hotmail.com", "$2a$10$IEyhnKNpiwzyiI9FUhGznea4hNNTdurg7hXJUbQO2Xiy0BtpGVphm", 12, "Customer" ),
 ("fishmania70him@protonmail.com", "$2a$10$FkcQUQY.9kqDnzBkeInxZOqR0NLTK6vEOK6SFLZCR4qTbbY/heLb2", 13, "Customer" ),
 ("katie.maschino2@outlook.com", "$2a$10$MF.NIi9uRggCEF84yQ1ULeGx2vKLvten9hGQ6bHCu0hSaOOPQvUTK", 15, "Customer" ),
-("ashley.gainey@gadgetgainey.com", "$2a$10$U8G7y9RKz0AHlHTXnIFbwePnYnZmgOArg4Wx0trH/yR7zW7ljSiT6", null, "Admin" ),
-("tom.jell@gadgetgainey.com", "$2a$10$POWbh3hBq08V7fiVgvDvf.qnIhddxzBMDfHNJceozqlvCCPk0cGpC", null, "Admin" );
+("ashley.gainey@gadgetgainey.com", "$2a$10$U8G7y9RKz0AHlHTXnIFbwePnYnZmgOArg4Wx0trH/yR7zW7ljSiT6", 14, "Admin" ),
+("tom.jell@gadgetgainey.com", "$2a$10$POWbh3hBq08V7fiVgvDvf.qnIhddxzBMDfHNJceozqlvCCPk0cGpC", 17, "Admin" );
