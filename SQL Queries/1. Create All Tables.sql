@@ -38,7 +38,7 @@ CREATE TABLE user (
     userID INT NOT NULL AUTO_INCREMENT,
 	userEmail VARCHAR(254) NOT NULL,
 	userPassword BINARY(60) NOT NULL,
-    mainAddressID INT,
+    mainAddressID INT NOT NULL,
 	typeOfUser VARCHAR(25) NOT NULL,
 
 CONSTRAINT pk_user PRIMARY KEY (userID),
