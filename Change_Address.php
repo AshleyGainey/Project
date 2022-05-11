@@ -14,6 +14,15 @@ include 'DatabaseLoginDetails.php';
 // Connect to the DB
 $conn = mysqli_connect($host, $user, $pass, $database);
 
+// Check connection
+if (!$conn) {
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Content-Type: application/json; charset=UTF-8');
+    die(json_encode('ERROR - Connection to the database has not been established'));
+} else  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
 // Query for getting the main address, binding the userID to the query
 $stmt = $conn->prepare("SELECT a.title, a.firstName, a.lastName, a.addressID, a.addressLine1, a.addressLine2, a.townCity, a.county, a.postcode from user u INNER JOIN address a ON u.mainAddressID = a.addressID where u.userID  = ?");
 $userID =    $_SESSION['userID'];

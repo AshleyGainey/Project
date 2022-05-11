@@ -22,7 +22,8 @@ if (!$conn) {
     header('HTTP/1.1 500 Internal Server Error');
     header('Content-Type: application/json; charset=UTF-8');
     die(json_encode('ERROR - Connection to the database has not been established'));
-    echo 'Connection error: ' . mysqli_connect_error();
+} else  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
 //Prepared Statement - query to get all order details tied to the user (latest first). 

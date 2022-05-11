@@ -276,7 +276,8 @@ if (isset($_POST['Register'])) {
         header('HTTP/1.1 500 Internal Server Error');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Connection to the database has not been established'));
-        echo 'Connection error: ' . mysqli_connect_error();
+    } else  if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
 
     //Prepared Statement - query to see if the user has already signed up using the same email address
@@ -416,8 +417,9 @@ VALUES (?, ?, ?, ?)");
     if (!$conn) {
         header('HTTP/1.1 500 Internal Server Error');
         header('Content-Type: application/json; charset=UTF-8');
-        die(json_encode('ERROR - Please contact us with this issue.'));
-        echo 'Connection error: ' . mysqli_connect_error();
+        die(json_encode('ERROR - Connection to the database has not been established'));
+    } else  if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
 
     //Prepared Statement - query to see if the user is in the DB by checking the email address

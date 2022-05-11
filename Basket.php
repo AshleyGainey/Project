@@ -59,7 +59,11 @@ $totalPriceOfEachProduct = array();
 
                 $conn = new mysqli($host, $user, $pass, $database);
                 // Check connection
-                if ($conn->connect_error) {
+                if (!$conn) {
+                    header('HTTP/1.1 500 Internal Server Error');
+                    header('Content-Type: application/json; charset=UTF-8');
+                    die(json_encode('ERROR - Connection to the database has not been established'));
+                } else  if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);
                 }
                 //Select all the information needed for the product (product title, image (alt text and image file name), price, the quantity in the DB.

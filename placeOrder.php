@@ -21,8 +21,9 @@ function getMainAddressID()
     if (!$conn) {
         header('HTTP/1.1 500 Internal Server Error');
         header('Content-Type: application/json; charset=UTF-8');
-        die(json_encode('ERROR - Cannot connect to the database while executing the main address. Please contact us with this issue.'));
-        echo 'Connection error: ' . mysqli_connect_error();
+        die(json_encode('ERROR - Connection to the database has not been established'));
+    } else  if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
 
     //Prepared Statement - query to select the main address ID from the user
@@ -241,10 +242,10 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
             if (!$conn) {
                 header('HTTP/1.1 500 Internal Server Error');
                 header('Content-Type: application/json; charset=UTF-8');
-                die(json_encode('ERROR - Cannot connect to the database while executing the billing. Please contact us with this issue.'));
-                echo 'Connection error: ' . mysqli_connect_error();
+                die(json_encode('ERROR - Connection to the database has not been established'));
+            } else  if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
             }
-
             //Prepared Statement - query to see if the address is already in the database
             $stmt = $conn->prepare("SELECT addressID from address where title = ? AND firstName = ? AND lastName = ? AND addressLine1 = ? AND addressLine2 = ? AND townCity = ? AND county = ? AND postcode = ?");
             //Binding the address information we got from the front end and passing it through to our prepared statement
@@ -501,8 +502,9 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
             if (!$conn) {
                 header('HTTP/1.1 500 Internal Server Error');
                 header('Content-Type: application/json; charset=UTF-8');
-                die(json_encode('ERROR - Cannot connect to the database while executing the delivery. Please contact us with this issue.'));
-                echo 'Connection error: ' . mysqli_connect_error();
+                die(json_encode('ERROR - Connection to the database has not been established'));
+            } else  if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
             }
             //Prepared Statement - query to see if the address is already in the database
             $stmt = $conn->prepare("SELECT addressID from address where title = ? AND firstName = ? AND lastName = ? AND addressLine1 = ? AND addressLine2 = ? AND townCity = ? AND county = ? AND postcode = ?");
@@ -596,6 +598,14 @@ foreach ($_SESSION['basket'] as $productID => $productQuantity) {
     include 'DatabaseLoginDetails.php';
     //Make a connect to the database
     $conn = mysqli_connect($host, $user, $pass, $database);
+    // Check connection
+    if (!$conn) {
+        header('HTTP/1.1 500 Internal Server Error');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Connection to the database has not been established'));
+    } else  if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
     //Prepared Statement - query to get the product price and the total inventory of that product
     $stmt = $conn->prepare("SELECT productPrice, productTotalQuantity from product where productID = ?");
     //Binding the Product ID of the current product and passing it through to our prepared statement

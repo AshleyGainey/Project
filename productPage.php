@@ -18,7 +18,11 @@ $conn = mysqli_connect($host, $user, $pass, $database);
 
 // Check connection and stop if there is an error
 if (!$conn) {
-echo 'Connection error: ' . mysqli_connect_error();
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Content-Type: application/json; charset=UTF-8');
+    die(json_encode('ERROR - Connection to the database has not been established'));
+} else  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
 //Prepare the statement - query to select the product information (Product Title) and order it by what order the product images want to be displayed

@@ -75,6 +75,14 @@ if ($_POST['process'] == "Email") {
     include 'DatabaseLoginDetails.php';
     //Make the connection
     $conn = mysqli_connect($host, $user, $pass, $database);
+// Check connection
+    if (!$conn) {
+        header('HTTP/1.1 500 Internal Server Error');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Connection to the database has not been established'));
+    } else  if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
     //Prepare the statement - query to get the user password from the database so it can be compared
     $stmt = $conn->prepare("SELECT userPassword From user where userID = ?");
     //Bind the variable to the prepared statement
@@ -194,6 +202,15 @@ if ($_POST['process'] == "Email") {
 
     //Connect to the database
     $conn = mysqli_connect($host, $user, $pass, $database);
+    //Check connection
+    if (!$conn) {
+        header('HTTP/1.1 500 Internal Server Error');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Connection to the database has not been established'));
+    } else  if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
     //Prepare the statement - query to select the user's hashed password from the database
     $stmt = $conn->prepare("SELECT userPassword From user where userID = ?");
     //Bind the parameter of UserID to the prepared statement
