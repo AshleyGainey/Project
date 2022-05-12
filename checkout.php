@@ -752,7 +752,6 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         var deliveryPostCode;
 
         var deliveryMethod = 0;
-        debugger;
         // If Delivery Address and the billing address is Main Address (it means it is in an incorrect state - Delivery address gets removed from view if Billing Address is Main Address)
         if (deliveryAddressChecked.value == "DeliveryADDRESSSTORED" &&
             billingAddressChecked.value == "BillingADDRESSSTORED") {

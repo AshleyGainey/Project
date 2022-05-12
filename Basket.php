@@ -49,150 +49,153 @@ $totalPriceOfEachProduct = array();
     <!-- Add the header at the top before any other material -->
     <?php include "./header.php" ?>
     <div id="bodyOfPage">
-        <div class="title">
+        <div id="title">
             <!-- Title of Page with an icon (better accessibility) -->
             <i class="fa fa-shopping-basket"></i>
             <h1>Your Basket</h1>
         </div>
-        <?php
-        $total = 0;
 
-        // Check to see if there is a basket session set, if not, don't show any other elements other than 
-        // displaying a header saying 'No products in the basket'
-        if (!isset($_SESSION["basket"])) {
-            $invalidBasket = 1;
-            echo "<h1 id='NoProducts'>No Products in the basket</h1>";
-        } else if (count($_SESSION["basket"]) == 0) {
-            $invalidBasket = 1;
-            echo "<h1 id='NoProducts'>No Products in the basket</h1>";
-        } else {
-            // Not invalid so keep looping through the basket session array, getting out the key (the Product ID) and the value (the quantity)
-            $invalidBasket = 0;
-            foreach ($_SESSION["basket"] as $basketItem => $basketItem_value) {
-                include 'DatabaseLoginDetails.php';
 
-                $conn = new mysqli($host, $user, $pass, $database);
-                // Check connection
-                if (!$conn) {
-                    header('HTTP/1.1 500 Internal Server Error');
-                    header('Content-Type: application/json; charset=UTF-8');
-                    die(json_encode('ERROR - Connection to the database has not been established'));
-                } else  if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
-                //Select all the information needed for the product (product title, image (alt text and image file name), price, the quantity in the DB.
-                $stmt = $conn->prepare("SELECT p.productTitle, pi.productImageFilename, pi.productImageAltText, p.productPrice, p.productTotalQuantity FROM product p INNER JOIN product_image pi ON p.productID = pi.productID
+        <div id="basketForm">
+            <?php
+            $total = 0;
+
+            // Check to see if there is a basket session set, if not, don't show any other elements other than 
+            // displaying a header saying 'No products in the basket'
+            if (!isset($_SESSION["basket"])) {
+                $invalidBasket = 1;
+                echo "<h1 id='NoProducts'>No Products in the basket</h1>";
+            } else if (count($_SESSION["basket"]) == 0) {
+                $invalidBasket = 1;
+                echo "<h1 id='NoProducts'>No Products in the basket</h1>";
+            } else {
+                // Not invalid so keep looping through the basket session array, getting out the key (the Product ID) and the value (the quantity)
+                $invalidBasket = 0;
+                foreach ($_SESSION["basket"] as $basketItem => $basketItem_value) {
+                    include 'DatabaseLoginDetails.php';
+
+                    $conn = new mysqli($host, $user, $pass, $database);
+                    // Check connection
+                    if (!$conn) {
+                        header('HTTP/1.1 500 Internal Server Error');
+                        header('Content-Type: application/json; charset=UTF-8');
+                        die(json_encode('ERROR - Connection to the database has not been established'));
+                    } else  if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+                    //Select all the information needed for the product (product title, image (alt text and image file name), price, the quantity in the DB.
+                    $stmt = $conn->prepare("SELECT p.productTitle, pi.productImageFilename, pi.productImageAltText, p.productPrice, p.productTotalQuantity FROM product p INNER JOIN product_image pi ON p.productID = pi.productID
 where p.productID = ? AND pi.displayOrder = 1");
-                $stmt->bind_param("i", $basketItem);
+                    $stmt->bind_param("i", $basketItem);
 
-                if (!$stmt->execute()) {
-                    header('HTTP/1.1 500 Internal Server Error');
-                    header('Content-Type: application/json; charset=UTF-8');
-                    die(json_encode('ERROR - Could not retrieve the data of the item from the database.'));
-                }
-                //Get results from the database
-                $res = $stmt->get_result();
-                $basket_product = mysqli_fetch_all($res, MYSQLI_ASSOC);
+                    if (!$stmt->execute()) {
+                        header('HTTP/1.1 500 Internal Server Error');
+                        header('Content-Type: application/json; charset=UTF-8');
+                        die(json_encode('ERROR - Could not retrieve the data of the item from the database.'));
+                    }
+                    //Get results from the database
+                    $res = $stmt->get_result();
+                    $basket_product = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
-                // Now add the structure of the product information
-                // Starting with a div container to contain everything of that product
-                echo "<div id='individualProduct" . $basketItem . "' class='individualProduct'>";
-        ?>
-                <!-- Container for the whole of the Product Image -->
-                <div class="containerProduct">
-                    <!-- Container for the Product Image -->
-                    <div class="productImage">
-                        <!-- insert the Product Image, getting the correct URL and the alternative text for the image -->
-                        <?php
-                        $productImagePath = "images/products/" . $basketItem . "/" . $basket_product[0]["productImageFilename"];
-                        echo "<a href='productPage.php?productID=" . $basketItem . "'><img src='" . $productImagePath . "' alt='" .
-                            $basket_product[0]["productImageAltText"]  . "' ></a>";
-                        ?>
-                    </div>
-                </div>
-                <!-- Container for all the other information of the product -->
-                <div class="containerProductDetails">
-                    <div class="productDetails">
-                        <!-- First Row includes the title of the product and the quantity in the basket-->
-                        <div class="firstRow">
-                            <div class="titleOfProduct">
-                                <?php
-                                //Output the Title, with a link to the original product
-                                echo "<a href='productPage.php?productID=" . $basketItem . "'><h1>" . $basket_product[0]["productTitle"] . "</h1></a>" ?>
-
-                            </div>
-                            <div class="quantityOfProduct">
-                                <label name="Quantity">Quantity:</label>
-                                <?php
-                                //Output the Quantity Dropdown
-                                echo "<select name='quantity' id='quantity" . $basketItem . "' onchange='changeQuantity(" . $basketItem . ")'>'"
-                                ?>
-
-
-                                <?php
-                                //Get the quantity from the Database and if over 10, then just say the user can order the limit for a user (10)
-                                $quantity = $basket_product[0]["productTotalQuantity"];
-                                // Also get the quantity that is in the basket for that product
-                                $quantitySelected = $basketItem_value;
-
-                                if ($quantity > 10) {
-                                    $quantity = 10;
-                                }
-                                // Loop through, adding the dropdown values (1-10 if database holds more than 10 as its total quantity, 1-x if the database holds less than 10 (x being what the database has))
-                                for ($i = 1; $i < $quantity + 1; $i++) {
-                                    $selectOption = "<option value='" . $i . "'";
-                                    if ($i == $quantitySelected) {
-                                        $selectOption = $selectOption . " selected";
-                                    }
-                                    $selectOption = $selectOption .
-                                        ">" . $i . "</option>";
-                                    echo $selectOption;
-                                }
-                                ?>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- Second row contains the Remove Product button and the quantity prices of the product in the basket -->
-                        <div class="secondRow">
+                    // Now add the structure of the product information
+                    // Starting with a div container to contain everything of that product
+                    echo "<div id='individualProduct" . $basketItem . "' class='individualProduct'>";
+            ?>
+                    <!-- Container for the whole of the Product Image -->
+                    <div class="containerProduct">
+                        <!-- Container for the Product Image -->
+                        <div class="productImage">
+                            <!-- insert the Product Image, getting the correct URL and the alternative text for the image -->
                             <?php
-                            echo "<div class='RemoveProduct' onclick='removeProductFromBasket(" . $basketItem . ")'>"
+                            $productImagePath = "images/products/" . $basketItem . "/" . $basket_product[0]["productImageFilename"];
+                            echo "<a href='productPage.php?productID=" . $basketItem . "'><img src='" . $productImagePath . "' alt='" .
+                                $basket_product[0]["productImageAltText"]  . "' ></a>";
                             ?>
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                            <h4>Remove</h4>
                         </div>
-                        <?php
-                        // Div to hold the prices (appending the product id for the div id)
-                        echo "<div id='quantityPriceOfProduct" . $basketItem . "' class='quantityPriceOfProduct'>"
-                        ?>
-                        <?php
-                        $productPrice = $basket_product[0]["productPrice"];
-
-                        $productPriceArray[$basketItem] = $productPrice;
-
-                        // If the quantity from the basket is more than 1, then display text telling the user how much it is for one of the products. If not more than one, then create it, but add the hiddenQuantity class which hides the element.
-                        if ($quantitySelected > 1) {
-                            echo "<h3 id='quantityPerPrice" . $basketItem . "'>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPrice, 2) . "</span></h3>";
-                        } else {
-                            echo "<h3 id='quantityPerPrice" . $basketItem . "' class='hiddenQuantity'>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPrice, 2) . "</span></h3>";
-                        }
-
-                        // Work out the total amount for the product (price times quantity) and add it to the total price of the basket
-                        $quantityPrice = $productPrice * $quantitySelected;
-                        $totalPriceOfEachProduct[$basketItem] = $quantityPrice;
-                        $total += $quantityPrice;
-
-
-                        // Output the price with the quantity included
-                        echo "<h1 id='totalPriceOfQuantity" . $basketItem . "' >£" . number_format($quantityPrice, 2) . "</h1>";
-                        ?>
                     </div>
-                </div>
-    </div>
+                    <!-- Container for all the other information of the product -->
+                    <div class="containerProductDetails">
+                        <div class="productDetails">
+                            <!-- First Row includes the title of the product and the quantity in the basket-->
+                            <div class="firstRow">
+                                <div class="titleOfProduct">
+                                    <?php
+                                    //Output the Title, with a link to the original product
+                                    echo "<a href='productPage.php?productID=" . $basketItem . "'><h1>" . $basket_product[0]["productTitle"] . "</h1></a>" ?>
+
+                                </div>
+                                <div class="quantityOfProduct">
+                                    <label name="Quantity">Quantity:</label>
+                                    <?php
+                                    //Output the Quantity Dropdown
+                                    echo "<select name='quantity' id='quantity" . $basketItem . "' onchange='changeQuantity(" . $basketItem . ")'>'"
+                                    ?>
+
+
+                                    <?php
+                                    //Get the quantity from the Database and if over 10, then just say the user can order the limit for a user (10)
+                                    $quantity = $basket_product[0]["productTotalQuantity"];
+                                    // Also get the quantity that is in the basket for that product
+                                    $quantitySelected = $basketItem_value;
+
+                                    if ($quantity > 10) {
+                                        $quantity = 10;
+                                    }
+                                    // Loop through, adding the dropdown values (1-10 if database holds more than 10 as its total quantity, 1-x if the database holds less than 10 (x being what the database has))
+                                    for ($i = 1; $i < $quantity + 1; $i++) {
+                                        $selectOption = "<option value='" . $i . "'";
+                                        if ($i == $quantitySelected) {
+                                            $selectOption = $selectOption . " selected";
+                                        }
+                                        $selectOption = $selectOption .
+                                            ">" . $i . "</option>";
+                                        echo $selectOption;
+                                    }
+                                    ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Second row contains the Remove Product button and the quantity prices of the product in the basket -->
+                            <div class="secondRow">
+                                <?php
+                                echo "<div class='RemoveProduct' onclick='removeProductFromBasket(" . $basketItem . ")'>"
+                                ?>
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                                <h4>Remove</h4>
+                            </div>
+                            <?php
+                            // Div to hold the prices (appending the product id for the div id)
+                            echo "<div id='quantityPriceOfProduct" . $basketItem . "' class='quantityPriceOfProduct'>"
+                            ?>
+                            <?php
+                            $productPrice = $basket_product[0]["productPrice"];
+
+                            $productPriceArray[$basketItem] = $productPrice;
+
+                            // If the quantity from the basket is more than 1, then display text telling the user how much it is for one of the products. If not more than one, then create it, but add the hiddenQuantity class which hides the element.
+                            if ($quantitySelected > 1) {
+                                echo "<h3 id='quantityPerPrice" . $basketItem . "'>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPrice, 2) . "</span></h3>";
+                            } else {
+                                echo "<h3 id='quantityPerPrice" . $basketItem . "' class='hiddenQuantity'>Price Per Quantity: £<span id='productPriceQuantity'>" . number_format($productPrice, 2) . "</span></h3>";
+                            }
+
+                            // Work out the total amount for the product (price times quantity) and add it to the total price of the basket
+                            $quantityPrice = $productPrice * $quantitySelected;
+                            $totalPriceOfEachProduct[$basketItem] = $quantityPrice;
+                            $total += $quantityPrice;
+
+
+                            // Output the price with the quantity included
+                            echo "<h1 id='totalPriceOfQuantity" . $basketItem . "' >£" . number_format($quantityPrice, 2) . "</h1>";
+                            ?>
+                        </div>
+                    </div>
+        </div>
     </div>
     </div>
 <?php
+                }
             }
-        }
 ?>
 <?php
 // After printing out each product in the basket, and only if there are items in the basket
@@ -220,9 +223,12 @@ if ($invalidBasket == 0) {
             </a>
         </div>
     </div>
+
 <?php
 }
 ?>
+</div>
+
 </div>
 </div>
 </div>
@@ -237,19 +243,19 @@ if ($invalidBasket == 0) {
         align-items: center;
     }
 
-    .title {
+    #title {
         display: inline-block;
         color: white;
         margin: 50px;
     }
 
-    .title i {
+    #title i {
         display: inline;
         font-size: 3em;
         color: #FFFFFF
     }
 
-    .title h1 {
+    #title h1 {
         display: inline;
     }
 

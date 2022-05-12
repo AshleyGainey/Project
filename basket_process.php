@@ -77,22 +77,21 @@ if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['produc
     }
 }
 
-//Update the basket by looking at the URL parameter of update (which is the product id) and the quantity of the requested product, check to see if it is in the basket and is numerical
-if (
-    isset($_POST['update'], $_POST['quantity']) && isset($_SESSION['basket']) && is_numeric($_POST['update']) && is_numeric($_POST['quantity']) &&
-    isset($_SESSION['basket'][$_POST['update']])
-) {
-    $_SESSION['basket'][$_POST['update']] = $_POST['quantity'];
+if (isset($_POST['update'])) {
+    //Update the basket by looking at the URL parameter of update (which is the product id) and the quantity of the requested product, check to see if it is in the basket and is numerical
+    if (isset($_POST['quantity']) && isset($_SESSION['basket']) && is_numeric($_POST['update']) && is_numeric($_POST['quantity']) && isset($_SESSION['basket'][$_POST['update']])) {
+        $_SESSION['basket'][$_POST['update']] = $_POST['quantity'];
 
-    //Report back to say that it has been updated
-    header('HTTP/1.1 200 OK');
-    header('Content-Type: application/json; charset=UTF-8');
-    die(json_encode('Updated'));;
-} else {
-    //If the data was dirty (/bad), report back saying an error.
-    header('HTTP/1.1 400 Bad Request');
-    header('Content-Type: application/json; charset=UTF-8');
-    die(json_encode('ERROR: Invalid data while updating the product from the basket'));
+        //Report back to say that it has been updated
+        header('HTTP/1.1 200 OK');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('Updated'));;
+    } else {
+        //If the data was dirty (/bad), report back saying an error.
+        header('HTTP/1.1 400 Bad Request');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR: Invalid data while updating the product from the basket'));
+    }
 }
 
 //Remove from basket by looking at the URL paramater of remove (which is the product id), check to see if it is in the basket and is numerical
@@ -109,4 +108,3 @@ if (isset($_POST['remove']) && is_numeric($_POST['remove']) && isset($_SESSION['
     header('Content-Type: application/json; charset=UTF-8');
     die(json_encode('ERROR: Invalid data while removing the product from the basket'));
 }
-

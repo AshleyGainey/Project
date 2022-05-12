@@ -120,12 +120,12 @@ body::after {
     background: #1900ff;
     color: #FFFFFF;
     text-decoration: none;
-    height: 30px;
+    height: 35px;
     left: 50%;
-    padding: 8px;
+    padding: 10px;
     position: absolute;
     transform: translateY(-100%);
-    transition: transform 0.3s;
+    transition: transform 0.2s;
 }
 
 #skipToContent:focus {
