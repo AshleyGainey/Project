@@ -130,9 +130,9 @@ if (isset($_POST['Register'])) {
 
     //Server side validation to check if the title is either Mr, Master, Miss, Mrs, Ms or Dr.
     if (
-        !$title === "Mr" || !$title === "Master" ||
-        !$title === "Miss" || !$title === "Mrs" || !$title === "Ms" ||
-        !$title === "Dr"
+        $title !== "Mr" && $title !== "Master" &&
+        $title !== "Miss" && $title !== "Mrs" && $title !== "Ms" &&
+        $title !== "Dr"
     ) {
         header('HTTP/1.1 400 Bad Request');
         header('Content-Type: application/json; charset=UTF-8');

@@ -61,9 +61,8 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
         $billingAddressID = $mainAddressID;
     } else if ($billingMethod == 2) {
         // They Selected and entered the new address for billing
-
         //Check if already in DB (if it is a main address or just a normal address - and if so, use that ID)
-        if (isset($_POST['billingFirstName']) && isset($_POST['billingLastName']) && isset($_POST['billingAddressLine1']) && isset($_POST['billingTownCity']) && isset($_POST['billingCounty']) && isset($_POST['billingPostCode'])) {
+        if (isset($_POST['billingTitle']) && isset($_POST['billingFirstName']) && isset($_POST['billingLastName']) && isset($_POST['billingAddressLine1']) && isset($_POST['billingTownCity']) && isset($_POST['billingCounty']) && isset($_POST['billingPostCode'])) {
             // Get the billing values from the post request and trim whitespaces from them
             $billingTitle = $_POST['billingTitle'];
             $billingFirstName = trim($_POST['billingFirstName']);
@@ -114,8 +113,8 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
 
             //Server side validation to check if the billing title is either Mr, Master, Miss, Mrs, Ms or Dr.
             if (
-                $billingTitle !== "Mr" || $billingTitle !== "Master" ||
-                $billingTitle !== "Miss" || $billingTitle !== "Mrs" || $billingTitle !== "Ms" ||
+                $billingTitle !== "Mr" && $billingTitle !== "Master" &&
+                $billingTitle !== "Miss" && $billingTitle !== "Mrs" && $billingTitle !== "Ms" &&
                 $billingTitle !== "Dr"
             ) {
                 header('HTTP/1.1 400 Bad Request');
@@ -153,13 +152,14 @@ if (isset($_POST['billingMethod']) && is_numeric($_POST['billingMethod'])) {
             if (strlen($billingLastName) > 255) {
                 header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
-                die(json_encode('ERROR - BillingLast Name length is too strong. It must be a maximum of 255 characters.'));
+                die(json_encode('ERROR - Billing Last Name length is too strong. It must be a maximum of 255 characters.'));
             }
+
             //Server side validation to check if the billing last name doesn't contain any numbers in it
             if (!(preg_match('/^\D+$/', $billingLastName))) {
                 header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/json; charset=UTF-8');
-                die(json_encode('ERROR - Incorrect Format for Billing Last Name. Last Name should not contain numbers'));
+                die(json_encode('ERROR - Incorrect Format for Billing Last Name. First Name should not contain numbers:' . $billingLastName));
             }
 
             // Server side validation to check if the billing address line 1 is more than a character
@@ -375,8 +375,8 @@ if (isset($_POST['deliveryMethod']) && is_numeric($_POST['deliveryMethod'])) {
 
             //Server side validation to check if the delivery title is either Mr, Master, Miss, Mrs, Ms or Dr.
             if (
-                $deliveryTitle !== "Mr" || $deliveryTitle !== "Master" ||
-                $deliveryTitle !== "Miss" || $deliveryTitle !== "Mrs" || $deliveryTitle !== "Ms" ||
+                $deliveryTitle !== "Mr" && $deliveryTitle !== "Master" &&
+                $deliveryTitle !== "Miss" && $deliveryTitle !== "Mrs" && $deliveryTitle !== "Ms" &&
                 $deliveryTitle !== "Dr"
             ) {
                 header('HTTP/1.1 400 Bad Request');

@@ -746,14 +746,15 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
         var deliveryPostCode;
 
         var deliveryMethod = 0;
+        debugger;
         // If Delivery Address and the billing address is Main Address (it means it is in an incorrect state - Delivery address gets removed from view if Billing Address is Main Address)
-        if (deliveryAddressChecked.value == "deliveryADDRESSSTORED" &&
-            billingAddressChecked.value == "billingADDRESSSTORED") {
+        if (deliveryAddressChecked.value == "DeliveryADDRESSSTORED" &&
+            billingAddressChecked.value == "BillingADDRESSSTORED") {
             outputMessage = "Invalid state - Please contact support for more details.";
             showHideMessage(true, outputMessage);
             return false;
             //If selected the delivery is the same as billing address
-        } else if (deliveryAddressChecked.value == "deliveryADDRESSSTORED") {
+        } else if (deliveryAddressChecked.value == "DeliveryADDRESSSTORED") {
             deliveryMethod = 2;
             // Incorrect values... shouldn't be able to select Main Address for both billing and delivery
         } else if (deliveryAddressChecked.value == "UseSameAsBillingAddress") {
@@ -847,20 +848,22 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
             "&deliveryMethod=" + deliveryMethod +
 
             "&billingTitle=" + billingTitle +
-            "&billingFirstName=" + billingLastName +
-            "&billingLastName=" + billingAddressLine1 +
-            "&billingAddressLine1=" + billingAddressLine2 +
-            "&billingAddressLine2=" + billingTownCity +
-            "&billingTownCity=" + billingCounty +
+            "&billingFirstName=" + billingFirstName +
+            "&billingLastName=" + billingLastName +
+            "&billingAddressLine1=" + billingAddressLine1 +
+            "&billingAddressLine2=" + billingAddressLine2 +
+            "&billingTownCity=" + billingTownCity +
+            "&billingCounty=" + billingCounty +
             "&billingPostCode=" + billingPostCode +
 
 
             "&deliveryTitle=" + deliveryTitle +
-            "&deliveryFirstName=" + deliveryLastName +
-            "&deliveryLastName=" + deliveryAddressLine1 +
-            "&deliveryAddressLine1=" + deliveryAddressLine2 +
-            "&deliveryAddressLine2=" + deliveryTownCity +
-            "&deliveryTownCity=" + deliveryCounty +
+            "&deliveryFirstName=" + deliveryFirstName +
+            "&deliveryLastName=" + deliveryLastName +
+            "&deliveryAddressLine1=" + deliveryAddressLine1 +
+            "&deliveryAddressLine2=" + deliveryAddressLine2 +
+            "&deliveryTownCity=" + deliveryTownCity +
+            "&deliveryCounty=" + deliveryCounty +
             "&deliveryPostCode=" + deliveryPostCode
         );
 
