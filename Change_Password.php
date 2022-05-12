@@ -44,7 +44,10 @@ if (!isset($_SESSION['userID'])) {
 
 <body>
     <!-- Add the header at the top before any other material -->
-
+    <!-- Accessibility Feature to help Screen Readers and to skip the Tab Counter to the main content -->
+    <a id="skipToContent" href="#bodyOfPage">
+        Skip to Main Content
+    </a>
     <?php include "./header.php" ?>
 
     <div id="bodyOfPage">
