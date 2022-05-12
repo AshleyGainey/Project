@@ -13,7 +13,7 @@ if (!is_numeric($_GET['productID'])) {
 //Include the Login Details to access the DB
 include 'DatabaseLoginDetails.php';
 
- //Connect to the database
+//Connect to the database
 $conn = mysqli_connect($host, $user, $pass, $database);
 
 // Check connection and stop if there is an error
@@ -53,35 +53,35 @@ $productInfo = mysqli_fetch_all($result, MYSQLI_ASSOC);
 // If there are no results for the product ID that has been sent by the get method, then redirect to the Error404 page
 if (empty($productInfo)) {
     header('Location: Error404.php');
-} 
-    // If there is a/multiple results then declare new variables to put the information in
-    $productTitle;
-    $productDescription;
-    $productDescriptionCorrect;
-    $productPrice;
-    $productQuantity = 0;
-    $productImage = [];
-    $productAltText = [];
+}
+// If there is a/multiple results then declare new variables to put the information in
+$productTitle;
+$productDescription;
+$productDescriptionCorrect;
+$productPrice;
+$productQuantity = 0;
+$productImage = [];
+$productAltText = [];
 
-    $i = 0;
-    // For every result that has come back from the DB (can have multiple due to having multiple product images)
-    foreach ($productInfo as $product) {
-        // If it is the first time coming into the for loop, then set the product title, description, quantity and price
-        if ($i == 0) {
-            $productTitle = $product['productTitle'];
-            $productDescription = $product['productDescription'];
+$i = 0;
+// For every result that has come back from the DB (can have multiple due to having multiple product images)
+foreach ($productInfo as $product) {
+    // If it is the first time coming into the for loop, then set the product title, description, quantity and price
+    if ($i == 0) {
+        $productTitle = $product['productTitle'];
+        $productDescription = $product['productDescription'];
 
-            $productDescriptionCorrect = str_replace("\\n", "\n", $productDescription);
-            $productQuantity = $product['productTotalQuantity'];
-            $productPrice = $product['productPrice'];
-        }
-        // For every result in the database, then add the filename of the product image and the alternative text to an array
-        // This can be improved by using an object array instead but time pressures
-        array_push($productImage, $product['productImageFilename']);
-        array_push($productAltText, $product['productImageAltText']);
-        // Increase the index
-        $i++;
+        $productDescriptionCorrect = str_replace("\\n", "\n", $productDescription);
+        $productQuantity = $product['productTotalQuantity'];
+        $productPrice = $product['productPrice'];
     }
+    // For every result in the database, then add the filename of the product image and the alternative text to an array
+    // This can be improved by using an object array instead but time pressures
+    array_push($productImage, $product['productImageFilename']);
+    array_push($productAltText, $product['productImageAltText']);
+    // Increase the index
+    $i++;
+}
 
 //Free  memory and close the connection
 mysqli_free_result($result);
@@ -98,6 +98,16 @@ mysqli_close($conn);
     <title><?php echo $productTitle; ?> - Gadget Gainey Store </title>
     <!-- Keywords of the site for search engine optimisation -->
     <meta name="keywords" content="Gadget Gainey, Gadget, Ecommerce, Online, Shop, Kids Toys, Toys, Technology, Gainey, Ashley Gainey">
+    <!-- Icons for Gadget Gainey - Based on the size and who uses them -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="images/favicon/site.webmanifest">
+    <link rel="mask-icon" href="images/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="images/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="images/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
     <!-- Author of the site -->
     <meta name="author" content="Ashley Gainey">
     <!-- Make a dynamic description of the page for SEO (Search Engine descriptions of the page), this dynamic description will be 100 words of the description of the product (with an ellipsis at the end)-->

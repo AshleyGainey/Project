@@ -137,7 +137,7 @@ if ($_POST['process'] == "Email") {
     //If the changing process is password instead
 } else if ($_POST['process'] == "Password") {
     // Check values from POST to see if they are not set.
-    if (!isset($_POST['oldPassword']) || isset($_POST['newPassword'])|| isset($_POST['confirmPassword'])) {
+    if (!isset($_POST['oldPassword']) || !isset($_POST['newPassword'])|| !isset($_POST['confirmPassword'])) {
         header('HTTP/1.1 400 Bad Request');
         header('Content-Type: application/json; charset=UTF-8');
         die(json_encode('ERROR - Fields haven\'t been filled out correctly'));

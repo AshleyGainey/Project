@@ -355,11 +355,11 @@ VALUES (?, ?, ?, ?)");
     //If the process is Login
 } else if (isset($_POST['Login'])) {
 
-    // if (!isset($_POST['emailAddress']) && !isset($_POST['password'])) {
-    //     header('HTTP/1.1 400 Bad Request');
-    //     header('Content-Type: application/json; charset=UTF-8');
-    //     die(json_encode('ERROR - Email Address or Password is empty. Please fill it out.'));
-    // }
+    if (!isset($_POST['emailAddress']) && !isset($_POST['password'])) {
+        header('HTTP/1.1 400 Bad Request');
+        header('Content-Type: application/json; charset=UTF-8');
+        die(json_encode('ERROR - Email Address or Password is empty. Please fill it out.'));
+    }
 
     // Get details from the post request and trim whitespaces from the email address
     $email = trim($_POST['emailAddress']);
@@ -423,7 +423,7 @@ VALUES (?, ?, ?, ?)");
     }
 
     //Prepared Statement - query to see if the user is in the DB by checking the email address
-    $stmt = $conn->prepare('SELECT u.userID, u.userPassword, a.firstName From user u INNER JOIN address a ON u.mainAddressID = a.addressID where userEmail = ? LIMIT 1');
+    $stmt = $conn->prepare('SELECT u.userID, u.userPassword, a.firstName From user u INNER JOIN address a ON u.mainAddressID = a.addressID where userEmail = ?');
     //Binding the email with the prepared statement
     $stmt->bind_param('s', $email);
 
