@@ -177,14 +177,15 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                     <!-- Options to select what the user wants (Main Address: B1 | New Address: B2)  -->
                     <div class="radioGroup">
                         <!-- For B1, Output the main Address in the display variable we made earlier -->
-                        <label class="radioContainer" id="labelB1" for="B1">Main Address: <?php echo $mainAddressDisplay ?>
-                            <input type="radio" id="B1" name="billingAddress" value="BillingADDRESSSTORED" onchange="getRadioSelected(this)">
-                            <span class="tick"></span>
+                        <?php
+                        echo "<label class='radioContainer' id='labelB1' for='B1' name='" . $mainAddressDisplay . "'> Main Address: " . $mainAddressDisplay ?>
+                        <input type="radio" id="B1" name="billingAddress" value="BillingADDRESSSTORED" onchange="getRadioSelected(this)">
+                        <span class="tick"></span>
                         </label>
                     </div>
                     <div class="radioGroup">
                         <!-- For B2, Output "Use a new address"-->
-                        <label class="radioContainer" id="labelB2" for="B2">Use a new Address
+                        <label class="radioContainer" id="labelB2" for="B2" name="Use a new Address">Use a new Address
                             <input type="radio" id="B2" name="billingAddress" value="BillingNewAddress" onchange="getRadioSelected(this)">
                             <span class="tick"></span>
                     </div>
@@ -259,19 +260,20 @@ $mainAddressDisplay = $strFirstPart . ", " . $strSecondPart . ". " . $mainAddres
                     <!-- Options to select what the user wants (Same as Billing Address: D1 | Main Address: D2 | New Address: D3 )  -->
                     <div class="radioGroup">
                         <!-- For D1, Output a radio input of "Use same as Billing Address"-->
-                        <label class="radioContainer" id="labelD1" for="D1">Use Same As Billing Address
+                        <label class="radioContainer" id="labelD1" for="D1" name="Use Same As Billing Address">Use Same As Billing Address
                             <input type="radio" id="D1" name="deliveryAddress" value="UseSameAsBillingAddress" onchange="getRadioSelected(this)">
                             <span class="tick"></span>
                     </div>
                     <div class="radioGroup">
                         <!-- For D2, Output the main Address in the display variable we made earlier-->
-                        <label class="radioContainer" id="labelD2" for="D2">Main Address: <?php echo $mainAddressDisplay ?>
-                            <input type="radio" id="D2" name="deliveryAddress" value="DeliveryADDRESSSTORED" onchange="getRadioSelected(this)">
-                            <span class="tick"></span>
+                        <?php
+                        echo "<label class='radioContainer' id='labelD2' for='D2' name='" . $mainAddressDisplay . "'> Main Address: " . $mainAddressDisplay ?>
+                        <input type="radio" id="D2" name="deliveryAddress" value="DeliveryADDRESSSTORED" onchange="getRadioSelected(this)">
+                        <span class="tick"></span>
                     </div>
                     <div class="radioGroup">
                         <!-- For D3, Output "Use a new address"-->
-                        <label class="radioContainer" id="labelD3" for="D3">Use a new Address
+                        <label class="radioContainer" id="labelD3" for="D3" name="Use a new Address">Use a new Address
                             <input type="radio" id="D3" name="deliveryAddress" value="DeliveryNewAddress" onchange="getRadioSelected(this)">
                             <span class="tick"></span>
                     </div>

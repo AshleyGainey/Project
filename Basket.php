@@ -122,7 +122,7 @@ where p.productID = ? AND pi.displayOrder = 1");
 
                             </div>
                             <div class="quantityOfProduct">
-                                <label>Quantity:</label>
+                                <label name="Quantity">Quantity:</label>
                                 <?php
                                 //Output the Quantity Dropdown
                                 echo "<select name='quantity' id='quantity" . $basketItem . "' onchange='changeQuantity(" . $basketItem . ")'>'"
